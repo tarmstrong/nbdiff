@@ -2,8 +2,6 @@
 JavaScript used by IPython for rendering cells
 ===========================================================
 
-.. sectnum::
-
 .. contents:: Javascript files
 
 notebook.js
