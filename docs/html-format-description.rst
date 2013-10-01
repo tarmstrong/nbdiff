@@ -1,7 +1,12 @@
 Notebook HTML format
 ====================
 
-Each line of code is wrapped in  a pre tag. For example:
+Each line of code is wrapped in  a pre tag.
+Individual tokens are wrapped in span tags for highlighting purposes.
+The ``cm-`` stands for `CodeMirror <http://codemirror.net/>`__ ,
+the editor that IPyNB uses.
+
+For example:
 
 ::
 
@@ -41,7 +46,12 @@ Each line of code is wrapped in  a pre tag. For example:
 
 
 
-This code shows the first cell in a notebook:
+This code shows the first cell in a notebook.
+It includes a
+
+* Input prompt (In \[5\])
+* an ``input_area``, in this case filled with a ``CodeMirror`` div.
+* an ``output_area``, in this case filled with the line of output "Populating the interactive namespace from numpy and matplotlib"
 
 ::
  
@@ -190,107 +200,14 @@ This code shows the In[Num] that's repeated for each cell in the notebook
       </div>
       </div>
       <div class="input_area">
-      <div class="CodeMirror cm-s-ipython">
-        <div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 5.71875px; left: 5.71875px;">
-        <textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; padding: 0px; width: 1000px; height: 1em; outline: none; font-size: 4px;">
-        </textarea>
-        </div>
-        <div class="CodeMirror-hscrollbar" style="left: 0px;">
-        <div style="height: 1px;">
-        </div>
-        </div>
-        <div class="CodeMirror-vscrollbar">
-        <div style="width: 1px;">
-        </div>
-        </div>
-        <div class="CodeMirror-scrollbar-filler">
-        </div>
-        <div class="CodeMirror-gutter-filler">
-        </div>
-        <div class="CodeMirror-scroll" tabindex="-1">
-        <div class="CodeMirror-sizer" style="min-width: 129px; margin-left: 0px; min-height: 62px;">
-          <div style="position: relative; top: 0px;">
-          <div class="CodeMirror-lines">
-            <div style="position: relative; outline: none;">
-            <div class="CodeMirror-measure">
-              <pre>
-              <span class="cm-keyword">
-                i
-              </span>
-              <span class="cm-keyword">
-                m
-              </span>
-              <span class="cm-keyword">
-                p
-              </span>
-              <span class="cm-keyword">
-                o
-              </span>
-              <span class="cm-keyword">
-                r
-              </span>
-              <span class="cm-keyword">
-                t
-              </span>
-              <span>
-              </span>
-              <span class="cm-variable">
-                j
-              </span>
-              <span class="cm-variable">
-                s
-              </span>
-              <span class="cm-variable">
-                o
-              </span>
-              <span class="cm-variable">
-                n
-              </span>
-              <span>
-              </span>
-              </pre>
-            </div>
-            <div style="position: relative; z-index: 1; display: none;">
-            </div>
-            <div class="CodeMirror-code" style="">
-              <pre>
-              <span class="cm-keyword">
-                import
-              </span>
-              <span class="cm-variable">
-                json
-              </span>
-              </pre>
-              <pre>
-              &nbsp;
-              </pre>
-              <pre>
-              &nbsp;
-              </pre>
-            </div>
-            <div class="CodeMirror-cursor" style="left: 0px; top: 0px; height: 17px;">
-              &nbsp;
-            </div>
-            <div class="CodeMirror-cursor CodeMirror-secondarycursor" style="display: none;">
-              &nbsp;
-            </div>
-            </div>
-          </div>
-          </div>
-        </div>
-        <div style="position: absolute; height: 30px; width: 1px; top: 62px;">
-        </div>
-        <div class="CodeMirror-gutters" style="display: none; height: 62px;">
-        </div>
-        </div>
-      </div>
+      <!-- This is where the Python CodeMirror stuff goes. -->
       </div>
     </div>
     </div>
 
 
 
-This code shows the output of ploting some data ( this part is kind of long becuase it outputs a line of text 
+This code shows the output of ploting some data ( this part is kind of long because it outputs a line of text 
 and a graph:
 
 1. the line of text 
