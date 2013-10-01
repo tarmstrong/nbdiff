@@ -4,8 +4,14 @@ JavaScript used by IPython for rendering cells
 
 .. contents:: Javascript files
 
+See
+`IPython/html/static/notebook/js <https://github.com/ipython/ipython/tree/master/IPython/html/static/notebook/js>`__
+
 notebook.js
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See
+`notebook.js <https://github.com/ipython/ipython/blob/master/IPython/html/static/notebook/js/notebook.js>`__.
 
 Related functions:
 ^^^^^^^^^^^^^^^^^^^^^^^^^
