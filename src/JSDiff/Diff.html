@@ -212,6 +212,7 @@
 										diffID++;
 										rightCellsIndex++;
 									} else {
+										var cellMatch = false;
 										while (rightCellsIndex < rightCells.length) {
 											if (compareCell(leftCells[j],
 													rightCells[rightCellsIndex])) {
@@ -220,6 +221,7 @@
 														tempCellList);
 												diffID++;
 												rightCellsIndex++;
+												cellMatch =true;
 												break;
 											} else if (likeCell(leftCells[j],
 													rightCells[rightCellsIndex])) {
@@ -232,6 +234,7 @@
 														tempCellList);
 												diffID++;
 												rightCellsIndex++;
+												cellMatch =true;
 												break;
 											} else {
 												insertDiff(
@@ -241,6 +244,13 @@
 												diffID++;
 												rightCellsIndex++;
 											}
+										}
+										if(!cellMatch){
+											insertDiff(
+													leftCells[j],
+													state[2], diffID,
+													tempCellList);
+											diffID++;
 										}
 									}
 								}
