@@ -74,13 +74,6 @@ function resizeContent() {
 
 }
 
-//event listeners
-document.getElementById('file1').addEventListener('change',
-		handleFileSelect, false);
-document.getElementById('file2').addEventListener('change',
-		handleFileSelect, false);
-document.getElementById('generateDiff').onclick = generateDiff;
-
 //generated the middle diff results
 function generateDiff() {
 	if (document.getElementById('file1').value == "")
