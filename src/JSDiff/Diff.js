@@ -19,7 +19,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   alert('The File APIs are not fully supported in this browser.');
 }
 
-//hangles the file contents uploaded
+//handles the file contents uploaded
 
 function handleFileSelect(evt) {
 	var files = evt.target.files; // FileList object
