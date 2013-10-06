@@ -26,16 +26,7 @@ function handleFileSelect(evt) {
 
 	var srcElementID = evt.srcElement.id;
 
-	// Loop through the FileList and render.
-	for ( var i = 0, f; f = files[i]; i++) {
-
-		// Only process image files.
-		if (f.name.match(/ipynb/g).length == 0) {
-			continue;
-		}
-
-		var reader = new FileReader();
-		reader.onload = (function(reader) {
+  var makeOnload = function (reader) {
 			return function() {
 				var contents = reader.result;
 				if (srcElementID == "file1")
@@ -46,8 +37,19 @@ function handleFileSelect(evt) {
 				var contentElement = srcElementID + "Content";
 				document.getElementById(contentElement).innerHTML = contents;
 				resizeContent();
-			}
-		})(reader);
+			};
+  };
+
+	// Loop through the FileList and render.
+	for ( var i = 0; i < files.length; i++) {
+	var f = files[i];
+		// Only process image files.
+		if (f.name.match(/ipynb/g).length === 0) {
+			continue;
+		}
+
+		var reader = new FileReader();
+		reader.onload = makeOnload(reader);
 
 		reader.readAsText(f);
 	}
@@ -76,15 +78,15 @@ function resizeContent() {
 
 //generated the middle diff results
 function generateDiff() {
-	if (document.getElementById('file1').value == "")
+	if (document.getElementById('file1').value === "")
 		alert("Please Specify the Left File.");
-	else if (document.getElementById('file2').value == "")
+	else if (document.getElementById('file2').value === "")
 		alert("Please Specify the Right File.");
 	else {
 		var results = {};
 		results.state = state[0];
 
-		for (attribute in IPYNBAtt) {
+		for (var attribute in IPYNBAtt) {
 			var att = IPYNBAtt[attribute];
 			if (compareIPYNBAtt(att, leftFileJSON[att],
 					rightFileJSON[att])) {
@@ -190,15 +192,15 @@ function generateDiff() {
 						}
 						results[att][i][worksheetAtt[0]] = tempCellList;
 					}
-					for ( var i = minWorkSheet; i < maxWorkSheet; i++) {
+					for ( var k = minWorkSheet; k < maxWorkSheet; k++) {
 						if (leftWorkSheet.length == minWorkSheet) {
-							var temp = rightWorkSheet[i];
+							var temp = rightWorkSheet[k];
 							temp.state = state[1];
 							results[att].push(temp);
 						} else {
-							var temp = leftWorkSheet[i];
-							temp.state = state[2];
-							results[att].push(temp);
+							var temp2 = leftWorkSheet[k];
+							temp2.state = state[2];
+							results[att].push(temp2);
 						}
 					}
 				}
@@ -260,7 +262,7 @@ function compareMetaData(left, right) {
 	if (left.length != right.length)
 		return false;
 	try {
-		for (data in left) {
+		for (var data in left) {
 			if (left[data] != right[data])
 				return false;
 		}
@@ -277,7 +279,7 @@ function compareCell(left, right) {
 		return false;
 	} else {
 		cellAttributes = getCellAtt(left);
-		for (attribute in cellAttributes) {
+		for (var attribute in cellAttributes) {
 			att = cellAttributes[attribute];
 			if (att != codeCell[4] && att != codeCell[3]) {
 				if (left[att] != right[att])
@@ -311,7 +313,7 @@ function compareOutputArray(left, right) {
 	if (left.length != right.length) {
 		return false;
 	} else {
-		for (output in left) {
+		for (var output in left) {
 			if (!compareOutputs(left[output], right[output]))
 				return false;
 		}
@@ -325,7 +327,7 @@ function compareOutputs(left, right) {
 		return false;
 	} else {
 		try {
-			for (att in left) {
+			for (var att in left) {
 				if (att == "metadata") {
 					if (!compareMetaData(left[att], right[att]))
 						return false;
@@ -346,11 +348,11 @@ function likeCell(left, right) {
 		return false;
 	} else {
 		cellAttributes = getCellAtt(left);
-		for (attribute in cellAttributes) {
+		for (var attribute in cellAttributes) {
 			att = cellAttributes[attribute];
 			//we ignore the output cell because if the input changed the output will obviously change.
-			if (att != codeCell[4] && att != codeCell[3]
-					&& att != codeCell[1]) {
+			if (att != codeCell[4] && att != codeCell[3] &&
+					att != codeCell[1]) {
 				if (left[att] != right[att])
 					return false;
 			} else if (att == codeCell[3]) {
@@ -369,7 +371,7 @@ function likeCell(left, right) {
 function likeInput(left, right) {
 	var phrases = left.split(/\n/);
 	var matches = 0;
-	for (line in phrases) {
+	for (var line in phrases) {
 		if (right.indexOf(phrases[line]) != -1)
 			matches++;
 	}
