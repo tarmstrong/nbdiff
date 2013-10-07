@@ -22,12 +22,14 @@
 	</style>
   <script src="diff.js"></script>
   <script>
-//event listeners
-document.getElementById('file1').addEventListener('change',
-		handleFileSelect, false);
-document.getElementById('file2').addEventListener('change',
-		handleFileSelect, false);
-document.getElementById('generateDiff').onclick = generateDiff;
+window.onload = function () {
+  //event listeners
+  document.getElementById('file1').addEventListener('change',
+      handleFileSelect, false);
+  document.getElementById('file2').addEventListener('change',
+      handleFileSelect, false);
+  document.getElementById('generateDiff').onclick = generateDiff;
+};
   </script>
   </head>
   <body>
