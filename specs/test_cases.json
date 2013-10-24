@@ -1,0 +1,40 @@
+[
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["B", "C", "D", "E", "F"],
+"diff": [
+{"type": "deleted", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "A", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "added", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "G", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "deleted", "text": "D"},
+{"type": "added", "text": "G"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+}
+]
