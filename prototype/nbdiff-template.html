@@ -125,9 +125,33 @@ background-color: #ADFF2F;
 border: 3px solid #006400;
 }
 
-.row-cell {
+.bottom-spacer {
+    height: 100px;
+    margin: 100px;
+    padding: 100px;
+}
+
+.row-cell-diff-left {
   float: left;
-  width: 50%;
+  width: 47%;
+  overflow-x: hidden;
+}
+
+.row-cell-diff-middle {
+    padding-top: 10px;
+    overflow-x: hidden;
+    width: 6%;
+    text-align: center;
+}
+
+.row-cell-diff-right {
+    float:right;
+    overflow-x: hidden;
+    width: 47%;
+}
+
+#notebook-container {
+    margin-bottom: 100px;
 }
 
 .diff-spacer {
@@ -135,6 +159,18 @@ border: 3px solid #006400;
 }
 .diff-spacer .cell {
     visibility:hidden;
+}
+
+.diff-image {
+visibility: hidden;
+}
+
+.diff-image:hover {
+visibility: visible;
+}
+
+.diff-image-actual:hover {
+visibility: hidden;
 }
 
 </style>
@@ -169,6 +205,9 @@ border: 3px solid #006400;
 
 </div>
 </div>
+</div>
+
+<div class='bottom-spacer'>
 </div>
 
 <script src="/static/components/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
