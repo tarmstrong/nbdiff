@@ -1,0 +1,319 @@
+<html><head>
+    <meta charset="utf-8">
+
+    <title>Untitled2-Copy0</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/base/images/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link rel="stylesheet" href="jquery-ui.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full&amp;delayStartupUntil=configured" charset="utf-8"></script>
+
+<script type="text/javascript">
+// MathJax disabled, set as null to distingish from *missing* MathJax,
+// where it will be undefined, and should prompt a dialog later.
+window.mathjax_url = "http://cdn.mathjax.org/mathjax/latest/MathJax.js";
+</script>
+
+<link rel="stylesheet" href="/static/components/codemirror/lib/codemirror.css">
+
+
+    
+	    
+	        <link rel="stylesheet" href="style.css" type="text/css">
+	    
+    
+    
+
+<link rel="stylesheet" href="override.css" type="text/css">
+
+
+    <link rel="stylesheet" href="/static/custom/custom.css" type="text/css">
+    <script src="/static/components/requirejs/require.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+      require.config({
+          baseUrl: '/static/',
+      });
+    </script>
+
+    
+    
+
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="components/marked/lib/marked" src="/static/components/marked/lib/marked.js"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style>.CodeMirror span { vertical-align: bottom; }</style><style type="text/css">.MathJax_Display {text-align: center; margin: 0; position: relative; display: block; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; border: 0; padding: 0; margin: 0}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0 !important; padding: 0 !important; margin: 0 !important; vertical-align: 0 !important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap ! important}
+.MathJax img {display: inline ! important; float: none ! important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block; overflow: hidden; width: 1px; height: 60ex}
+.MathJax .MathJax_EmBox {display: block; overflow: hidden; width: 1px; height: 60em}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Main; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf') format('opentype'); font-weight: bold}
+@font-face {font-family: MathJax_Main; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Math; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf') format('opentype'); font-style: italic}
+@font-face {font-family: MathJax_Caligraphic; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff') format('woff'), url('http://cdn.mathjax.org/mathjax/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf') format('opentype')}
+.MathJax .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style>
+<style>
+#first-bar{
+float:left;
+max-width:50%;
+overflow-x: hidden;
+}
+#second-bar{
+float:right;
+max-width:50%;
+overflow-x: hidden;
+}
+pre.deleted {
+background-color: #F5F5DC;
+}
+
+div.cell.deleted {
+background-color: #E9967A;
+}
+.added-ul {
+text-decoration: none;
+border-bottom: 4px solid green;
+}
+.delete-text {
+background-color: #E9967A;
+}
+.CodeMirror-measure {
+display: none;
+}
+.added-cell {
+background-color: #ADFF2F;
+border: 3px solid #006400;
+}
+
+.bottom-spacer {
+    height: 100px;
+    margin: 100px;
+    padding: 100px;
+}
+
+.row-cell-merge-local {
+  float: left;
+  clear:right;
+  width: 30%;
+  overflow-x: hidden;
+}
+
+.row-cell-merge-base {
+  width: 30%;
+  overflow-x: hidden;
+}
+
+.row-cell-merge-remote {
+  width: 30%;
+  overflow-x: hidden;
+  float:right;
+}
+
+.row-cell-merge-controls-local {
+  width: 5%;
+  overflow-x: hidden;
+  float:left;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.row-cell-merge-controls-remote {
+  width: 5%;
+  overflow-x: hidden;
+  float:right;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.row-cell-diff-left {
+  float: left;
+  width: 47%;
+  overflow-x: hidden;
+}
+
+.row-cell-diff-middle {
+    padding-top: 10px;
+    overflow-x: hidden;
+    width: 6%;
+    text-align: center;
+}
+
+.row-cell-diff-right {
+    float:right;
+    overflow-x: hidden;
+    width: 47%;
+}
+
+#notebook-container {
+    margin-bottom: 100px;
+}
+
+.diff-spacer {
+  background-color: rgb(230, 230, 230);
+}
+.diff-spacer .cell {
+    visibility:hidden;
+}
+
+.diff-image {
+visibility: hidden;
+}
+
+.diff-image:hover {
+visibility: visible;
+}
+
+.diff-image-actual:hover {
+visibility: hidden;
+}
+
+</style>
+
+</head>
+
+
+<body data-project="C:\Users\shorooq" data-base-project-url="/" data-base-kernel-url="/" data-notebook-id="240ca3aa-a6b3-41fb-ba89-028fdc8cbe7b" class="notebook_app" style=""><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div>
+
+<noscript>
+    &lt;div id='noscript'&gt;
+      IPython Notebook requires JavaScript.&lt;br&gt;
+      Please enable it to proceed.
+  &lt;/div&gt;
+</noscript>
+<img src="newlogo.png" alt="logo"/>
+<div id="site" class="border-box-sizing" style="display: block;">
+
+
+<div id="ipython-main-app" class="border-box-sizing" >
+
+    <div id="notebook_panel" class="border-box-sizing">
+        <div id="notebook" class="border-box-sizing" style="height: 100%;">
+
+
+<div class="container" id="notebook-container">
+
+  ${cells}
+
+</div>
+
+
+</div>
+</div>
+</div>
+
+<div class='bottom-spacer'>
+</div>
+
+<script src="/static/components/jquery/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/components/jquery-ui/ui/minified/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/components/bootstrap/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/base/js/namespace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/base/js/page.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/auth/js/loginwidget.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+
+    
+
+
+<script src="/static/components/codemirror/lib/codemirror.js" charset="utf-8"></script>
+<script type="text/javascript">
+    CodeMirror.modeURL = "/static/components/codemirror/mode/%N/%N.js";
+</script>
+<script src="/static/components/codemirror/addon/mode/loadmode.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/addon/mode/multiplex.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/addon/mode/overlay.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/addon/edit/matchbrackets.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/addon/comment/comment.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/htmlmixed/htmlmixed.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/xml/xml.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/javascript/javascript.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/css/css.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/rst/rst.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/markdown/markdown.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/gfm/gfm.js" charset="utf-8"></script>
+<script src="/static/components/codemirror/mode/python/python.js" charset="utf-8"></script>
+<script src="/static/notebook/js/codemirror-ipython.js" charset="utf-8"></script>
+
+<script src="/static/components/highlight.js/build/highlight.pack.js" charset="utf-8"></script>
+
+<script src="/static/dateformat/date.format.js" charset="utf-8"></script>
+
+<script src="/static/base/js/events.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/base/js/utils.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/base/js/dialog.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/layoutmanager.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/mathjaxutils.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/outputarea.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/cell.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/celltoolbar.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/codecell.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/completer.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/textcell.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/services/kernels/js/kernel.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/savewidget.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/quickhelp.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/pager.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/menubar.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/toolbar.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/maintoolbar.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/notebook.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/notificationwidget.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/notificationarea.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/tooltip.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/config.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/main.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="/static/notebook/js/contexthint.js" charset="utf-8"></script>
+
+<script src="/static/notebook/js/celltoolbarpresets/default.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/notebook/js/celltoolbarpresets/slideshow.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+<script src="/static/custom/custom.js" type="text/javascript" charset="utf-8"></script>
+
+
+
+<div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: normal; font-family: MathJax_Size1, monospace;">?</div></body></html>
