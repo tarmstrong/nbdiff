@@ -19,7 +19,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='nbdiff',
-    version='0.1.0',
+    version='0.0.0',
     description='A tool for diffing and merging IPython Notebook files',
     long_description=readme + '\n\n' + history,
     author='Tavish Armstrong',
@@ -32,7 +32,7 @@ setup(
     include_package_data=True,
     install_requires=[
     ],
-    license="BSD",
+    license="MIT",
     zip_safe=False,
     keywords='nbdiff',
     classifiers=[

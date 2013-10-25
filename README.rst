@@ -12,7 +12,7 @@ NBDiff
         :target: https://crate.io/packages/nbdiff?version=latest
 
 
-A tool for diffing and merging IPython Notebook files
+A tool for diffing and merging IPython Notebook files.
 
 * Free software: MIT license
 * Documentation: http://nbdiff.rtfd.org.
