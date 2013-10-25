@@ -7,7 +7,7 @@ def find_cells(n):
     result = [div for div in n.findAll('div') if 'class' in dict(div.attrs) and re.match(r'^cell\ .*', dict(div.attrs)['class'])]
     return result
 
-html_data = open('old-index.html').read()
+html_data = open('old-diff.html').read()
 soup = b.BeautifulSoup(html_data)
 first_bar = soup.find('div', id='first-bar')
 soup = b.BeautifulSoup(html_data)
