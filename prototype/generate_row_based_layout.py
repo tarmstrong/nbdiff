@@ -1,3 +1,4 @@
+'''You probably don't want to run this script.'''
 from mako.template import Template
 import re
 import BeautifulSoup as b
