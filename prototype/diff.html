@@ -104,7 +104,11 @@ max-width:50%;
 overflow-x: hidden;
 }
 pre.deleted {
-background-color: #F5F5DC;
+background-color: #FFCC66;
+}
+
+.changed {
+background-color: #FFCC66;
 }
 
 div.cell.deleted {
@@ -114,9 +118,18 @@ background-color: #E9967A;
 text-decoration: none;
 border-bottom: 4px solid green;
 }
+
+.deleted-ul {
+text-decoration: none;
+border-bottom: 4px solid red;
+}
 .delete-text {
 background-color: #E9967A;
 }
+.add-text {
+background-color: #ADFF2F;
+}
+
 .CodeMirror-measure {
 display: none;
 }
@@ -1287,7 +1300,7 @@ visibility: hidden;
 <div class="CodeMirror-selected" style="position: absolute; left: 0px; top: 17px; width: 1072px; height: 17px;">
 </div>
 </div>
-<div class="CodeMirror-code" style=""><pre><span class="cm-variable">fruits</span> = [<span class="cm-string">'apple'</span>, <span class="cm-string">'orange'</span>, <span class="cm-string">'mango'</span>]</pre><pre><span class="cm-keyword">for</span> <span class="cm-variable">fruit</span> <span class="cm-operator">in</span> <span class="cm-variable">fruits</span>:</pre><pre>    <span class="cm-keyword">print</span> <span class="cm-string">' Current fruit: '</span>,<span class="cm-variable">fruit</span></pre><pre>&nbsp;</pre>
+<div class="CodeMirror-code" style=""><pre class = "deleted" ><span class="cm-variable">fruits</span> = [<div class = " deleted-ul"> <span class="cm-string">'apple'</span>, <span class="cm-string">'orange'</span>, <span class="cm-string">'mango'</span></div>]</pre><pre><span class="cm-keyword">for</span> <span class="cm-variable">fruit</span> <span class="cm-operator">in</span> <span class="cm-variable">fruits</span>:</pre><pre>    <span class="cm-keyword">print</span> <span class="cm-string">' Current fruit: '</span>,<span class="cm-variable">fruit</span></pre><pre>&nbsp;</pre>
 </div>
 <div class="CodeMirror-cursor" style="left: 0px; top: 51px; height: 17px; visibility: hidden;">&nbsp;
 </div>
@@ -1315,7 +1328,7 @@ visibility: hidden;
 </div>
 <div class="output_subarea output_text output_stream output_stdout"><pre> Current fruit:  apple
  Current fruit:  orange
- Current fruit:  mango
+<div class = "changed"> Current fruit: <span class = "deleted-ul">mango </span></div>
 </pre>
 </div>
 </div>
@@ -1362,7 +1375,7 @@ visibility: hidden;
 <div class="CodeMirror-selected" style="position: absolute; left: 80px; top: 0px; width: 208px; height: 17px;">
 </div>
 </div>
-<div class="CodeMirror-code" style=""><pre><span class="cm-variable">fruits</span> = []</pre><pre><span class="cm-variable">fruits</span>.<span class="cm-variable">append</span>(<span class="cm-string">'apple'</span>)</pre><pre><span class="cm-variable">fruits</span>.<span class="cm-variable">append</span>(<span class="cm-string">'orange'</span>)</pre><pre><span class="cm-variable">fruits</span>.<span class="cm-variable">append</span>(<span class="cm-string">'banana'</span>)</pre><pre><span class="cm-keyword">for</span> <span class="cm-variable">fruit</span> <span class="cm-operator">in</span> <span class="cm-variable">fruits</span>:</pre><pre>    <span class="cm-keyword">print</span> <span class="cm-string">' Current fruit: '</span>,<span class="cm-variable">fruit</span></pre>
+<div class="CodeMirror-code" style=""><pre class = "deleted"><span class="cm-variable">fruits</span> = []</pre><pre class = "add-text"><span class="cm-variable">fruits</span>.<span class="cm-variable">append</span>(<span class="cm-string">'apple'</span>)</pre><pre class = "add-text"><span class="cm-variable">fruits</span>.<span class="cm-variable">append</span>(<span class="cm-string">'orange'</span>)</pre><pre class = "add-text"><span class="cm-variable">fruits</span>.<span class="cm-variable">append</span>(<span class="cm-string">'banana'</span>)</pre><pre><span class="cm-keyword">for</span> <span class="cm-variable">fruit</span> <span class="cm-operator">in</span> <span class="cm-variable">fruits</span>:</pre><pre>    <span class="cm-keyword">print</span> <span class="cm-string">' Current fruit: '</span>,<span class="cm-variable">fruit</span></pre>
 </div>
 <div class="CodeMirror-cursor" style="left: 160px; top: 68px; height: 17px;">&nbsp;
 </div>
@@ -1390,7 +1403,7 @@ visibility: hidden;
 </div>
 <div class="output_subarea output_text output_stream output_stdout"><pre> Current fruit:  apple
  Current fruit:  orange
- Current fruit:  banana
+ <div class = "changed">Current fruit:<span class= "added-ul"> banana </span></div>
 </pre>
 </div>
 </div>
