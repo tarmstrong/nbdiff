@@ -18,7 +18,7 @@ install:
 # command to run tests, e.g. python setup.py test
 script:
   - python setup.py nosetests
-  - flake8 git2json
+  - flake8 nbdiff
   - flake8 tests
 
 notifications:
