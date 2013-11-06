@@ -2,6 +2,7 @@
 Entry points for the nbdiff package.
 '''
 import argparse
+from notebook_parser import NotebookParser
 
 
 def diff():
@@ -11,7 +12,16 @@ def diff():
     # TODO take 0 or 2 arguments
     # if 0, use version control (unstaged changes)
     # if 2, use the files.
-    print ('Arguments received: {}'.format(args))
+    length = len(args.notebook)
+    if length == 0:
+        q = 0
+    elif length == 2:
+        x = NotebookParser()
+        notebook = x.parse(args.notebook[0])
+    else:
+        raise ValueError("Number of arguments must be either 0 or 2")
+
+    print('Arguments received: {}'.format(args.notebook))
 
 
 def merge():
@@ -21,4 +31,4 @@ def merge():
     # TODO take 0 or 3 arguments.
     # if 0, use version control
     # if 3, use the files.
-    print ('Arguments received: {}'.format(args))
+    print('Arguments received: {}'.format(args))
