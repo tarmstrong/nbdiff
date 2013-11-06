@@ -2,7 +2,7 @@
 Entry points for the nbdiff package.
 '''
 import argparse
-from notebook_parser import NotebookParser
+#from notebook_parser import NotebookParser
 
 
 def diff():
@@ -14,7 +14,7 @@ def diff():
     # if 2, use the files.
     #length = len(args.notebook)
     #if length == 0:
-        #do
+    #    do
     #elif length == 2:
     #    x = NotebookParser()
     #    x.parse(args.notebook[0])
