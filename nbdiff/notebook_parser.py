@@ -3,6 +3,12 @@ __author__ = 'root'
 import json
 from notebookNode import NotebookNode
 
+primitive = (int, str, bool)
+
+
+def isPrimitive(val):
+    return isinstance(val, primitive)
+
 
 class NotebookParser:
 
@@ -16,37 +22,31 @@ class NotebookParser:
 
     def parse(self, path):
         self.load(path)
-        nb = NotebookNode(self.data)
-        cells = nb.worksheets[0]["cells"]
-        nb.__init__({"worksheets": [NotebookNode({"cells": cells})]})
-        cell_list = self.as_cells(nb.worksheets[0].cells)
-        nb.__init__({"worksheets": cell_list})
-        #self.recursive(self.data, nb)
+        nb = NotebookNode()
+        self.recursive(self.data, nb)
         return nb
-
-    def as_cells(self, worksheet):
-        cell_list = []
-        for item in worksheet:
-            cell_list.append(NotebookNode(item))
-        return cell_list
 
     def recursive(self, item, notebook_node):
         if type(item) is dict:
             for key in item:
                 if type(item[key]) is list:
-                    notebook_node.__init__(**{key: self.recursive(item[key])})
-                elif type(item[key]) is str or type(item[key]) is int:
-                    NotebookNode(**{key: item[key]})
+                    array = []
+                    setattr(notebook_node, key, array)
+                    self.recursive(item[key], array)
+                elif isPrimitive(item[key]):
+                    setattr(notebook_node, key, item[key])
                 else:
-                    NotebookNode(**{key: self.recursive(item[key])})
+                    node = NotebookNode()
+                    setattr(notebook_node, key, node)
+                    self.recursive(item[key], node)
         elif type(item) is list:
             for it in item:
-                self.recursive(it)
-
-
-    #def ispair(self, item):
-        #return type(item) is dict and len(item) == 1 and (type(list(item.values())[0]) is str or type(list(item.values())[0]) is int)
-          # and (type(item.values()[0]) is str or int)
+                if isPrimitive(it):
+                    notebook_node.append(it)
+                else:
+                    node = NotebookNode()
+                    notebook_node.append(node)
+                    self.recursive(it, node)
 
 x = NotebookParser()
-notebook = x.parse("/home/bobi/GPTutorial.ipynb")
+notebook = x.parse("/home/bobi/Part 5 - Rich Display System.ipynb")
