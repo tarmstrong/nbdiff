@@ -186,6 +186,18 @@ visibility: visible;
 visibility: hidden;
 }
 
+.saveButton{
+position:fixed;
+right:10px;
+top:5px;
+}
+
+.questionButton{
+position:fixed;
+right:55px;
+top:5px;
+}
+
 </style>
 
 </head>
@@ -201,7 +213,8 @@ visibility: hidden;
 </noscript>
 <img src="newlogo.png" alt="logo"/>
 <div id="site" class="border-box-sizing" style="display: block;">
-
+<input type='button' value='save' data-cell-idx='0' class = 'saveButton' />
+<input type='button' value='?' data-cell-idx='0' class = 'questionButton' />
 
 <div id="ipython-main-app" class="border-box-sizing" >
 
