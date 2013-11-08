@@ -2,6 +2,7 @@ __author__ = 'root'
 
 import json
 from notebook_node import NotebookNode
+from comparable import CellComparator
 
 primitive = (int, str, bool)
 
@@ -43,4 +44,10 @@ class NotebookParser:
                     self.deserialize(it, node)
 
 x = NotebookParser()
-notebook = x.parse("/home/lenovo/Part 5 - Rich Display System.ipynb")
+notebook = x.parse("Part_5_-_Rich_Display_System.ipynb")
+notebook2 = x.parse("Part_5_-_Rich_Display_System_(changed).ipynb")
+comparator = CellComparator()
+notequal = [(i, j) for i, j in zip(notebook.worksheets[0].cells, notebook2.worksheets[0].cells)
+             if not comparator.equal(i, j)]
+
+print (notequal)
