@@ -18,8 +18,8 @@ class NotebookParser:
         data = json.load(json_data)
         json_data.close()
         nb = NotebookNode()
-        self.deserialize(data, nb)
-        return nb
+        #self.deserialize(data, nb)
+        return data
 
     def deserialize(self, item, notebook_node):
         if type(item) is dict:
@@ -47,7 +47,9 @@ x = NotebookParser()
 notebook = x.parse("Part_5_-_Rich_Display_System.ipynb")
 notebook2 = x.parse("Part_5_-_Rich_Display_System_(changed).ipynb")
 comparator = CellComparator()
-notequal = [(i, j) for i, j in zip(notebook.worksheets[0].cells, notebook2.worksheets[0].cells)
-             if not comparator.equal(i, j)]
 
-print (notequal)
+notequal = comparator.equalworksheets(notebook["worksheets"][0], notebook2["worksheets"][0])
+notequal[0][0]["metadata"]["status"] = "changed"
+notequal[0][1]["metadata"]["status"] = "changed"
+
+print (len(notequal))
