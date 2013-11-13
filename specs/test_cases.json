@@ -26,6 +26,76 @@
 },
 {
 "before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "A", "A", "A", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "added", "text": "A"},
+{"type": "added", "text": "A"},
+{"type": "added", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["D", "E", "F"],
+"diff": [
+{"type": "deleted", "text": "A"},
+{"type": "deleted", "text": "B"},
+{"type": "deleted", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["G", "H", "I", "D", "E", "F"],
+"diff": [
+{"type": "deleted", "text": "A"},
+{"type": "deleted", "text": "B"},
+{"type": "deleted", "text": "C"},
+{"type": "added", "text": "G"},
+{"type": "added", "text": "H"},
+{"type": "added", "text": "I"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "G", "H", "I", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "added", "text": "G"},
+{"type": "added", "text": "H"},
+{"type": "added", "text": "I"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["G", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "deleted", "text": "A"},
+{"type": "added", "text": "G"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
 "after": ["A", "B", "C", "G", "E", "F"],
 "diff": [
 {"type": "unchanged", "text": "A"},
@@ -35,6 +105,342 @@
 {"type": "added", "text": "G"},
 {"type": "unchanged", "text": "E"},
 {"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "G", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "added", "text": "G"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "deleted", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "F", "G"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "G"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "deleted", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "G"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "deleted", "text": "F"},
+{"type": "added", "text": "G"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "G"},
+{"type": "added", "text": "H"},
+{"type": "added", "text": "I"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["B", "C", "D", "E", "F", "A"],
+"diff": [
+{"type": "deleted", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "A"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "C", "D", "B", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "deleted", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "added", "text": "B"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["/$?%@#", "A", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "added", "text": "/$?%@#"},
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "/$?%@#", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "added", "text": "/$?%@#"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "F", "/$?%@#"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "/$?%@#"}
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["É", "A", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "added", "text": "É"},
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "É", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "added", "text": "É"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "F", "É"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "É"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "/$?%@#" "D", "E", "F", "É"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "added", "text": "/$?%@"}
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "É"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "/$?%@#" "D", "E", "F", "É"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "added", "text": "/#"}
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+{"type": "added", "text": "É"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A: ["A", "B", "C"]", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "changed", "text": "A: ["A", "B", "C"]"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C: ["A", "B", "C"]", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "changed", "text": "C: ["A", "B", "C"]"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "F: ["A", "B", "C"]"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "changed", "text": "F: ["A", "B", "C"]"}
+]
+},
+"before": ["A: ["A", "B", "C"]", "B", "C", "D", "E", "F"],
+"after": ["A: ["D", "B", "C"]", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "changed", "text": "A: ["D", "B", "C"]"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A: ["A", "B", "C"]", "B", "C", "D", "E", "F"],
+"after": ["A: ["A", "D", "C"]", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "changed", "text": "A: ["A", "D", "C"]"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A: ["A", "B", "C"]", "B", "C", "D", "E", "F"],
+"after": ["A: ["A", "B", "D"]", "B", "C", "D", "E", "F"],
+"diff": [
+{"type": "changed", "text": "A: ["A", "B", "D"]"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C: ["A", "B", "C"]", "D", "E", "F"],
+"after": ["A", "B", "C: ["D", "B", "C"]", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "changed", "text": "C: ["D", "B", "C"]"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C: ["A", "B", "C"]", "D", "E", "F"],
+"after": ["A", "B", "C: ["A", "D", "C"]", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "changed", "text": "C: ["A", "D", "C"]"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C: ["A", "B", "C"]", "D", "E", "F"],
+"after": ["A", "B", "C: ["A", "B", "D"]", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "changed", "text": "C: ["A", "B", "D"]"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"}
+]
+},
+"before": ["A", "B", "C", "D", "E", "F: ["A", "B", "C"]"],
+"after": ["A", "B", "C", "D", "E", "F: ["D", "B", "C"]"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "changed", "text": "F: ["D", "B", "C"]"}
+]
+}
+"before": ["A", "B", "C", "D", "E", "F: ["A", "B", "C"]"],
+"after": ["A", "B", "C", "D", "E", "F: ["A", "D", "C"]"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "changed", "text": "F: ["A", "D", "C"]"}
+]
+}
+"before": ["A", "B", "C", "D", "E", "F: ["A", "B", "C"]"],
+"after": ["A", "B", "C", "D", "E", "F: ["A", "B", "D"]"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "changed", "text": "F: ["A", "B", "D"]"}
 ]
 }
 ]
