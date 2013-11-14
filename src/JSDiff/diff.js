@@ -76,9 +76,51 @@ function resizeContent() {
 
 }
 
-//generated the middle diff results
-function generateDiff() {
-    if (document.getElementById('file1').value === "")
+function Cell(cType, input, language, level){
+this.cType = cType;
+this.input = input;
+this.language = language;
+this.level = level;
+}
+//Create two objects in order to compare them later
+var cellA = new Cell("code", "import matplotlib.pyplot as plt\nx = linspace(0, 5, 10)", "python", 1);
+var cellB = new Cell("code", "import matplotlib.pyplot as plt\nx = linspace(0, 5, 10)\ny = x ** 2\n\nfig1 = figure()\nplot(x, y, 'r')\nxlabel('x')\nylabel('y')\ntitle('title')", "python", 2);
+
+
+//generate the diff results
+function generateDiff(cellA, cellB) {
+var diffText="";
+	if (cellA.cType !== cellB.cType) {
+		diffText.concat(cellA.cType);
+		diffText.concat(" ");
+		diffText.concat(cellB.cType);
+		diffText.concat("<br>");
+		}
+		
+	if (cellA.input !== cellB.input){
+		diffText.concat(cellA.cType);
+		diffText.concat(" ");
+		diffText.concat(cellB.cType);
+		diffText.concat("<br>");
+	}
+	
+	if (cellA.language !== cellB.language){
+		diffText.concat(cellA.language);
+		diffText.concat(" ");
+		diffText.concat(cellB.language);
+		diffText.concat("<br>");
+	}
+	
+	if (cellA.level !== cellB.level){
+		diffText.concat(cellA.level);
+		diffText.concat(" ");
+		diffText.concat(cellB.level);
+		diffText.concat("<br>");
+	}
+
+	document.write(diffText);
+	
+    /*if (document.getElementById('file1').value === "")
         alert("Please Specify the Left File.");
     else if (document.getElementById('file2').value === "")
         alert("Please Specify the Right File.");
@@ -209,9 +251,9 @@ function generateDiff() {
         }
         document.getElementById("result").innerHTML = JSON.stringify(
                 results, null, 1);
-        resizeContent();
+        resizeContent(); */
     }
-}
+
 
 //compares the ipynb attributes.
 function compareIPYNBAtt(att, left, right) {
