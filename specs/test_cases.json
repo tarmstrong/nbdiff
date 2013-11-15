@@ -211,6 +211,7 @@
 {"type": "unchanged", "text": "F"}
 ]
 },
+{
 "before": ["A", "B", "C", "D", "E", "F"],
 "after": ["@", "A", "B", "C", "D", "E", "F"],
 "diff": [
@@ -225,7 +226,20 @@
 },
 {
 "before": ["A", "B", "C", "D", "E", "F"],
-"after": ["A", "B", "C", "D", "E", "F", "/$?%@#"],
+"after": ["A", "B", "C", "#", "D", "E", "F"],
+"diff": [
+{"type": "unchanged", "text": "A"},
+{"type": "unchanged", "text": "B"},
+{"type": "unchanged", "text": "C"},
+{"type": "added", "text": "#"}
+{"type": "unchanged", "text": "D"},
+{"type": "unchanged", "text": "E"},
+{"type": "unchanged", "text": "F"},
+]
+},
+{
+"before": ["A", "B", "C", "D", "E", "F"],
+"after": ["A", "B", "C", "D", "E", "F", "#"],
 "diff": [
 {"type": "unchanged", "text": "A"},
 {"type": "unchanged", "text": "B"},
@@ -233,7 +247,7 @@
 {"type": "unchanged", "text": "D"},
 {"type": "unchanged", "text": "E"},
 {"type": "unchanged", "text": "F"},
-{"type": "added", "text": "/$?%@#"}
+{"type": "added", "text": "#"}
 ]
 },
 {
@@ -289,19 +303,6 @@
 ]
 },
 {
-"before": ["A", "B", "C", "D", "E", "F"],
-"after": ["A", "B", "C", "D", "E", "F", "@"],
-"diff": [
-{"type": "unchanged", "text": "A"},
-{"type": "unchanged", "text": "B"},
-{"type": "unchanged", "text": "C"},
-{"type": "unchanged", "text": "D"},
-{"type": "unchanged", "text": "E"},
-{"type": "unchanged", "text": "F"},
-{"type": "added", "text": "@"}
-]
-},
-{
 "before": [
 {"input": ["print 'hello'\n", "x = 10\n", "print x\n"], "output":["hello\n", "10\n"]},
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
@@ -315,7 +316,49 @@
 {"type": "added",  "text": {"input": ["x = 10\n", "print x\n"], "output": ["10\n"]}}
 ]
 },
-*{
+{
+"before": [
+{"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
+{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
+]
+"after":[
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
+]
+"diff": [
+{"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]}
+]
+},
+{
+"before": [
+{"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
+{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
+]
+"after":[
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
+]
+"diff": [
+{"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]}
+]
+},
+{
+"before": [
+{"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
+{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
+]
+"after":[
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
+]
+"diff": [
+{"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]}
+]
+},
+{
 "before": [
 {"input": ["print 'hello'\n", "x = 10\n", "print x\n"], "output":["hello\n", "10\n"]},
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
@@ -337,54 +380,12 @@
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
 ]
 "after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
-{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-]
-"diff": [
-{"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]}
-]
-},
-{
-"before": [
-{"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-]
-"after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
-{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-]
-"diff": [
-{"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]}
-]
-},
-{
-"before": [
-{"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-]
-"after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
-{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-]
-"diff": [
-{"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]}
-]
-},
-{
-"before": [
-{"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-]
-"after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
 {"input": ["D = 20\n", "A = 10\n", "B = 10\n", "C = 10\n"], "output: []"}
 ]
 "diff": [
 {"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
 {"type": "deleted", "text": {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}},
 {"type": "added",  "text": {"input": ["D = 20\n", "A = 10\n", "B = 10\n", "C = 10\n"], "output: []"}}
 ]
@@ -465,12 +466,12 @@
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
 ]
 "after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n", "D = 20\n"], "output: []"}
 ]
 "diff": [
 {"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]}},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]}},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]}},
 {"type": "deleted", "text": {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}},
 {"type": "added",  "text": {"input": ["A = 10\n", "B = 10\n", "C = 10\n", "D = 20\n"], "output: []"}}
 ]
@@ -481,12 +482,12 @@
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
 ]
 "after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
 {"input": ["D = 20\n", "A = 10\n", "B = 10\n", "C = 10\n"], "output: []"}
 ]
 "diff": [
 {"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]}},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]}},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]}},
 {"type": "deleted", "text": {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}},
 {"type": "added",  "text": {"input": ["D = 20\n", "A = 10\n", "B = 10\n", "C = 10\n"], "output: []"}}
 ]
@@ -497,12 +498,12 @@
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
 ]
 "after":[
-{"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]},
+{"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]},
 {"input": ["A = 10\n", "D = 20\n", "B = 10\n", "C = 10\n"], "output: []"}
 ]
 "diff": [
 {"type": "deleted", "text": {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]}},
-{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n', "print y\n"], "output": ["hello\n", "20\n"]}},
+{"type": "added", "text": {"input": ["print 'hello'\n", "y = 20\n", "print y\n"], "output": ["hello\n", "20\n"]}},
 {"type": "deleted", "text": {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}},
 {"type": "added",  "text": {"input": ["A = 10\n", "D = 20\n", "B = 10\n", "C = 10\n"], "output: []"}}
 ]
@@ -643,7 +644,6 @@
 {"type": "deleted", "text": {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}}
 ]
 },
-,
 {
 "before": [
 {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
@@ -669,7 +669,6 @@
 {"input": ["print 'hi'\n", "x = 10\n", "print x\n"], "output":["hi\n", "10\n"]},
 {"input": ["print 'hi'\n"], "output":["hi\n"]},
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
-
 ]
 "after":[
 {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
@@ -708,7 +707,7 @@
 {"input": ["A = 10\n", "B = 10\n", "C = 10\n"], "output":[]}
 ]
 "after":[
-{"input": ["print 'goodbye'\n, "x = 10\n"], "output": ["goodbye\n"]},
+{"input": ["print 'goodbye'\n", "x = 10\n"], "output": ["goodbye\n"]},
 {"input": ["print 'see you later'\n, "x = 10\n", "print x\n"], "output": ["see you later\n", "10\n"]},
 {"input": ["print 'hello'\n", "x = 10\n", "y = 20\n", "print y\n"], "output":["hello\n", "20\n"]},
 {"input": ["print 'hola'\n", "x = 20\n", "y = 20\n", "x = 30\n", "print x\n", "print y\n", "print z\n"], "output":["hola\n", "20\n", "20\n", "30\n"]},
