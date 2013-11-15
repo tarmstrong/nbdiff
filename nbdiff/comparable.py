@@ -15,10 +15,10 @@ class CellComparator():
         if self.istextcell(cell1) and self.istextcell(cell2):
             return cell1["source"] == cell2["source"]
         else:
-            equallanguage = cell1["language"] == cell2["language"]
-            equalinput = cell1["input"] == cell2["input"]
-            equaloutputs = self.equaloutputs(cell1["outputs"], cell2["outputs"])
-            return equallanguage and equalinput and equaloutputs
+            eqlanguage = cell1["language"] == cell2["language"]
+            eqinput = cell1["input"] == cell2["input"]
+            eqoutputs = self.equaloutputs(cell1["outputs"], cell2["outputs"])
+            return eqlanguage and eqinput and eqoutputs
 
     def istextcell(self, cell):
         return "source" in cell
