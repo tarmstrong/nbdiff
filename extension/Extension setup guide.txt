@@ -1,0 +1,14 @@
+Steps to setup extension.
+
+1. locate ipython profile. and cd to it in command prompt. 
+eg:C:\Users\[your_user_name]\.ipython
+
+2. type: ipython profile create customcss
+
+3. place 'static' folder of extension into the newly created profile.
+eg: C:\Users\[your_user_name]\.ipython\profile_customcss
+
+4. to run extension run ipython notebook with the profile param
+	ipython notebook --profile customcss
+	
+	
