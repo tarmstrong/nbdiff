@@ -1,7 +1,6 @@
 __author__ = 'root'
 
 import json
-from comparable import CellComparator
 
 
 class NotebookParser:
