@@ -356,7 +356,7 @@
 "diff": [
 {"type": "added", "text": {"input": ["print 'hola'\n", "x = 20\n", "y = 20\n", "x = 30\n", "print x\n", "print y\n", "print z\n"], "output":["hola\n", "20\n", "20\n", "30\n"]}},
 {"type": "added", "text": {"input": ["print 'hi'\n", "x = 10\n", "print x\n"], "output":["hi\n", "10\n"]}},
-{"type": "added", "text": {"input": ["print 'hi'\n"], "output":["hi\n"]}},
+{"type": "added", "text": {"input": ["print 'hi'\n"], "output":["hi\n"]}}
 ]
 },
 {
@@ -374,7 +374,7 @@
 "diff": [
 {"type": "deleted", "text": {"input": ["print 'hola'\n", "x = 20\n", "y = 20\n", "x = 30\n", "print x\n", "print y\n", "print z\n"], "output":["hola\n", "20\n", "20\n", "30\n"]}},
 {"type": "deleted", "text": {"input": ["print 'hi'\n", "x = 10\n", "print x\n"], "output":["hi\n", "10\n"]}},
-{"type": "deleted", "text": {"input": ["print 'hi'\n"], "output":["hi\n"]}},
+{"type": "deleted", "text": {"input": ["print 'hi'\n"], "output":["hi\n"]}}
 ]
 },
 {
