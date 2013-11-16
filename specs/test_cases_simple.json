@@ -231,7 +231,7 @@
 {"type": "unchanged", "text": "A"},
 {"type": "unchanged", "text": "B"},
 {"type": "unchanged", "text": "C"},
-{"type": "added", "text": "#"}
+{"type": "added", "text": "#"},
 {"type": "unchanged", "text": "D"},
 {"type": "unchanged", "text": "E"},
 {"type": "unchanged", "text": "F"},
@@ -296,10 +296,10 @@
 {"type": "unchanged", "text": "A"},
 {"type": "unchanged", "text": "B"},
 {"type": "unchanged", "text": "C"},
-{"type": "added", "text": "@"}
+{"type": "added", "text": "@"},
 {"type": "unchanged", "text": "D"},
 {"type": "unchanged", "text": "E"},
 {"type": "unchanged", "text": "F"}
 ]
 }
-}
+]
