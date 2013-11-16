@@ -10,8 +10,16 @@ import json
 def diff(before, after):
     return []
 
+
 def test_diffs():
-    test_cases = json.load(open('test_cases.json'))
+    test_cases = json.load(open('test_cases_simple.json'))
+    for test_case in test_cases:
+        result = diff(test_case['before'], test_case['after'])
+        eq_(result, test_case['diff'])
+
+
+def test_diffs_cells():
+    test_cases = json.load(open('test_cases_cells.json'))
     for test_case in test_cases:
         result = diff(test_case['before'], test_case['after'])
         eq_(result, test_case['diff'])
