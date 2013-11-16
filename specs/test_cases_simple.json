@@ -234,7 +234,7 @@
 {"type": "added", "text": "#"},
 {"type": "unchanged", "text": "D"},
 {"type": "unchanged", "text": "E"},
-{"type": "unchanged", "text": "F"},
+{"type": "unchanged", "text": "F"}
 ]
 },
 {
@@ -291,7 +291,7 @@
 },
 {
 "before": ["A", "B", "C", "D", "E", "F"],
-"after": ["A", "B", "C", "@" "D", "E", "F"],
+"after": ["A", "B", "C", "@", "D", "E", "F"],
 "diff": [
 {"type": "unchanged", "text": "A"},
 {"type": "unchanged", "text": "B"},
