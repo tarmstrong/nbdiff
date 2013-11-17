@@ -10,6 +10,7 @@ $( document ).ready(function() {
 	for(var i = 0; i < cells.length; i++){
 		cellElements[i] = IPython.notebook.get_cell_element(i);
 	}
+    
 	
 	var init = function(){
 		$('#notebook').append(generate_notebook_container());
@@ -29,12 +30,35 @@ $( document ).ready(function() {
 		var state = cell.metadata.state;
 		
 		if(side == cellSide[0]){
-			$('#notebook-container-new').append(generate_empty_merge_row());
-		}
-		
-		generate_merge_collumn(side, state, index);
-		
+      var new_row = $(generate_empty_merge_row());
+       new_row.find("input.merge-arrow-right").click(function(index, state){
+        return function(){
+        console.log('hello');
+           var leftCell = cellElements[index];
+           leftCell.addClass(get_state_css(state));
+           var lastRow = $("#notebook-container-new").children().last();
+           var htmlClass = ".row-cell-merge-base";
+           lastRow.children(htmlClass).append(leftCell); 
+        }     
+        }(index, state));
+        
+        new_row.find("input.merge-arrow-left").click(function(index, state, cellElements){
+        return function(){
+        console.log('hello', cellElements);
+            var rightCell = $(cellElements[index][0]);
+           rightCell.addClass(get_state_css(state));
+           var lastRow = $("#notebook-container-new").children().last();
+           var htmlClass = ".row-cell-merge-base";
+           lastRow.children(htmlClass).append(rightCell);
+           }
+        }(index, state, cellElements));       
+        
+			$('#notebook-container-new').append(new_row);
+		}		
+		generate_merge_collumn(side, state, index);		
 	};
+    
+   
 	
 	var generate_merge_collumn = function(side, state, index){
 		var cellHTML = cellElements[index];
