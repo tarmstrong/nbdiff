@@ -1,7 +1,6 @@
 /**write your css in here**/
 /* like */
 
-<style>
 	
 	#first-bar {
 	  float:left;
@@ -113,11 +112,6 @@
 	  width: 47%;
 	}
 
-	#notebook-container {
-	  display:none;
-	  margin-bottom: 100px;
-	}
-
 	.diff-spacer {
 	  background-color: rgb(230, 230, 230);
 	}
@@ -150,4 +144,3 @@
 	  top:5px;
 	}
 
-</style>

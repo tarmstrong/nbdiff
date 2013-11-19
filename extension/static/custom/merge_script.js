@@ -13,8 +13,19 @@ $( document ).ready(function() {
     
 	
 	var init = function(){
-		$('#notebook').append(generate_notebook_container());
-		init_notebook_merge_rows();
+    var cells = IPython.notebook.get_cells();
+    console.log('Initializing nbdiff.');
+    if (typeof cells[0].metadata.state !== 'undefined') {
+      console.log('Found nbdiff metadata in the notebook.');
+      console.log('Hiding the normal notebook container.');
+      $('#notebook-container').hide();
+
+      console.log('Creating a new notebook container.');
+      $('#notebook').append(generate_notebook_container());
+
+      console.log('Initializing merge rows.');
+      init_notebook_merge_rows();
+    }
 	};
 	
 	var init_notebook_merge_rows = function(){
