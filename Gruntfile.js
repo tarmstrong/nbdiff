@@ -6,7 +6,7 @@ module.exports = function(grunt) {
       files: ['src/test/index.html']
     },
     jshint: {
-      all: ['Gruntfile.js', 'src/test/*.js', 'src/*']
+      all: ['Gruntfile.js', 'src/test/*.js', 'src/*', 'extension/static/custom/merge_script.js']
     }
   });
 

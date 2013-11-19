@@ -6,7 +6,7 @@ $( document ).ready(function() {
 	
 	//The indexing for IPython.notebook.get_cells_element(index) messes up with append in 
 	//generate_merge_column so this data-structure was created to preserve index.
-	var cellElements = new Array();
+	var cellElements = [];
 	for(var i = 0; i < cells.length; i++){
 		cellElements[i] = IPython.notebook.get_cell_element(i);
 	}
@@ -56,7 +56,7 @@ $( document ).ready(function() {
           // TODO allow me to change my mind and merge the
           //      local version instead of the remote.
           row.children(htmlClass).find('.cell').replaceWith(rightCell);
-        }     
+        };     
       }(index, state, new_row));
         
       new_row.find("input.merge-arrow-left").click(function(index, state, row) {
@@ -65,7 +65,7 @@ $( document ).ready(function() {
           rightCell.addClass(get_state_css(state));
           var htmlClass = ".row-cell-merge-base";
           row.children(htmlClass).find('.cell').replaceWith(rightCell);
-        }
+        };
       }(index, state, new_row));
         
 			$('#notebook-container-new').append(new_row);
