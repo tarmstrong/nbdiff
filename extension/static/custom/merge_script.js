@@ -51,6 +51,10 @@ $( document ).ready(function() {
           var rightCell = row.find('.row-cell-merge-local .cell');
           rightCell.addClass(get_state_css(state));
           var htmlClass = ".row-cell-merge-base";
+          // TODO this shouldn't obliterate the base cell -- we should
+          //      be able to undo this operation.
+          // TODO allow me to change my mind and merge the
+          //      local version instead of the remote.
           row.children(htmlClass).find('.cell').replaceWith(rightCell);
         }     
       }(index, state, new_row));
