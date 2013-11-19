@@ -5,7 +5,7 @@ $( document ).ready(function() {
 	var cells = IPython.notebook.get_cells();
 	
 	//The indexing for IPython.notebook.get_cells_element(index) messes up with append in 
-	//generate_merge_collumn so this data-structure was created to preserve index.
+	//generate_merge_column so this data-structure was created to preserve index.
 	var cellElements = new Array();
 	for(var i = 0; i < cells.length; i++){
 		cellElements[i] = IPython.notebook.get_cell_element(i);
@@ -69,12 +69,12 @@ $( document ).ready(function() {
     else {
       console.log('Adding ' + side + ' cell.');
     }
-		generate_merge_collumn(side, state, index);		
+		generate_merge_column(side, state, index);		
 	};
     
    
 	
-	var generate_merge_collumn = function(side, state, index){
+	var generate_merge_column = function(side, state, index){
 		var cellHTML = cellElements[index];
 		cellHTML.addClass(get_state_css(state));
 		var lastRow = $("#notebook-container-new").children().last();
@@ -94,7 +94,7 @@ $( document ).ready(function() {
 		} 
 	};
 	
-	var generate_merge_control_collumn = function(side) {
+	var generate_merge_control_column = function(side) {
 		var mergeArrowClass = 'merge-arrow-left';
 		if(side == cellSide[0]){
 			return "<input value='->' data-cell-idx='0' class='merge-arrow-right' type='button'>";
@@ -106,9 +106,9 @@ $( document ).ready(function() {
 	var generate_empty_merge_row = function() {
 		return "<div class='row'>"+
 					"<div class='row-cell-merge-local'></div>"+
-					"<div class='row-cell-merge-controls-local'>"+generate_merge_control_collumn("local")+"</div>"+
+					"<div class='row-cell-merge-controls-local'>"+generate_merge_control_column("local")+"</div>"+
 					"<div class='row-cell-merge-remote'></div>"+
-					"<div class='row-cell-merge-controls-remote'>"+generate_merge_control_collumn("remote")+"</div>"+
+					"<div class='row-cell-merge-controls-remote'>"+generate_merge_control_column("remote")+"</div>"+
 					"<div class='row-cell-merge-base'></div>"+
 				"</div>";
 	};
