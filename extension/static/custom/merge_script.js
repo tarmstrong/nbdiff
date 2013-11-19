@@ -30,7 +30,8 @@ $( document ).ready(function() {
 	
 	var init_notebook_merge_rows = function(){
 		
-		for(var i = 0; i < cells.length; i++){
+		for (var i = 0; i < cells.length; i++) {
+      console.log('Processing cell #' + i + '...');
 			parse_merge_row( cells[i], i);
 		}
 		$('#notebook-container-new').append(generate_notebook_container_end_space());
@@ -40,7 +41,8 @@ $( document ).ready(function() {
 		var side = cell.metadata.side;
 		var state = cell.metadata.state;
 		
-		if(side == cellSide[0]){
+		if (side === cellSide[0]){
+      console.log('New row. Adding local cell.');
       var new_row = $(generate_empty_merge_row());
       new_row.find("input.merge-arrow-right").click(function(index, state, row) {
         return function(){
@@ -64,6 +66,9 @@ $( document ).ready(function() {
         
 			$('#notebook-container-new').append(new_row);
 		}		
+    else {
+      console.log('Adding ' + side + ' cell.');
+    }
 		generate_merge_collumn(side, state, index);		
 	};
     
