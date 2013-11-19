@@ -51,7 +51,7 @@ $( document ).ready(function() {
           var rightCell = row.find('.row-cell-merge-local .cell');
           rightCell.addClass(get_state_css(state));
           var htmlClass = ".row-cell-merge-base";
-          row.children(htmlClass).append(rightCell);
+          row.children(htmlClass).find('.cell').replaceWith(rightCell);
         }     
       }(index, state, new_row));
         
@@ -60,7 +60,7 @@ $( document ).ready(function() {
           var rightCell = row.find('.row-cell-merge-remote .cell');
           rightCell.addClass(get_state_css(state));
           var htmlClass = ".row-cell-merge-base";
-          row.children(htmlClass).append(rightCell);
+          row.children(htmlClass).find('.cell').replaceWith(rightCell);
         }
       }(index, state, new_row));
         
