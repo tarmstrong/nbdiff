@@ -31,27 +31,25 @@ $( document ).ready(function() {
 		
 		if(side == cellSide[0]){
       var new_row = $(generate_empty_merge_row());
-       new_row.find("input.merge-arrow-right").click(function(index, state){
+      new_row.find("input.merge-arrow-right").click(function(index, state, row) {
         return function(){
-        console.log('hello');
-           var leftCell = cellElements[index];
-           leftCell.addClass(get_state_css(state));
-           var lastRow = $("#notebook-container-new").children().last();
-           var htmlClass = ".row-cell-merge-base";
-           lastRow.children(htmlClass).append(leftCell); 
+          // TODO we need to keep track, in memory, of the in-memory cells we're moving around
+          //      so that we can exfiltrate the data and save the resulting notebook.
+          var rightCell = row.find('.row-cell-merge-local .cell');
+          rightCell.addClass(get_state_css(state));
+          var htmlClass = ".row-cell-merge-base";
+          row.children(htmlClass).append(rightCell);
         }     
-        }(index, state));
+      }(index, state, new_row));
         
-        new_row.find("input.merge-arrow-left").click(function(index, state, cellElements){
-        return function(){
-        console.log('hello', cellElements);
-            var rightCell = $(cellElements[index][0]);
-           rightCell.addClass(get_state_css(state));
-           var lastRow = $("#notebook-container-new").children().last();
-           var htmlClass = ".row-cell-merge-base";
-           lastRow.children(htmlClass).append(rightCell);
-           }
-        }(index, state, cellElements));       
+      new_row.find("input.merge-arrow-left").click(function(index, state, row) {
+        return function() {
+          var rightCell = row.find('.row-cell-merge-remote .cell');
+          rightCell.addClass(get_state_css(state));
+          var htmlClass = ".row-cell-merge-base";
+          row.children(htmlClass).append(rightCell);
+        }
+      }(index, state, new_row));
         
 			$('#notebook-container-new').append(new_row);
 		}		
