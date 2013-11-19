@@ -70,6 +70,16 @@ $( document ).ready(function() {
       console.log('Adding ' + side + ' cell.');
     }
 		generate_merge_column(side, state, index);		
+
+    var current_row = $("#notebook-container-new").children().last();
+    if (state === cellState[3] || state === cellState[4]) {
+      if (side === cellSide[2]) {
+        current_row.find("input.merge-arrow-left").hide();
+      }
+      else if (side === cellSide[0]) {
+        current_row.find("input.merge-arrow-right").hide();
+      }
+    }
 	};
     
    
