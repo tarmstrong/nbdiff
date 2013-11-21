@@ -50,6 +50,21 @@ def test_lcs():
     expected = [(1, 1), (3, 2), (4, 3), (6,4)]
     eq_(result, expected)
 
+    grid = [
+        [False, False, True, False, True, False],
+        [False, False, False, True, False, False],
+        [True, False, False, False, False, True],
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [False, True, False, True, False, False],
+        [False, False, True, False, True, False]
+    ]
+#    print zip(*grid)
+    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    result = lcs(grid)
+    expected = [(2, 0), (3, 2), (4, 3), (6,4)]
+    eq_(result, expected)
+
 
 def test_add_results():
     k = {1:[(0,2)]}

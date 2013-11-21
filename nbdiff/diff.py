@@ -24,7 +24,7 @@ def lcs(grid):
         print
         print "comp", comp
         print "cands", kcs[cur]
-        acc.append([(x, y) for (x, y) in reversed(kcs[cur]) if cx > x and cy-1 == y][0])
+        acc.append([(x, y) for (x, y) in reversed(kcs[cur]) if cx > x and cy > y][-1])
         cur -= 1
 
     return list(reversed(acc))
