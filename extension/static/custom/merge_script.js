@@ -54,7 +54,7 @@ $( document ).ready(function() {
         return function(){
           // TODO we need to keep track, in memory, of the in-memory cells we're moving around
           //      so that we can exfiltrate the data and save the resulting notebook.
-          var rightCell = row.find('.row-cell-merge-local .cell');
+          var rightCell = row.find('.row-cell-merge-local .cell').clone(true);
           rightCell.addClass(get_state_css(state));
           var htmlClass = ".row-cell-merge-base";
           // TODO this shouldn't obliterate the base cell -- we should
@@ -67,7 +67,7 @@ $( document ).ready(function() {
         
       new_row.find("input.merge-arrow-left").click(function(index, state, row) {
         return function() {
-          var rightCell = row.find('.row-cell-merge-remote .cell');
+          var rightCell = row.find('.row-cell-merge-remote .cell').clone(true);
           rightCell.addClass(get_state_css(state));
           var htmlClass = ".row-cell-merge-base";
           row.children(htmlClass).find('.cell').replaceWith(rightCell);
@@ -141,6 +141,21 @@ $( document ).ready(function() {
 		return "<div class='end_space'></div>";
 	};
 	
-	
 	init();
 });
+
+	var remove_metadata = function(cells) {
+        //todo remove metadata from each cell.
+    };
+    var save_merging_to_ipynb = function() {
+        var mergedcells = $('#notebook-container-new .row .row-cell-merge-base .cell').clone(true);
+        $('#notebook-container').empty();
+        
+        remove_metadata(mergedcells);
+        
+        for(var index = 0; index<mergedcells.length; index++){
+            $('#notebook-container').append(mergedcells[index]);
+        }
+        IPython.notebook.save_notebook();
+    };
+    
