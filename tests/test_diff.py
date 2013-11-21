@@ -6,6 +6,7 @@ from nbdiff.diff import (
     find_matches,
     process_col,
     check_match,
+    lcs,
 )
 
 
@@ -28,6 +29,25 @@ def test_find_candidates():
                 2:[(1,3),(3,2),(4,1)],
                 3:[(2,5),(3,4),(4,3),(6,2)],
                 4:[(6,4)]}
+    eq_(result, expected)
+
+
+def test_lcs():
+    A = "abcabba"
+    B = "cbabac"
+    grid = [
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [True, False, False, False, False, True],
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [False, True, False, True, False, False],
+        [False, False, True, False, True, False]
+    ]
+#    print zip(*grid)
+    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    result = lcs(grid)
+    expected = [(1, 1), (3, 2), (4, 3), (6,4)]
     eq_(result, expected)
 
 

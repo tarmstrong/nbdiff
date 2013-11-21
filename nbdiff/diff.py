@@ -12,6 +12,24 @@ def find_matches(col, colNum):
     return result
 
 
+def lcs(grid):
+    kcs = find_candidates(grid)
+    highest = max(kcs.keys())
+    last_point = kcs[highest][-1]
+    cur = highest - 1
+    acc = [last_point]
+    while cur > 0:
+        comp = acc[-1]
+        cx, cy = comp
+        print
+        print "comp", comp
+        print "cands", kcs[cur]
+        acc.append([(x, y) for (x, y) in reversed(kcs[cur]) if cx > x and cy-1 == y][0])
+        cur -= 1
+
+    return list(reversed(acc))
+
+
 def process_col(k, col, colNum):
     matches = find_matches(col, colNum)
     d = collections.defaultdict(lambda:[])
