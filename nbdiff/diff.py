@@ -4,6 +4,24 @@ import itertools as it
 import collections
 
 
+def diff(before, after):
+    grid = create_grid(before, after)
+    dps = diff_points(grid)
+    result = []
+    for kind, col, row in dps:
+        if kind == 'unchanged':
+            value = before[col]
+        elif kind == 'deleted':
+            value = before[col]
+        elif kind == 'added':
+            value = after[row]
+        result.append({
+            'state': kind,
+            'value': value,
+        })
+    return result
+
+
 def diff_points(grid):
     # cols = before; rows = after
     ncols = len(grid)

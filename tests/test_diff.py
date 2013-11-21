@@ -9,7 +9,26 @@ from nbdiff.diff import (
     lcs,
     diff_points,
     create_grid,
+    diff,
 )
+
+
+def test_diff():
+    A = "abcabba"
+    B = "cbabac"
+    result = diff(A, B)
+    expected = [
+        {"state": 'deleted', 'value': 'a'},
+        {"state": 'added', 'value': 'c'},
+        {"state": 'unchanged', 'value': 'b'},
+        {"state": 'deleted', 'value': 'c'},
+        {"state": 'unchanged', 'value': 'a'},
+        {"state": 'unchanged', 'value': 'b'},
+        {"state": 'deleted', 'value': 'b'},
+        {"state": 'unchanged', 'value': 'a'},
+        {"state": 'added', 'value': 'c'},
+    ]
+    eq_(result, expected)
 
 
 def test_create_grid():
