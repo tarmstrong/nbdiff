@@ -17,15 +17,21 @@ $( document ).ready(function() {
     console.log('Initializing nbdiff.');
     if (typeof cells[0].metadata.state !== 'undefined') {
       console.log('Found nbdiff metadata in the notebook.');
-      console.log('Hiding the normal notebook container.');
-      $('#notebook-container').hide();
-
+						console.log('Hiding the normal notebook container.');
+					 $('#notebook-container').hide();
+						var cssLink = $("<link rel='stylesheet' type='text/css' href='/static/custom/merge.css'>");
+						$("head").append(cssLink); 
       console.log('Creating a new notebook container.');
       $('#notebook').append(generate_notebook_container());
 
       console.log('Initializing merge rows.');
       init_notebook_merge_rows();
     }
+				else {
+					console.log('No nbdiff metadata in the notebook.');
+					console.log('Showing the normal notebook container.');
+					$('#notebook-container').css("visibility", "visible");
+				}
 	};
 	
 	var init_notebook_merge_rows = function(){
