@@ -36,8 +36,6 @@ def diff_points(grid):
     # cols = before; rows = after
     ncols = len(grid)
     nrows = len(grid[0])
-    colvals = list(range(ncols))
-    rowvals = list(range(nrows))
 
     lcs_result = lcs(grid)
 #   print
@@ -75,8 +73,8 @@ def diff_points(grid):
 
 
 def create_grid(before, after):
-    ncols = blen = len(before)
-    nrows = alen = len(after)
+    ncols = len(before)
+    nrows = len(after)
     all_comps = [b == a for b, a in it.product(before, after)]
     return [all_comps[col*(nrows):col*(nrows)+nrows] for col in range(ncols)]
 
@@ -98,7 +96,11 @@ def lcs(grid):
     while cur > 0:
         comp = acc[-1]
         cx, cy = comp
-        possibilities = [(x, y) for (x, y) in reversed(kcs[cur]) if cx > x and cy > y]
+        possibilities = [
+            (x, y) for (x, y)
+            in reversed(kcs[cur])
+            if cx > x and cy > y
+        ]
         if len(possibilities) > 0:
             acc.append(possibilities[-1])
         cur -= 1
@@ -108,21 +110,21 @@ def lcs(grid):
 
 def process_col(k, col, colNum):
     matches = find_matches(col, colNum)
-    d = collections.defaultdict(lambda:[])
+    d = collections.defaultdict(lambda: [])
     x = 0
     for (i, j) in matches:
         oldx = x
         if not k and not d[1]:
-            d[1].append((i,j))
+            d[1].append((i, j))
         elif k:
             #print 'check_match', (i, j), k
-            x = check_match((i,j),k)
+            x = check_match((i, j), k)
             if x is None:
                 continue
             x = x
             if x == oldx:
                 continue
-            d[x].append((i,j))
+            d[x].append((i, j))
     return dict(d)
 
 
@@ -140,43 +142,24 @@ def check_match(point, k):
 #        print
 #        print 'K = ', x
         above_key = x - 1
-        above_x = above_key == new_max_k and 10000 or max([l[0] for l in k[above_key]])
-        above_y = above_key == new_max_k and 10000 or min([l[1] for l in k[above_key]])
+        above_x = above_key == new_max_k and \
+            10000 or max([l[0] for l in k[above_key]])
+        above_y = above_key == new_max_k and \
+            10000 or min([l[1] for l in k[above_key]])
         below_key = x - 2
         below_x = below_key < 1 and -1 or max([l[0] for l in k[below_key]])
         below_y = below_key < 1 and -1 or min([l[1] for l in k[below_key]])
         new_x, new_y = point
-#        print
-#        print 'point', point
-#        print 'above', (above_x, above_y)
-#        print 'below', (below_x, below_y)
-        if new_x > above_x and new_y < above_y and new_x > below_x and new_y > below_y:
+        if new_x > above_x and new_y < above_y and \
+                new_x > below_x and new_y > below_y:
             result.append(x-1)
-        continue
-        for d in range(len(second_elts)):
-            if point[0] > first_elts[d] and point[1] < second_elts[d]:
-#                print 'woop', x-1
-#                print 'check_point', (first_elts, second_elts)
-                result.append(x-1)
-                break
 
     below_key = new_max_k - 1
     below_x = below_key == 0 and -1 or max([l[0] for l in k[new_max_k-1]])
     below_y = below_key == 0 and -1 or min([l[1] for l in k[new_max_k-1]])
     new_x, new_y = point
-    first_elts = [l[0] for l in k[new_max_k-1]]
-    second_elts = [l[1] for l in k[new_max_k-1]]
-#    print
-#    print 'k', k
-#    print 'below-key', below_key
-#    print 'point', point
-#    print 'below', (below_x, below_y)
     if new_x > below_x and new_y > below_y:
         result.append(new_max_k)
-#k    for d in range(len(second_elts)):
-#k        if point[0] > first_elts[d] and point[1] > second_elts[d]:
-#k            result.append(new_max_k)
-#k            break
     if len(result) > 0:
         actual_result = result[0]
         #print result
@@ -187,14 +170,14 @@ def check_match(point, k):
 
 
 def add_results(k, result):
-    finalResult = collections.defaultdict(lambda:[],k)
+    finalResult = collections.defaultdict(lambda: [], k)
     for x in result.keys():
         finalResult[x] = finalResult[x] + result[x]
     return finalResult
 
 
 def find_candidates(grid):
-    k = collections.defaultdict(lambda:[])
+    k = collections.defaultdict(lambda: [])
     for colNum in range(len(grid)):
-        k = add_results(k,process_col(k, grid[colNum], colNum))
+        k = add_results(k, process_col(k, grid[colNum], colNum))
     return dict(k)
