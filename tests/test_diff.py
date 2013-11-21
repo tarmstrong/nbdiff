@@ -29,6 +29,9 @@ def test_diff():
         {"state": 'added', 'value': 'c'},
     ]
     eq_(result, expected)
+    diff("aaaaaaaaaaaaaaaaaaaa", "bbbbbbaaaaaaaaaaabbbbbbbbbbb")
+    diff("cabcdef", "abdef")
+    diff("ca", "abdef")
 
 
 def test_create_grid():
@@ -44,9 +47,9 @@ def test_create_grid():
         [False, False, True, False, True, False]
     ]
     grid = create_grid(A, B)
-    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
-    print
-    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in expected]))
+#    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+#    print
+#    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in expected]))
     eq_(grid, expected)
 
 
@@ -61,7 +64,7 @@ def test_diff_points():
         [False, True, False, True, False, False],
         [False, False, True, False, True, False]
     ]
-    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    #print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
     result = diff_points(grid)
 
     A = "abcabba"
@@ -92,12 +95,25 @@ def test_find_candidates():
         [False, True, False, True, False, False],
         [False, False, True, False, True, False]
     ]
-    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    #print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
     result = find_candidates(grid)
     expected = {1:[(0,2),(1,1),(2,0)],
                 2:[(1,3),(3,2),(4,1)],
                 3:[(2,5),(3,4),(4,3),(6,2)],
                 4:[(6,4)]}
+    eq_(result, expected)
+
+    grid = [
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True]
+    ]
+    result = find_candidates(grid)
+    expected = {1:[(0,1)], 2: [(1, 2)]}
     eq_(result, expected)
 
 
@@ -114,7 +130,7 @@ def test_lcs():
         [False, False, True, False, True, False]
     ]
 #    print zip(*grid)
-    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+#    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
     result = lcs(grid)
     expected = [(1, 1), (3, 2), (4, 3), (6,4)]
     eq_(result, expected)
@@ -129,9 +145,37 @@ def test_lcs():
         [False, False, True, False, True, False]
     ]
 #    print zip(*grid)
-    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+#    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
     result = lcs(grid)
     expected = [(2, 0), (3, 2), (4, 3), (6,4)]
+    eq_(result, expected)
+
+    grid = [
+        [True, True, True, True, True, True],
+        [True, True, True, True, True, True],
+        [True, True, True, True, True, True],
+        [True, True, True, True, True, True],
+        [True, True, True, True, True, True],
+        [True, True, True, True, True, True],
+        [True, True, True, True, True, True]
+    ]
+    result = lcs(grid)
+    expected = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
+    eq_(result, expected)
+
+    grid = [
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+        [False, True, True]
+    ]
+#    print
+#    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    result = lcs(grid)
+    expected = [(0, 1), (1, 2)]
     eq_(result, expected)
 
 
@@ -183,6 +227,25 @@ def test_process_col():
     result = process_col(d, a, col)
     eq_(result, expected)
 
+    grid = [
+        [False, True, True],
+        [False, True, True],
+        [False, True, True],
+    ]
+    d = {1: [(0, 1)]}
+    a = grid[1]
+    col = 1
+    expected = {2: [(1, 2)]}
+    result = process_col(d, a, col)
+    eq_(result, expected)
+
+    d = {1: [(0, 1)], 2: [(1, 2)]}
+    a = grid[2]
+    col = 2
+    expected = {}
+    result = process_col(d, a, col)
+    eq_(result, expected)
+
 
 def test_check_match():
     point = (1,3)
@@ -217,6 +280,13 @@ def test_check_match():
 
     point = (5, 1)
     k = {1: [(0, 2), (1, 1), (2, 0)], 2: [(1, 3), (3, 2), (4, 1)], 3: [(2, 5), (3, 4), (4, 3)]}
+    expected = None
+    result = check_match(point, k)
+    eq_(result, expected)
+
+    print 'boop boop'
+    point = (2, 1)
+    k = {1: [(0, 1)], 2: [(1, 2)]}
     expected = None
     result = check_match(point, k)
     eq_(result, expected)
