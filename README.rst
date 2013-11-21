@@ -14,6 +14,11 @@ NBDiff
 
 A tool for diffing and merging IPython Notebook files.
 
+This project is currently under heavy development by a team of
+university students. See
+`AUTHORS <https://github.com/tarmstrong/nbdiff/blob/master/AUTHORS.rst>`__
+for more information.
+
 * Free software: MIT license
 * Documentation: http://nbdiff.rtfd.org.
 
