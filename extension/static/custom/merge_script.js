@@ -6,7 +6,7 @@ $( document ).ready(function() {
 	
 	//The indexing for IPython.notebook.get_cells_element(index) messes up with append in 
 	//generate_merge_collumn so this data-structure was created to preserve index.
-	var cellElements = new Array();
+	var cellElements = [];
 	for(var i = 0; i < cells.length; i++){
 		cellElements[i] = IPython.notebook.get_cell_element(i);
 	}

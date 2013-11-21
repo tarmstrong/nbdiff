@@ -3,10 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     qunit: {
-      files: ['src/test/index.html']
+      files: ['jstests/index.html']
     },
     jshint: {
-      all: ['Gruntfile.js', 'src/test/*.js', 'src/*']
+      all: [
+        'Gruntfile.js',
+        'extension/static/custom/*.js'
+      ]
     }
   });
 
