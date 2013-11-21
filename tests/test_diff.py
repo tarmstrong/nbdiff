@@ -7,7 +7,58 @@ from nbdiff.diff import (
     process_col,
     check_match,
     lcs,
+    diff_points,
+    create_grid,
 )
+
+
+def test_create_grid():
+    A = "abcabba"
+    B = "cbabac"
+    expected = [
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [True, False, False, False, False, True],
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [False, True, False, True, False, False],
+        [False, False, True, False, True, False]
+    ]
+    grid = create_grid(A, B)
+    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    print
+    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in expected]))
+    eq_(grid, expected)
+
+
+def test_diff_points():
+#    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    grid = [
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [True, False, False, False, False, True],
+        [False, False, True, False, True, False],
+        [False, True, False, True, False, False],
+        [False, True, False, True, False, False],
+        [False, False, True, False, True, False]
+    ]
+    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
+    result = diff_points(grid)
+
+    A = "abcabba"
+    B = "cbabac"
+    expected = [
+        ('deleted', 0, None),
+        ('added', None, 0),
+        ('unchanged', 1, 1),
+        ('deleted', 2, None),
+        ('unchanged', 3, 2),
+        ('unchanged', 4, 3),
+        ('deleted', 5, None),
+        ('unchanged', 6, 4),
+        ('added', None, 5),
+    ]
+    eq_(result, expected)
 
 
 def test_find_candidates():
@@ -22,7 +73,6 @@ def test_find_candidates():
         [False, True, False, True, False, False],
         [False, False, True, False, True, False]
     ]
-    print zip(*grid)
     print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
     result = find_candidates(grid)
     expected = {1:[(0,2),(1,1),(2,0)],

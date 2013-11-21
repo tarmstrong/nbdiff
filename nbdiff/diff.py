@@ -4,6 +4,49 @@ import itertools as it
 import collections
 
 
+def diff_points(grid):
+    # cols = before; rows = after
+    ncols = len(grid)
+    nrows = len(grid[0])
+    colvals = list(range(ncols))
+    rowvals = list(range(nrows))
+
+    lcs_result = lcs(grid)
+    matched_cols = [r[0] for r in lcs_result]
+    matched_rows = [r[1] for r in lcs_result]
+
+    cur_col = 0
+    cur_row = 0
+
+    result = []
+    while cur_col < ncols or cur_row < nrows:
+        passfirst = cur_col < ncols and cur_row < nrows
+        goodcol = cur_col < ncols
+        goodrow = cur_row < nrows
+        if passfirst and (cur_col, cur_row) == lcs_result[0]:
+            lcs_result.pop(0)
+            matched_cols.pop(0)
+            matched_rows.pop(0)
+            result.append(('unchanged', cur_col, cur_row))
+            cur_col += 1
+            cur_row += 1
+        elif goodcol and (not matched_cols or cur_col != matched_cols[0]):
+            result.append(('deleted', cur_col, None))
+            cur_col += 1
+        elif goodrow and (not matched_rows or cur_row != matched_rows[0]):
+            result.append(('added', None, cur_row))
+            cur_row += 1
+
+    return result
+
+
+def create_grid(before, after):
+    blen = len(before)
+    alen = len(after)
+    all_comps = [b == a for b, a in it.product(before, after)]
+    return [all_comps[i*(blen-1):i*(blen-1)+blen-1] for i in range(len(before))]
+
+
 def find_matches(col, colNum):
     result = []
     for j in range(len(col)):
@@ -21,9 +64,6 @@ def lcs(grid):
     while cur > 0:
         comp = acc[-1]
         cx, cy = comp
-        print
-        print "comp", comp
-        print "cands", kcs[cur]
         acc.append([(x, y) for (x, y) in reversed(kcs[cur]) if cx > x and cy > y][-1])
         cur -= 1
 
