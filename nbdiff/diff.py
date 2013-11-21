@@ -6,18 +6,24 @@ import collections
 
 def diff(before, after):
     grid = create_grid(before, after)
+    nrows = len(grid[0])
+    ncols = len(grid)
     dps = diff_points(grid)
     result = []
     for kind, col, row in dps:
         if kind == 'unchanged':
             value = before[col]
         elif kind == 'deleted':
+            assert col < ncols
             value = before[col]
         elif kind == 'added':
 #            print
 #            print dps
 #            print 'row', row
 #            print 'after', after
+            assert row < nrows
+            #if len(after) <= row:
+            #    print grid
             value = after[row]
         result.append({
             'state': kind,
@@ -69,10 +75,10 @@ def diff_points(grid):
 
 
 def create_grid(before, after):
-    blen = len(before)
-    alen = len(after)
+    ncols = blen = len(before)
+    nrows = alen = len(after)
     all_comps = [b == a for b, a in it.product(before, after)]
-    return [all_comps[i*(blen-1):i*(blen-1)+blen-1] for i in range(len(before))]
+    return [all_comps[col*(nrows):col*(nrows)+nrows] for col in range(ncols)]
 
 
 def find_matches(col, colNum):

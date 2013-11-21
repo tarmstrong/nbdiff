@@ -38,19 +38,25 @@ def test_create_grid():
     A = "abcabba"
     B = "cbabac"
     expected = [
-        [False, False, True, False, True, False],
-        [False, True, False, True, False, False],
-        [True, False, False, False, False, True],
-        [False, False, True, False, True, False],
-        [False, True, False, True, False, False],
-        [False, True, False, True, False, False],
-        [False, False, True, False, True, False]
+         # c      b     a     b      a      c
+        [False, False, True, False, True, False], # a
+        [False, True, False, True, False, False], # b
+        [True, False, False, False, False, True], # c
+        [False, False, True, False, True, False], # a
+        [False, True, False, True, False, False], # b
+        [False, True, False, True, False, False], # b
+        [False, False, True, False, True, False]  # a
     ]
     grid = create_grid(A, B)
 #    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
 #    print
 #    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in expected]))
     eq_(grid, expected)
+
+    A, B = ("cabcdef", "abdef")
+    grid = create_grid(A, B)
+    assert len([True for col in grid if len(col) == 0]) == 0
+
 
 
 def test_diff_points():
@@ -284,7 +290,7 @@ def test_check_match():
     result = check_match(point, k)
     eq_(result, expected)
 
-    print 'boop boop'
+    #print 'boop boop'
     point = (2, 1)
     k = {1: [(0, 1)], 2: [(1, 2)]}
     expected = None
