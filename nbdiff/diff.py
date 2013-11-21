@@ -1,7 +1,5 @@
 __author__ = 'Lina'
 
-# nosetests DiffingFunctions.py
-
 import itertools as it
 import collections
 
@@ -26,7 +24,6 @@ def process_col(k, col, colNum):
             x = check_match((i,j),k)
             if x is None:
                 continue
-            #for x in xs:
             x = x
             if x == oldx:
                 continue
@@ -36,18 +33,32 @@ def process_col(k, col, colNum):
 
 def check_match(point, k):
     result = []
-    for x in k.keys():
-        first_elts = [l[0] for l in k[x]]
-        second_elts = [l[1] for l in k[x]]
+    k_keys = k.keys()
+    max_k = max(k_keys)
+    new_max_k = max_k + 1
+    k_range = k_keys + [new_max_k]
+    for x in k_range:
+        if x == 1:
+            continue
+        if point[1] < x-2:
+            continue
+        first_elts = [max([l[0] for l in k[x-1]])]
+        second_elts = [min([l[1] for l in k[x-1]])]
         for d in range(len(second_elts)):
-            if point[0] > first_elts[d] and point[1] > second_elts[d]:
-                result.append(x + 1)
-                break
             if point[0] > first_elts[d] and point[1] < second_elts[d]:
-                result.append(x)
+                result.append(x-1)
                 break
+
+    first_elts = [l[0] for l in k[new_max_k-1]]
+    second_elts = [l[1] for l in k[new_max_k-1]]
+    for d in range(len(second_elts)):
+        if point[0] > first_elts[d] and point[1] > second_elts[d]:
+            result.append(new_max_k)
+            break
     if len(result) > 0:
-        return max(result)
+        actual_result = result[0]
+        assert point[1] >= actual_result-1
+        return (result)[0]
     else:
         return None
 

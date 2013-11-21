@@ -21,6 +21,8 @@ def test_find_candidates():
         [False, True, False, True, False, False],
         [False, False, True, False, True, False]
     ]
+    print zip(*grid)
+    print "\n".join(str(" ".join(c and "X" or "+" for c in row)) for row in zip(*[reversed(col) for col in grid]))
     result = find_candidates(grid)
     expected = {1:[(0,2),(1,1),(2,0)],
                 2:[(1,3),(3,2),(4,1)],
@@ -106,5 +108,11 @@ def test_check_match():
     point = (2, 0)
     k = {1:[(0,2),(1,1)], 2:[(1,3)]}
     expected = 1
+    result = check_match(point, k)
+    eq_(result, expected)
+
+    point = (5, 1)
+    k = {1: [(0, 2), (1, 1), (2, 0)], 2: [(1, 3), (3, 2), (4, 1)], 3: [(2, 5), (3, 4), (4, 3)]}
+    expected = None
     result = check_match(point, k)
     eq_(result, expected)
