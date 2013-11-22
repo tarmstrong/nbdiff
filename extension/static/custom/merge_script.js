@@ -15,6 +15,7 @@ $( document ).ready(function() {
     var cells = IPython.notebook.get_cells();
     console.log('Initializing nbdiff.');
     if (cells.length > 0 && typeof cells[0].metadata.state !== 'undefined') {
+					$('#notebook-container').css("visibility", "hidden");
       console.log('Found nbdiff metadata in the notebook.');
 						console.log('Hiding the normal notebook container.');
         $('#notebook-container').hide();
@@ -29,7 +30,6 @@ $( document ).ready(function() {
 				else {
 					console.log('No nbdiff metadata in the notebook.');
 					console.log('Showing the normal notebook container.');
-					$('#notebook-container').css("visibility", "visible");
 				}
 	};
 	
@@ -143,17 +143,21 @@ $( document ).ready(function() {
 });
 
 	var remove_metadata = function(cells) {
-        //todo remove metadata from each cell.
+    for (var i = 0; i < cells.length; i++) {
+      delete cells[i].metadata.state;
+      delete cells[i].metadata.side;
+    }
     };
     var save_merging_to_ipynb = function() {
         var mergedcells = $('#notebook-container-new .row .row-cell-merge-base .cell').clone(true);
         $('#notebook-container').empty();
         
-        remove_metadata(mergedcells);
-        
         for(var index = 0; index<mergedcells.length; index++){
             $('#notebook-container').append(mergedcells[index]);
         }
+
+        remove_metadata(IPython.notebook.get_cells());
+        
         IPython.notebook.save_notebook();
     };
     

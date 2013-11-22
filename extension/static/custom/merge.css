@@ -1,10 +1,6 @@
 /**write your css in here**/
 /* like */
 
-	#notebook-container{
-		visibility:hidden;
-	}
-	
 	#first-bar {
 	  float:left;
 	  max-width:50%;
@@ -47,9 +43,11 @@
 	  background-color: #ADFF2F;
 	}
 
+  /*
 	.CodeMirror-measure {
 	  display: none;
 	}
+  */
 
 	.added-cell {
 	  background-color: #ADFF2F;
