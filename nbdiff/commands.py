@@ -38,6 +38,7 @@ def merge():
     parser.add_argument('notebook', nargs='*')
     args = parser.parse_args()
     length = len(args.notebook)
+    parser = NotebookParser()
     if length == 0:
         output = subprocess.check_output("git ls-files --unmerged".split())
         output_array = [line.split() for line in output.splitlines()]
@@ -45,25 +46,25 @@ def merge():
         for line in output_array:
             hash = line[1]
             hash_array.append(hash)
-        nb_local = hash_array[0]
-        nb_base = hash_array[1]
-        nb_remote = hash_array[2]
-    elif length == 3:
-        parser = NotebookParser()
         local_show = subprocess.Popen(
             ['git', 'show', hash_array[0]],
             stdout=subprocess.PIPE
         )
-        nb_local = local_show.stdout
+        nb_local = parser.parse(local_show.stdout)
         base_show = subprocess.Popen(
             ['git', 'show', hash_array[1]],
             stdout=subprocess.PIPE
         )
-        nb_base = base_show.stdout
+        nb_base = parser.parse(base_show.stdout)
         remote_show = subprocess.Popen(
             ['git', 'show', hash_array[2]],
             stdout=subprocess.PIPE
         )
-        nb_remote = remote_show.stdout
+        nb_remote = parser.parse(remote_show.stdout)
+    elif length == 3:
+        nb_local = parser.parse(open(args.notebook[0]))
+        nb_base = parser.parse(open(args.notebook[1]))
+        nb_remote = parser.parse(open(args.notebook[2]))
+
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
     print pre_merged_notebook
