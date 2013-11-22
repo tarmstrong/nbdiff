@@ -14,6 +14,11 @@ NBDiff
 
 A tool for diffing and merging IPython Notebook files.
 
+This project is currently under heavy development by a team of
+university students. See
+`AUTHORS <https://github.com/tarmstrong/nbdiff/blob/master/AUTHORS.rst>`__
+for more information.
+
 * Free software: MIT license
 * Documentation: http://nbdiff.rtfd.org.
 
@@ -35,6 +40,13 @@ From Source
 1. Download the code from this repository
 2. Run ``python setup.py install``
 
+Install the Extension
+~~~~~~~~~~~~~~~~~~~~~
+
+NBDiff's merging interface currently works as an IPython Notebook extension.
+
+TODO write instructions on how to install the extension.
+
 Features
 --------
 
@@ -43,20 +55,35 @@ TODO
 Developing
 ----------
 
-Run the tests
-~~~~~~~~~~~~~
+Run the Python tests
+~~~~~~~~~~~~~~~~~~~~
 
-Install node and npm.
+To run the python tests, run the following command:
 
-In this directory, run:
+::
+
+    $ python setup.py nosetests
+
+NBDiff adheres to `PEP-8 <http://www.python.org/dev/peps/pep-0008/>`__. To check the code
+against PEP-8, use ``flake8`` like so:
+
+::
+
+    $ flake8 tests nbdiff
+
+Run the JavaScript tests
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, install `node <http://nodejs.org/>`__ and npm.
+
+Second, install the JavaScript dependencies using ``npm``.
 
 ::
 
     $ npm install
 
-to install the dependencies.
-
-To run the tests, run this. You should get the following output.
+Finally, run the tests with ``grunt``. You should output similar to the following.
+Note that ``grunt`` will not only run the tests, but check for common style problems with ``jshint``.
 
 ::
 
