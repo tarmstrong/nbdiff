@@ -10,15 +10,14 @@ $( document ).ready(function() {
 	for(var i = 0; i < cells.length; i++){
 		cellElements[i] = IPython.notebook.get_cell_element(i);
 	}
-    
 	
 	var init = function(){
     var cells = IPython.notebook.get_cells();
     console.log('Initializing nbdiff.');
-    if (typeof cells[0].metadata.state !== 'undefined') {
+    if (cells.length > 0 && typeof cells[0].metadata.state !== 'undefined') {
       console.log('Found nbdiff metadata in the notebook.');
 						console.log('Hiding the normal notebook container.');
-					 $('#notebook-container').hide();
+        $('#notebook-container').hide();
 						var cssLink = $("<link rel='stylesheet' type='text/css' href='/static/custom/merge.css'>");
 						$("head").append(cssLink); 
       console.log('Creating a new notebook container.');
@@ -91,8 +90,6 @@ $( document ).ready(function() {
       }
     }
 	};
-    
-   
 	
 	var generate_merge_column = function(side, state, index){
 		var cellHTML = cellElements[index];
@@ -140,6 +137,7 @@ $( document ).ready(function() {
 	var generate_notebook_container_end_space = function() {
 		return "<div class='end_space'></div>";
 	};
+	
 	
 	init();
 });
