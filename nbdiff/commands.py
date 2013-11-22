@@ -32,7 +32,7 @@ def diff():
 
     print('Arguments received: {}'.format(args.notebook))
 
-
+    
 def merge():
     parser = argparse.ArgumentParser()
     parser.add_argument('notebook', nargs='*')
@@ -50,11 +50,11 @@ def merge():
         nb_remote = hash_array[2]
     elif length == 3:
         parser = NotebookParser()
-        local_show = subprocess.Popen(['git', 'show', hash_array[0]], stdout=subprocess.PIPE)
+        local_show = subprocess.Popen(['git', 'show', hash_array[0]], stdout = subprocess.PIPE)
         nb_local = local_show.stdout
-        base_show = subprocess.Popen(['git', 'show', hash_array[1]], stdout=subprocess.PIPE)
+        base_show = subprocess.Popen(['git', 'show', hash_array[1]], stdout = subprocess.PIPE)
         nb_base = base_show.stdout
-        remote_show = subprocess.Popen(['git', 'show', hash_array[2]], stdout=subprocess.PIPE)
+        remote_show = subprocess.Popen(['git', 'show', hash_array[2]], stdout = subprocess.PIPE)
         nb_remote = remote_show.stdout
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
     print pre_merged_notebook
