@@ -3,6 +3,7 @@ Entry points for the nbdiff package.
 '''
 import subprocess
 import argparse
+from merge import notebook_merge
 from notebook_parser import NotebookParser
 from comparable import CellComparator
 
@@ -37,12 +38,7 @@ def merge():
     parser.add_argument('notebook', nargs='*')
     args = parser.parse_args()
     length = len(args.notebook)
-    if length == 3:
-        parser = NotebookParser()
-        nb_local = parser.parse(open(args.notebook[0]))
-        nb_base = parser.parse(open(args.notebook[1]))
-        nb_remote = parser.parse(open(args.notebook[2]))
-    elif length == 0:
+    if length == 0:
         output = subprocess.check_output("git ls-files --unmerged")
         output_array = [line.split() for line in output.splitlines()]
         hash_array = []
@@ -54,5 +50,10 @@ def merge():
         nb_local = hash_array[0]
         nb_base = hash_array[1]
         nb_remote = hash_array[2]
+    elif length == 3:
+        parser = NotebookParser()
+        nb_local = parser.parse(open(args.notebook[0]))
+        nb_base = parser.parse(open(args.notebook[1]))
+        nb_remote = parser.parse(open(args.notebook[2]))
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
-
+    print pre_merged_notebook
