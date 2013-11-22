@@ -48,12 +48,12 @@ def merge():
             hash = line[1]
             hash_array.append(hash)
         local_show = subprocess.Popen(
-            ['git', 'show', hash_array[0]],
+            ['git', 'show', hash_array[1]],
             stdout=subprocess.PIPE
         )
         nb_local = parser.parse(local_show.stdout)
         base_show = subprocess.Popen(
-            ['git', 'show', hash_array[1]],
+            ['git', 'show', hash_array[0]],
             stdout=subprocess.PIPE
         )
         nb_base = parser.parse(base_show.stdout)
