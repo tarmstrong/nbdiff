@@ -1,6 +1,7 @@
 from . import diff
 from .comparable import CellComparator
 import itertools as it
+import copy
 
 
 def notebook_merge(local, base, remote):
@@ -24,7 +25,7 @@ def notebook_merge(local, base, remote):
     }
     for item in diff_of_diffs:
         state = item['state']
-        cell = diff_result_to_cell(item['value'])
+        cell = copy.deepcopy(diff_result_to_cell(item['value']))
         if state == 'deleted':
             # This change is on the left.
             cell['metadata']['side'] = 'local'
@@ -51,7 +52,6 @@ def notebook_merge(local, base, remote):
                 cell,
             ]
         elif state == 'unchanged':
-            import copy
             cell1 = copy.deepcopy(cell)
             cell2 = copy.deepcopy(cell)
             cell3 = copy.deepcopy(cell)
