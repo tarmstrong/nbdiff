@@ -27,11 +27,17 @@ def notebook_merge(local, base, remote):
         state = item['state']
         cell = copy.deepcopy(diff_result_to_cell(item['value']))
         if state == 'deleted':
+            if cell['metadata']['state'] == 'unchanged':
+                continue
             # This change is on the left.
             cell['metadata']['side'] = 'local'
             remote_cell = empty_cell()
             remote_cell['metadata']['side'] = 'remote'
-            base_cell = empty_cell()
+            if cell['metadata']['state'] == 'deleted' \
+                    or cell['metadata']['state'] == 'unchanged':
+                base_cell = copy.deepcopy(cell)
+            else:
+                base_cell = empty_cell()
             base_cell['metadata']['side'] = 'base'
             # This change is on the right.
             current_row = [
@@ -41,10 +47,18 @@ def notebook_merge(local, base, remote):
             ]
         elif state == 'added':
             cell['metadata']['side'] = 'remote'
-            local_cell = empty_cell()
-            local_cell['metadata']['side'] = 'local'
-            base_cell = empty_cell()
+            if cell['metadata']['state'] == 'unchanged':
+                continue
+            if cell['metadata']['state'] == 'deleted':
+                base_cell = copy.deepcopy(cell)
+                base_cell['metadata']['state'] = 'unchanged'
+                local_cell = copy.deepcopy(cell)
+                local_cell['metadata']['state'] = 'unchanged'
+            else:
+                base_cell = empty_cell()
+                local_cell = empty_cell()
             base_cell['metadata']['side'] = 'base'
+            local_cell['metadata']['side'] = 'local'
             # This change is on the right.
             current_row = [
                 local_cell,
@@ -53,8 +67,13 @@ def notebook_merge(local, base, remote):
             ]
         elif state == 'unchanged':
             cell1 = copy.deepcopy(cell)
-            cell2 = copy.deepcopy(cell)
             cell3 = copy.deepcopy(cell)
+            if cell['metadata']['state'] == 'deleted' \
+                    or cell['metadata']['state'] == 'unchanged':
+                cell2 = copy.deepcopy(cell)
+                cell2['metadata']['state'] = 'unchanged'
+            else:
+                cell2 = empty_cell()
             cell1['metadata']['side'] = 'local'
             cell2['metadata']['side'] = 'base'
             cell3['metadata']['side'] = 'remote'
