@@ -6,6 +6,7 @@ import argparse
 from merge import notebook_merge
 from notebook_parser import NotebookParser
 from comparable import CellComparator
+import json
 
 
 def diff():
@@ -67,4 +68,4 @@ def merge():
         nb_remote = parser.parse(open(args.notebook[2]))
 
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
-    print pre_merged_notebook
+    print json.dumps(pre_merged_notebook)
