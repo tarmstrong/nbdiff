@@ -14,10 +14,10 @@ $( document ).ready(function() {
 	var init = function(){
     var cells = IPython.notebook.get_cells();
     console.log('Initializing nbdiff.');
-    if (typeof cells[0].metadata.state !== 'undefined') {
+    if (cells.length > 0 && typeof cells[0].metadata.state !== 'undefined') {
       console.log('Found nbdiff metadata in the notebook.');
 						console.log('Hiding the normal notebook container.');
-					 $('#notebook-container').hide();
+        $('#notebook-container').hide();
 						var cssLink = $("<link rel='stylesheet' type='text/css' href='/static/custom/merge.css'>");
 						$("head").append(cssLink); 
       console.log('Creating a new notebook container.');
