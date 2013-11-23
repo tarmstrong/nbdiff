@@ -41,6 +41,9 @@ def merge():
     length = len(args.notebook)
     parser = NotebookParser()
     if length == 0:
+        # TODO error handling.
+        # TODO handle more than one notebook file.
+        # TODO ignore non-.ipynb files.
         output = subprocess.check_output("git ls-files --unmerged".split())
         output_array = [line.split() for line in output.splitlines()]
         hash_array = []
@@ -62,10 +65,28 @@ def merge():
             stdout=subprocess.PIPE
         )
         nb_remote = parser.parse(remote_show.stdout)
-    elif length == 3:
+    elif length == 3 or length == 4:
         nb_local = parser.parse(open(args.notebook[0]))
         nb_base = parser.parse(open(args.notebook[1]))
         nb_remote = parser.parse(open(args.notebook[2]))
 
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
-    print json.dumps(pre_merged_notebook)
+    if length == 3:
+        # TODO ignore non-.ipynb files.
+        # Mercurial gives three arguments:
+        # 1. Local / Result (the file in your working directory)
+        # 2. Base
+        # 3. Remote
+        with open(args.notebook[0], 'w') as resultfile:
+            resultfile.write(json.dumps(pre_merged_notebook, indent=2))
+    elif length == 4:
+        # Git gives four arguments (these are configurable):
+        # 1. Local
+        # 2. Base
+        # 3. Remote
+        # 4. Result (the file in your working directory)
+        with open(args.notebook[3], 'w') as resultfile:
+            resultfile.write(json.dumps(pre_merged_notebook, indent=2))
+    else:
+        # TODO save to the correct file in your working directory.
+        print json.dumps(pre_merged_notebook, indent=2)
