@@ -43,14 +43,78 @@ From Source
 Install the Extension
 ~~~~~~~~~~~~~~~~~~~~~
 
-NBDiff's merging interface currently works as an IPython Notebook extension.
+NBDiff ships with an IPython Notebook extension used modify the Notebook interface for merging.
+To create a profile with this extension installed, run the following:
 
-TODO write instructions on how to install the extension.
+::
+    nbdiff-install
 
-Features
---------
+Configure Git/Mercurial
+~~~~~~~~~~~~~~~~~~~~~~~
 
-TODO
+NBMerge is compatible with Mercurial out of the box by running ``hg merge --tool=nbmerge <branch>``.
+
+Git, however, needs to be configured by adding the following to your ``.gitconfig`` file:
+
+::
+
+    [mergetool "nbmerge"]                                                           
+      cmd = nbmerge $LOCAL $BASE $REMOTE $MERGED
+
+Alternatively, you can run the following command to add this configuration automatically:
+
+::
+
+    git config --global mergetool.nbmerge.cmd = "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
+
+You can then run ``nbmerge`` from git like so:
+
+::
+
+    git mergetool --tool=nbmerge
+
+
+Usage
+-----
+
+NBDiff
+~~~~~~
+
+::
+
+    usage: nbdiff [-h] [--cached] before after
+
+      Produce a diffed notebook from before and after notebooks.
+
+      If no arguments are given, nbdiff asks git for a list
+      of modified files.
+
+    positional arguments:
+      before  first version of the notebook
+      after   second version of the notebook
+
+    optional arguments:
+      -h, --help  show this help message and exit
+      --cached    instead of unstaged changes, look at staged changes.
+
+NBMerge
+~~~~~~~
+
+::
+
+    usage: nbmerge [-h] [local base remote [result]]
+
+      If no arguments are given, nbmerge asks git for a list of unmerged files
+      and uses those as input.
+
+    positional arguments:
+      local   the local branch's version of the notebook
+      base    the common ancestor version of local and remote notebooks
+      remote  the remote branch's version of the notebook
+
+    optional arguments:
+      -h, --help  show this help message and exit
+
 
 Developing
 ----------
