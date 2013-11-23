@@ -73,6 +73,10 @@ def merge():
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
     if length == 3:
         # TODO ignore non-.ipynb files.
+
+        # hg usage:
+        # $ hg merge -t nbmerge <branch>
+
         # Mercurial gives three arguments:
         # 1. Local / Result (the file in your working directory)
         # 2. Base
@@ -80,6 +84,12 @@ def merge():
         with open(args.notebook[0], 'w') as resultfile:
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     elif length == 4:
+        # You need to run this before git mergetool will accept nbmerge
+        # $ git config mergetool.nbmerge.cmd \
+        #        "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
+        # and then you can invoke it with:
+        # $ git mergetool -t nbmerge
+        #
         # Git gives four arguments (these are configurable):
         # 1. Local
         # 2. Base
