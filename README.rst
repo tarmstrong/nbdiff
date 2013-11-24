@@ -47,6 +47,7 @@ NBDiff ships with an IPython Notebook extension used modify the Notebook interfa
 To create a profile with this extension installed, run the following:
 
 ::
+
     nbdiff-install
 
 Configure Git/Mercurial
