@@ -29,7 +29,11 @@ setup(
         'nbdiff',
     ],
     package_dir={'nbdiff': 'nbdiff'},
-    entry_points={'console_scripts': ['nbdiff = nbdiff.commands:diff', 'nbmerge = nbdiff.commands:merge']},
+    entry_points={'console_scripts': [
+        'nbdiff = nbdiff.commands:diff',
+        'nbmerge = nbdiff.commands:merge',
+        'nbdiff-install = nbdiff.install:install',
+    ]},
     include_package_data=True,
     install_requires=[
     ],
