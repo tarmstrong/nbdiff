@@ -4,13 +4,14 @@ import re
 import os
 import shutil
 
+
 def install():
     profile_name = 'nbdiff'
     create_cmd = ['ipython', 'profile', 'create', profile_name]
     message = subprocess.Popen(create_cmd, stderr=subprocess.PIPE)
     message_str = message.stderr.read()
     re_msgline = \
-        re.compile(r'^.ProfileCrea.*u\'(?P<profilepath>.*)ipython_config\.py.$')
+        re.compile(r'^.ProfileCre.*u\'(?P<profilepath>.*)ipython_config\.py.$')
     profile_path = [
         re_msgline.match(line).groups()[0]
         for line in message_str.splitlines()
