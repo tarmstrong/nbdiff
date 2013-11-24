@@ -1,3 +1,4 @@
+from __future__ import print_function
 from . import __path__ as NBDIFF_PATH
 import subprocess
 import re
@@ -19,14 +20,14 @@ def install():
         if re_msgline.match(line)
     ]
     if len(profile_paths) == 0:
-        sys.stderr.write("It looks like creating the ipython profile "
-            "didn't work. Maybe you've already installed it?\n")
+        sys.stderr.write(
+            "It looks like creating the ipython profile "
+            "didn't work. Maybe you've already installed it?\n"
+        )
         sys.exit(-1)
 
     profile_path = profile_paths[0]
     extension_copy_from = os.path.join(NBDIFF_PATH[0], 'extension/static')
     extension_copy_dest = os.path.join(profile_path, 'static')
-    print extension_copy_from
-    print extension_copy_dest
     shutil.copytree(extension_copy_from, extension_copy_dest)
-    print profile_path
+    print("Finished installing NBDiff extension in profile `nbdiff`.")
