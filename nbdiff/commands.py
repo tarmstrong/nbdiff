@@ -8,6 +8,7 @@ from .merge import notebook_merge
 from .notebook_parser import NotebookParser
 from .comparable import CellComparator
 import json
+import sys
 
 
 def diff():
@@ -41,12 +42,19 @@ def merge():
     args = parser.parse_args()
     length = len(args.notebook)
     parser = NotebookParser()
+
     if length == 0:
         # TODO error handling.
         # TODO handle more than one notebook file.
         # TODO ignore non-.ipynb files.
         output = subprocess.check_output("git ls-files --unmerged".split())
         output_array = [line.split() for line in output.splitlines()]
+
+        if len(output_array) != 3:
+            # TODO This should work for multiple conflicting notebooks.
+            sys.stderr.write("Can't find the conflicting notebook. Quitting.\n")
+            sys.exit(-1)
+
         hash_array = []
         for line in output_array:
             hash = line[1]
@@ -70,6 +78,9 @@ def merge():
         nb_local = parser.parse(open(args.notebook[0]))
         nb_base = parser.parse(open(args.notebook[1]))
         nb_remote = parser.parse(open(args.notebook[2]))
+    else:
+        sys.stderr.write('Incorrect number of arguments. Quitting.\n')
+        sys.exit(-1)
 
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
     if length == 3:
