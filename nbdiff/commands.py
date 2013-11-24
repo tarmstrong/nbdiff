@@ -52,7 +52,8 @@ def merge():
 
         if len(output_array) != 3:
             # TODO This should work for multiple conflicting notebooks.
-            sys.stderr.write("Can't find the conflicting notebook. Quitting.\n")
+            sys.stderr.write(
+                "Can't find the conflicting notebook. Quitting.\n")
             sys.exit(-1)
 
         hash_array = []
