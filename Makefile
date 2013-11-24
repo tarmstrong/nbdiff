@@ -27,7 +27,11 @@ lint:
 	flake8 nbdiff tests
 
 test:
-	python setup.py test
+	python setup.py nosetests
+
+lint-test:
+	flake8 nbdiff tests
+	python setup.py nosetests
 
 test-all:
 	tox
