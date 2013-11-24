@@ -1,11 +1,12 @@
 '''
 Entry points for the nbdiff package.
 '''
+from __future__ import print_function
 import subprocess
 import argparse
-from merge import notebook_merge
-from notebook_parser import NotebookParser
-from comparable import CellComparator
+from .merge import notebook_merge
+from .notebook_parser import NotebookParser
+from .comparable import CellComparator
 import json
 
 
@@ -99,4 +100,4 @@ def merge():
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
         # TODO save to the correct file in your working directory.
-        print json.dumps(pre_merged_notebook, indent=2)
+        print(json.dumps(pre_merged_notebook, indent=2))
