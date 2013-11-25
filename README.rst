@@ -32,7 +32,7 @@ If you have pip installed:
 
 ::
 
-    pip install nbdiff
+    $ pip install nbdiff
 
 From Source
 ~~~~~~~~~~~
@@ -48,7 +48,7 @@ To create a profile with this extension installed, run the following:
 
 ::
 
-    nbdiff-install
+    $ nbdiff-install
 
 Configure Git/Mercurial
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,13 +66,13 @@ Alternatively, you can run the following command to add this configuration autom
 
 ::
 
-    git config --global mergetool.nbmerge.cmd = "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
+    $ git config --global mergetool.nbmerge.cmd = "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
 
 You can then run ``nbmerge`` from git like so:
 
 ::
 
-    git mergetool --tool=nbmerge
+    $ git mergetool --tool=nbmerge
 
 
 Usage
@@ -80,6 +80,9 @@ Usage
 
 NBDiff
 ~~~~~~
+
+TODO. This command doesn't work yet. But when it does, it will show a diff of
+two ``.ipynb`` files.
 
 ::
 
@@ -101,6 +104,11 @@ NBDiff
 NBMerge
 ~~~~~~~
 
+The ``nbmerge`` command generates a valid notebook file containing all the cells
+from all branches of the notebook. It adds cell metadata indicating which
+branch a cell is on, and whether it is an addition, deletion, modification, or
+neither.
+
 ::
 
     usage: nbmerge [-h] [local base remote [result]]
@@ -115,6 +123,18 @@ NBMerge
 
     optional arguments:
       -h, --help  show this help message and exit
+
+
+The NBDiff Notebook extension (see above section for installation instructions)
+provides a user interface for turning this "merge-able" notebook into a single,
+merged notebook. If you installed it through ``nbdiff-install``, open it with
+the following command:
+
+::
+
+    $ ipython notebook --profile nbdiff 
+
+Open the mergeable notebook and click save to complete the merge (TODO).
 
 
 Developing
