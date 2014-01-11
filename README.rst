@@ -14,6 +14,11 @@ NBDiff
 
 A tool for diffing and merging IPython Notebook files.
 
+This project is currently under heavy development by a team of
+university students. See
+`AUTHORS <https://github.com/tarmstrong/nbdiff/blob/master/AUTHORS.rst>`__
+for more information.
+
 * Free software: MIT license
 * Documentation: http://nbdiff.rtfd.org.
 
@@ -27,7 +32,7 @@ If you have pip installed:
 
 ::
 
-    pip install nbdiff
+    $ pip install nbdiff
 
 From Source
 ~~~~~~~~~~~
@@ -35,28 +40,135 @@ From Source
 1. Download the code from this repository
 2. Run ``python setup.py install``
 
-Features
---------
+Install the Extension
+~~~~~~~~~~~~~~~~~~~~~
 
-TODO
+NBDiff ships with an IPython Notebook extension used modify the Notebook interface for merging.
+To create a profile with this extension installed, run the following:
+
+::
+
+    $ nbdiff-install
+
+Configure Git/Mercurial
+~~~~~~~~~~~~~~~~~~~~~~~
+
+NBMerge is compatible with Mercurial out of the box by running ``hg merge --tool=nbmerge <branch>``.
+
+Git, however, needs to be configured by adding the following to your ``.gitconfig`` file:
+
+::
+
+    [mergetool "nbmerge"]                                                           
+      cmd = nbmerge $LOCAL $BASE $REMOTE $MERGED
+
+Alternatively, you can run the following command to add this configuration automatically:
+
+::
+
+    $ git config --global mergetool.nbmerge.cmd = "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
+
+You can then run ``nbmerge`` from git like so:
+
+::
+
+    $ git mergetool --tool=nbmerge
+
+
+Usage
+-----
+
+NBDiff
+~~~~~~
+
+TODO. This command doesn't work yet. But when it does, it will show a diff of
+two ``.ipynb`` files.
+
+::
+
+    usage: nbdiff [-h] [--cached] before after
+
+      Produce a diffed notebook from before and after notebooks.
+
+      If no arguments are given, nbdiff asks git for a list
+      of modified files.
+
+    positional arguments:
+      before  first version of the notebook
+      after   second version of the notebook
+
+    optional arguments:
+      -h, --help  show this help message and exit
+      --cached    instead of unstaged changes, look at staged changes.
+
+NBMerge
+~~~~~~~
+
+The ``nbmerge`` command generates a valid notebook file containing all the cells
+from all branches of the notebook. It adds cell metadata indicating which
+branch a cell is on, and whether it is an addition, deletion, modification, or
+neither.
+
+::
+
+    usage: nbmerge [-h] [local base remote [result]]
+
+      If no arguments are given, nbmerge asks git for a list of unmerged files
+      and uses those as input.
+
+    positional arguments:
+      local   the local branch's version of the notebook
+      base    the common ancestor version of local and remote notebooks
+      remote  the remote branch's version of the notebook
+
+    optional arguments:
+      -h, --help  show this help message and exit
+
+
+The NBDiff Notebook extension (see above section for installation instructions)
+provides a user interface for turning this "merge-able" notebook into a single,
+merged notebook. If you installed it through ``nbdiff-install``, open it with
+the following command:
+
+::
+
+    $ ipython notebook --profile nbdiff 
+
+Open the mergeable notebook and click save to complete the merge (TODO).
+
 
 Developing
 ----------
 
-Run the tests
-~~~~~~~~~~~~~
+Run the Python tests
+~~~~~~~~~~~~~~~~~~~~
 
-Install node and npm.
+To run the python tests, run the following command:
 
-In this directory, run:
+::
+
+    $ python setup.py nosetests
+
+NBDiff adheres to `PEP-8 <http://www.python.org/dev/peps/pep-0008/>`__. To check the code
+against PEP-8, use ``flake8`` like so:
+
+::
+
+    $ flake8 tests nbdiff
+
+Run the JavaScript tests
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, install `node <http://nodejs.org/>`__ and npm.
+
+Second, install the JavaScript dependencies using ``npm``.
 
 ::
 
     $ npm install
 
-to install the dependencies.
-
-To run the tests, run this. You should get the following output.
+Finally, run the tests with ``grunt``. You should output similar to the following.
+Note that ``grunt`` will not only run the tests, but check for common style problems with ``jshint``.
 
 ::
 

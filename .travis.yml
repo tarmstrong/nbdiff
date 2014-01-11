@@ -20,7 +20,8 @@ script:
   - python setup.py nosetests
   - flake8 nbdiff
   - flake8 tests
-  - python -m json.tool specs/test_cases.json
+  - python -m json.tool specs/test_cases_simple.json
+  - python -m json.tool specs/test_cases_cells.json
 
 notifications:
   email:
