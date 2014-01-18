@@ -14,7 +14,7 @@ class CellComparator():
             return False
         if cell1["cell_type"] == "heading":
             return cell1["source"] == cell2["source"] and \
-                   cell1["level"] == cell2["level"]
+                cell1["level"] == cell2["level"]
         elif self.istextcell(cell1):
             return cell1["source"] == cell2["source"]
         else:
