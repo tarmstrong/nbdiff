@@ -12,7 +12,9 @@ class CellComparator():
     def equal(self, cell1, cell2):
         if not cell1["cell_type"] == cell2["cell_type"]:
             return False
-        if self.istextcell(cell1) and self.istextcell(cell2):
+        if cell1["cell_type"] == "heading":
+            return cell1["source"] == cell2["source"] and cell1["level"] == cell2["level"]
+        elif self.istextcell(cell1):
             return cell1["source"] == cell2["source"]
         else:
             eqlanguage = cell1["language"] == cell2["language"]
