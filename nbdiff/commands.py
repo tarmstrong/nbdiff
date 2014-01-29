@@ -12,11 +12,6 @@ import sys
 
 
 def diff():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('notebook', nargs='*')
-    args = parser.parse_args()
-    # TODO take 0 or 2 arguments
-    # if 0, use version control (unstaged changes)
     # if 2, use the files.
     length = len(args.notebook)
     if length == 2:
