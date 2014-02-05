@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NbDiff</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/nbdiff.css">
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+<meta charset=utf-8 />
+  </head>
+  <body>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+   <ul class="nav">
+        <li><a href="index.html" accesskey="1" id="home" title="Home Page">Home Page</a></li>
+        <li><a href="http://www.ipython.org" accesskey="2" id="IPython" title="IPython Homepage">IPython</a>
+        <li><a href="aboutus.html" accesskey="3" id="about" title="About NbDiff">About Us</a></li>
+        <li><a href="faq.html" accesskey="4" id="faq" title="Frequently Asked Questions">FAQ</a></li>
+        <li><a href="contactus.html" accesskey="5" id="contact" title="Contact Us">Contact Us</a></li>
+    </ul> 
+  </div>
+</div>
+  
+<div class="container">
+  <div>
+    <h1>NbDiff</h1>
+    <h2>A diffing and merging tool for the IPython Notebook</h2>
+    <h3>Diff two IPython notebooks</h3>
+  </div>
+  <div id="tabContainer">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">URLs</a></li>
+        <li><a href="#tab2" data-toggle="tab">Local Notebooks</a></li>
+    </ul>
+  <div class="tab-content">
+    <div id="tab1" class="tab-pane active">
+      <p>Left URL: <input type='text' name='leftURL'></p><br>
+      <p>Right URL: <input type='text' name='rightURL'></p><br>
+    </div>
+    <div id="tab2" class="tab-pane">
+        <p>Left Notebook: </p><input type='file' name='leftFile'><br>
+        <p>Right Notebook: </p><input type='file' name='rightFile'><br>
+        <input type='submit' name='upload_btn' value='Submit'>
+    </div>
+  </div>
+  </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</div>
+  </body>
+</html>

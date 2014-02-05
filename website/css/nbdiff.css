@@ -1,0 +1,28 @@
+h1 {
+margin-top: 100px;
+color: #464646;
+font-family:"Times New Roman",Georgia,Serif;
+text-align: center;
+font-size: 55px;
+}
+h2{
+color: #464646;
+font-family:"Times New Roman",Georgia,Serif;
+text-align: center;
+font-size: 30px;
+}
+h3{
+color: #9E9E9E;
+font-family:"Times New Roman",Georgia,Serif;
+text-align: center;
+font-size: 25px;
+}
+tabContainer{
+position : absolute;
+width:200px;
+height:200px;
+left:50%;
+top:50%;
+margin-left:-100px;
+margin-top:-100px;
+}
