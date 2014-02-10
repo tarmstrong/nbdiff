@@ -111,5 +111,6 @@ def merge():
         with open(args.notebook[3], 'w') as resultfile:
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
-        # TODO save to the correct file in your working directory.
-        print(json.dumps(pre_merged_notebook, indent=2))
+        from .server.local_server import app
+        app.pre_merged_notebook = pre_merged_notebook
+        app.run(debug=True)
