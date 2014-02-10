@@ -1,6 +1,3 @@
-__author__ = 'root'
-
-import json
 import IPython.nbformat.current as current
 
 
