@@ -33,16 +33,15 @@ $( document ).ready(function() {
     };
 
     var init_notebook_merge_rows = function() {
-
+        var type = IPython.notebook.metadata['nbdiff-type'];
         for (var i = 0; i < cells.length; i++) {
             console.log('Processing cell #' + i + '...');
-            var type = IPython.notebook.metadata['nbdiff-type'];
             if(type = 'merge'){
                 parse_merge_row(cells[i], i);
             } else if(type='diff'){
                 parse_diff_row(cells[i], i);
             } else{
-            console.log('nbdiff-type not recognized');
+                console.log('nbdiff-type not recognized');
             }
         }
         $('#notebook-container-new').append(generate_notebook_container_end_space());
@@ -106,7 +105,6 @@ $( document ).ready(function() {
             console.log('Adding ' + side + ' cell.');
         }
         generate_diff_column(side, state, index);
-        current_row = $("#notebook-container-new").children().last();
     };
 
     var generate_merge_column = function(side, state, index) {
