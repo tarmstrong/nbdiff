@@ -11,9 +11,7 @@ def notebook_diff(nb1, nb2):
 
     cell_list = list()
     for item in diffed_nb:
-        state = item['state']
-        cell = copy.deepcopy(diff_result_to_cell(item))
-        cell['metadata']['state'] = state
+        cell = diff_result_to_cell(item)
         cell_list.append(cell)
 
     nb1['worksheets'][0]['cells'] = cell_list
