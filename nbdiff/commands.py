@@ -6,9 +6,9 @@ import subprocess
 import argparse
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
-from .comparable import CellComparator
 import json
 import sys
+from .notebook_diff import notebook_diff
 
 
 def diff():
@@ -23,17 +23,12 @@ def diff():
         x = NotebookParser()
         notebook1 = x.parse(open(args.notebook[0]))
         notebook2 = x.parse(open(args.notebook[1]))
-        notequal = []
-        for i in range(0, len(notebook1["worksheets"][0]["cells"])):
-            cell1 = notebook1['worksheets'][0]['cells'][i]
-            cell2 = notebook2['worksheets'][0]['cells'][i]
-            if not CellComparator(cell1) == CellComparator(cell2):
-                notequal.append((cell1, cell2))
-        for cell1, cell2 in notequal:
-            print(cell1)
-            print(cell2)
 
-    print('Arguments received: {}'.format(args.notebook))
+        result = notebook_diff(notebook1, notebook2)
+
+        from .server.local_server import app
+        app.pre_merged_notebook = result
+        app.run(debug=True)
 
 
 def merge():
