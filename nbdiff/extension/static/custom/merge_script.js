@@ -36,9 +36,9 @@ $( document ).ready(function() {
         var type = IPython.notebook.metadata['nbdiff-type'];
         for (var i = 0; i < cells.length; i++) {
             console.log('Processing cell #' + i + '...');
-            if(type = 'merge'){
+            if(type === 'merge'){
                 parse_merge_row(cells[i], i);
-            } else if(type='diff'){
+            } else if(type === 'diff'){
                 parse_diff_row(cells[i], i);
             } else{
                 console.log('nbdiff-type not recognized');
@@ -119,9 +119,9 @@ $( document ).ready(function() {
         var cellHTML = cellElements[index];
         var htmlClass;
         var lastRow = $("#notebook-container-new").children().last();
-        if (side = cellSide[0]) {
+        if (side === cellSide[0]) {
             htmlClass = ".row-cell-diff-left";
-        } else if (side = cellSide[2]) {
+        } else if (side === cellSide[2]) {
             htmlClass = ".row-cell-diff-right";
         } else{
             htmlClass = ".row-cell-diff-middle";
@@ -131,7 +131,7 @@ $( document ).ready(function() {
     };
 
     var get_state_css = function(state) {
-        if (state == cellState[0]) {
+        if (state === cellState[0]) {
             return "added-cell";
         } else if (state == cellState[1]) {
             return "deleted";
@@ -144,7 +144,7 @@ $( document ).ready(function() {
     
     var generate_merge_control_column = function(side) {
         var mergeArrowClass = 'merge-arrow-left';
-        if (side == cellSide[0]) {
+        if (side === cellSide[0]) {
             return "<input value='->' data-cell-idx='0' class='merge-arrow-right' type='button'>";
         } else {
             return "<input value='<-' data-cell-idx='0' class='merge-arrow-left' type='button'>";
