@@ -10,7 +10,7 @@ $( document ).ready(function() {
     for(var i = 0; i < cells.length; i++){
         cellElements[i] = IPython.notebook.get_cell_element(i);
     }
-    
+
     var init = function() {
         var cells = IPython.notebook.get_cells();
         console.log('Initializing nbdiff.');
@@ -31,20 +31,25 @@ $( document ).ready(function() {
             console.log('Showing the normal notebook container.');
         }
     };
-    
-    var init_notebook_merge_rows = function() {
 
+    var init_notebook_merge_rows = function() {
+        var type = IPython.notebook.metadata['nbdiff-type'];
         for (var i = 0; i < cells.length; i++) {
             console.log('Processing cell #' + i + '...');
-            parse_merge_row(cells[i], i);
+            if(type = 'merge'){
+                parse_merge_row(cells[i], i);
+            } else if(type='diff'){
+                parse_diff_row(cells[i], i);
+            } else{
+                console.log('nbdiff-type not recognized');
+            }
         }
         $('#notebook-container-new').append(generate_notebook_container_end_space());
     };
-    
+
     var parse_merge_row = function(cell, index) {
         var side = cell.metadata.side;
         var state = cell.metadata.state;
-
         if (side === cellSide[0]) {
             console.log('New row. Adding local cell.');
             var new_row = $(generate_empty_merge_row());
@@ -86,6 +91,20 @@ $( document ).ready(function() {
                 current_row.find("input.merge-arrow-right").hide();
             }
         }
+        
+        }
+    };
+
+    var parse_diff_row(cell, index){
+        var side = cell.metadata.side; 
+        var state = cell.metadata.state;
+        if (side === cellSide[0]) {
+            console.log('New row. Adding local cell.');
+            var new_row = $(generate_empty_diff_row());
+        } else {
+            console.log('Adding ' + side + ' cell.');
+        }
+        generate_diff_column(side, state, index);
     };
 
     var generate_merge_column = function(side, state, index) {
@@ -96,12 +115,27 @@ $( document ).ready(function() {
         lastRow.children(htmlClass).append(cellHTML);
     };
     
+    var generate_diff_column = function(side, state, index) {
+        var cellHTML = cellElements[index];
+        var htmlClass;
+        var lastRow = $("#notebook-container-new").children().last();
+        if (side = cellSide[0]) {
+            htmlClass = ".row-cell-diff-left";
+        } else if (side = cellSide[2]) {
+            htmlClass = ".row-cell-diff-right";
+        } else{
+            htmlClass = ".row-cell-diff-middle";
+        }
+        cellHTML.addClass(htmlClass);
+        lastRow.children(htmlClass).append(cellHTML);
+    };
+
     var get_state_css = function(state) {
-        if (state === cellState[0]) {
+        if (state == cellState[0]) {
             return "added-cell";
-        } else if (state === cellState[1]) {
+        } else if (state == cellState[1]) {
             return "deleted";
-        } else if (state === cellState[2]) {
+        } else if (state == cellState[2]) {
             return "changed";
         } else {
             return "";
@@ -110,7 +144,7 @@ $( document ).ready(function() {
     
     var generate_merge_control_column = function(side) {
         var mergeArrowClass = 'merge-arrow-left';
-        if (side === cellSide[0]) {
+        if (side == cellSide[0]) {
             return "<input value='->' data-cell-idx='0' class='merge-arrow-right' type='button'>";
         } else {
             return "<input value='<-' data-cell-idx='0' class='merge-arrow-left' type='button'>";
@@ -119,6 +153,10 @@ $( document ).ready(function() {
 
     var generate_empty_merge_row = function() {
         return "<div class='row'>" + "<div class='row-cell-merge-local'></div>" + "<div class='row-cell-merge-controls-local'>" + generate_merge_control_column("local") + "</div>" + "<div class='row-cell-merge-remote'></div>" + "<div class='row-cell-merge-controls-remote'>" + generate_merge_control_column("remote") + "</div>" + "<div class='row-cell-merge-base'></div>" + "</div>";
+    };
+
+    var generate_empty_diff_row = function() {
+        return "<div class='row'>" + "<div class='row-cell-diff-left'></div>" + "<div class='row-cell-diff-middle'></div>" + "<div class='row-cell-diff-right'></div>" + "</div>";
     };
 
     var generate_notebook_container = function() {
