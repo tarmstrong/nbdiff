@@ -120,6 +120,8 @@ def notebook_merge(local, base, remote):
     # Use the base notebook's notebook-level metadata (title, version, etc.)
     base['worksheets'][0]['cells'] = list(it.chain.from_iterable(rows))
 
+    base['metadata']['nbdiff-type'] = 'merge'
+
     return base
 
 
