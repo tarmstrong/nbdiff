@@ -20,9 +20,9 @@ def diff():
     # if 2, use the files.
     length = len(args.notebook)
     if length == 2:
-        x = NotebookParser()
-        notebook1 = x.parse(open(args.notebook[0]))
-        notebook2 = x.parse(open(args.notebook[1]))
+        parser = NotebookParser()
+        notebook1 = parser.parse(open(args.notebook[0]))
+        notebook2 = parser.parse(open(args.notebook[1]))
 
         result = notebook_diff(notebook1, notebook2)
 
