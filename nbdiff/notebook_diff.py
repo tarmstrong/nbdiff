@@ -1,5 +1,4 @@
 from .merge import cells_diff, diff_result_to_cell
-import copy
 
 
 def notebook_diff(nb1, nb2):
