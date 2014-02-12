@@ -60,6 +60,14 @@
 	  padding: 100px;
 	}
 
+  /* TODO: .row seems to be defined in IPython css, so
+   * we should call ours .nbdiff-row to avoid conflict. */
+
+  .row {
+    margin-left: 20px ! important;
+    margin-right: 20px;
+  }
+
 	.row-cell-merge-local {
 	  float: left;
 	  clear:right;
@@ -133,15 +141,32 @@
 	  visibility: hidden;
 	}
 
-	.saveButton {
-	  position:fixed;
-	  right:10px;
-	  top:5px;
-	}
+  /* NBDiff header toolbar items */
 
-	.questionButton {
-	  position:fixed;
-	  right:55px;
-	  top:5px;
-	}
+  #nbdiff-logo {
+    display: inline-block;
+  }
+
+  #nbdiff-controls {
+    display: inline-block;
+  }
+
+
+  /* hide IPython Notebook toolbar, logo, etc. */
+
+  #menubar {
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  #ipython_notebook {
+    display: none;
+  }
+
+  .prompt {
+    display: none;
+  }
 
