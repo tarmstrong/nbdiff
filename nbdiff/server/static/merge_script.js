@@ -95,16 +95,10 @@ function nbdiff() {
     };
 
     var parse_diff_row = function (cell, index){
-        var side = cell.metadata.side;
         var state = cell.metadata.state;
-        if (side === cellSide[0]) {
-            console.log('New row. Adding local cell.');
-            var new_row = $(generate_empty_diff_row());
-            $('#notebook-container-new').append(new_row);
-        } else {
-            console.log('Adding ' + side + ' cell.');
-        }
-        generate_diff_column(side, state, index);
+        var new_row = $(generate_empty_diff_row());
+        $('#notebook-container-new').append(new_row);
+        generate_diff_column(state, index);
     };
 
     var generate_merge_column = function(side, state, index) {
@@ -115,26 +109,23 @@ function nbdiff() {
         lastRow.children(htmlClass).append(cellHTML);
     };
     
-    var generate_diff_column = function(side, state, index) {
+    var generate_diff_column = function(state, index) {
         var cellHTML = cellElements[index];
         var htmlClass, targetContainer;
         var lastRow = $("#notebook-container-new").children('.row').last();
         var targets = [ ".row-cell-diff-left", ".row-cell-diff-right"];
 
-        if (side === cellSide[0]) {
-            targetContainer = ".row-cell-diff-left";
-        } else if (side === cellSide[2]) {
-            targetContainer = ".row-cell-diff-right";
-        }
-
         if (state === cellState[0]) {
+            targetContainer = ".row-cell-diff-right";
             cellHTML.addClass('added-cell');
         } else if (state === cellState[1]) {
+            targetContainer = ".row-cell-diff-left";
             cellHTML.addClass('deleted');
         }
 
         if (state === cellState[3]) {
             // If it's an unchanged cell, add to both sides.
+            // TODO grey them out as well
             targets.forEach(function (target) {
                 lastRow.children(target).append(cellHTML.clone());
             });
