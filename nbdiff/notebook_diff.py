@@ -14,6 +14,6 @@ def notebook_diff(nb1, nb2):
         cell_list.append(cell)
 
     nb1['worksheets'][0]['cells'] = cell_list
-    nb1['metadata']['ndiff-type'] = 'diff'
+    nb1['metadata']['nbdiff-type'] = 'diff'
 
     return nb1
