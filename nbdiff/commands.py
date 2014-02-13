@@ -44,6 +44,7 @@ def merge():
         # TODO ignore non-.ipynb files.
         output = subprocess.check_output("git ls-files --unmerged".split())
         output_array = [line.split() for line in output.splitlines()]
+        filename = output_array[0][3]
 
         if len(output_array) != 3:
             # TODO This should work for multiple conflicting notebooks.
@@ -109,3 +110,4 @@ def merge():
         from .server.local_server import app
         app.pre_merged_notebook = pre_merged_notebook
         app.run(debug=True)
+        open(filename, 'w').write(json.dumps(app.notebook_result, indent = 2))
