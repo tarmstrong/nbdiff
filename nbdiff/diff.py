@@ -4,7 +4,7 @@ import itertools as it
 import collections
 
 
-def diff(before, after):
+def diff(before, after, check_modified = False):
     grid = create_grid(before, after)
     nrows = len(grid[0])
     ncols = len(grid)
@@ -13,9 +13,17 @@ def diff(before, after):
     for kind, col, row in dps:
         if kind == 'unchanged':
             value = before[col]
+            result.append({
+                'state': kind,
+                'value': value,
+            })
         elif kind == 'deleted':
             assert col < ncols
             value = before[col]
+            result.append({
+                'state': kind,
+                'value': value,
+            })
         elif kind == 'added':
 #            print
 #            print dps
@@ -25,10 +33,16 @@ def diff(before, after):
             #if len(after) <= row:
             #    print grid
             value = after[row]
-        result.append({
-            'state': kind,
-            'value': value,
-        })
+            result.append({
+                'state': kind,
+                'value': value,
+            })
+        elif check_modified and kind == 'modified':
+            result.append({
+                'state': kind,
+                'originalvalue': before[col],
+                'modifiedvalue': after[row],
+            })
     return result
 
 
@@ -56,7 +70,11 @@ def diff_points(grid):
             lcs_result.pop(0)
             matched_cols.pop(0)
             matched_rows.pop(0)
-            result.append(('unchanged', cur_col, cur_row))
+            comparison = grid[cur_col][cur_row]
+            if hasattr(comparison, 'is_modified') and comparison.is_modified():
+                result.append('modified', cur_col, cur_row)
+            else:
+                result.append(('unchanged', cur_col, cur_row))
             cur_col += 1
             cur_row += 1
         elif goodcol and (not matched_cols or cur_col != matched_cols[0]):
