@@ -109,5 +109,16 @@ def merge():
     else:
         from .server.local_server import app
         app.pre_merged_notebook = pre_merged_notebook
+
+        def save_notebook(notebook_result):
+            import json
+            parsed = json.loads(notebook_result)
+            with open(filename, 'w') as targetfile:
+                targetfile.write(json.dumps(parsed, indent=2))
+            f = open(filename)
+            for line in f:
+                print(line)
+
+        app.shutdown = save_notebook
+
         app.run(debug=True)
-        open(filename, 'w').write(json.dumps(app.notebook_result, indent=2))

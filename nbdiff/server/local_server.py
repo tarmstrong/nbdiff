@@ -30,6 +30,7 @@ def home():
 def notebookjson():
     if request.method == 'PUT':
         app.notebook_result = request.data
+        app.shutdown(request.data)
         request.environ.get('werkzeug.server.shutdown')()
         return ""
     else:
