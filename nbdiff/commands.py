@@ -19,16 +19,31 @@ def diff():
     # if 0, use version control (unstaged changes)
     # if 2, use the files.
     length = len(args.notebook)
+    parser = NotebookParser()
     if length == 2:
-        parser = NotebookParser()
         notebook1 = parser.parse(open(args.notebook[0]))
         notebook2 = parser.parse(open(args.notebook[1]))
 
         result = notebook_diff(notebook1, notebook2)
+    elif length == 0:
+        output = subprocess.check_output("git ls-files --modified".split())
+        fnames = output.splitlines()
+        fname = fnames[0]  # TODO handle multiple notebooks
+        current_notebook = parser.parse(open(fname))
+        head_version_show = subprocess.Popen(
+            ['git', 'show', 'HEAD:' + fname],
+            stdout=subprocess.PIPE
+        )
+        head_version = parser.parse(head_version_show.stdout)
 
-        from .server.local_server import app
-        app.pre_merged_notebook = result
-        app.run(debug=True)
+        result = notebook_diff(head_version, current_notebook)
+    else:
+        print ("Invalid number of arguments. Run nbdiff --help")
+        return -1
+
+    from .server.local_server import app
+    app.pre_merged_notebook = result
+    app.run(debug=True)
 
 
 def merge():
