@@ -19,13 +19,15 @@ function nbdiff() {
             console.log('Found nbdiff metadata in the notebook.');
             console.log('Hiding the normal notebook container.');
             $('#notebook-container').hide();
-            var cssLink = $("<link rel='stylesheet' type='text/css' href='/nbdiff/merge.css'>");
-            $("head").append(cssLink);
             console.log('Creating a new notebook container.');
             $('#notebook').append(generate_notebook_container());
 
             console.log('Initializing merge/diff rows.');
             init_notebook_merge_rows();
+
+            $('#nbdiff-save').click(function (event) {
+                save_merging_to_ipynb();
+            });
         } else {
             console.log('No nbdiff metadata in the notebook.');
             console.log('Showing the normal notebook container.');
