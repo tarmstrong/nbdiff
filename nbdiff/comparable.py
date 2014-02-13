@@ -19,6 +19,52 @@ class BooleanPlus(object):
     def is_modified(self):
         return self.modified
 
+class LineComparator(object):
+
+    def __init__(self, data):
+        self.data = data
+
+    def __eq__(self, other):
+        return self.equal(self.data, other.data)
+
+    def equal(self, line1, line2):
+        '''
+        return true if exactly equal or if equal but modified,
+        otherwise return false
+        return type: BooleanPlus
+        '''
+
+        eqLine = line1 == line2
+        if eqLine:
+            return BooleanPlus(True, False)
+
+        unchanged_count = self.count_similar_words(line1, line2)
+        similarity_percent = (2.0 * unchanged_count) / (len(line1) + len(line2))
+        if similarity_percent >= 0.50:
+            return BooleanPlus(True, True)
+        return BooleanPlus(False, False)
+
+
+    def count_similar_words(self, line1, line2):
+
+        words1 = line1.split()
+        words2 = line2.split()
+        grid = create_grid(words1, words2)
+        matches = []
+        for colnum in range(len(grid)):
+            new_matches = find_matches(grid[colnum],colnum)
+            matches = matches + new_matches
+
+        matched_cols = [r[0] for r in matches]
+        matched_rows = [r[1] for r in matches]
+
+        unique_cols = []
+        [unique_cols.append(col) for col in matched_cols if col not in unique_cols]
+        unique_rows = []
+        [unique_rows.append(row) for row in matched_rows if row not in unique_rows]
+
+        return min(len(unique_cols), len(unique_rows))
+
 
 class CellComparator():
 
@@ -83,10 +129,6 @@ class CellComparator():
         similarity_percent = (2.0 * unchanged_count) / (len(cell1) + len(cell2))
         if similarity_percent >= 0.50:
             return BooleanPlus(True, True)
-        return BooleanPlus(False, True)
-
-
-
-
+        return BooleanPlus(False, False)
 
 

@@ -26,7 +26,7 @@ def diff(before, after, check_modified = False):
             })
         elif kind == 'added':
 #            print
-#            print dps
+#            print dps00
 #            print 'row', row
 #            print 'after', after
             assert row < nrows
@@ -49,7 +49,7 @@ def diff_modified_items(cellslist):
     result = {}
     for i in range(len(cellslist)):
         if cellslist[i]['state'] == 'modified':
-            result[i] = diff(cellslist[i]['originalvalue'], cellslist[i]['modifiedvalue'])
+            result[i] = diff(cellslist[i]['originalvalue']["input"], cellslist[i]['modifiedvalue']["input"])
     return result
 
 def diff_points(grid):
