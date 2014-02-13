@@ -45,6 +45,12 @@ def diff(before, after, check_modified = False):
             })
     return result
 
+def diff_modified_items(cellslist):
+    result = {}
+    for i in range(len(cellslist)):
+        if cellslist[i]['state'] == 'modified':
+            result[i] = diff(cellslist[i]['originalvalue'], cellslist[i]['modifiedvalue'])
+    return result
 
 def diff_points(grid):
     # cols = before; rows = after
