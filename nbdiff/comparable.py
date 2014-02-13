@@ -1,5 +1,5 @@
 __author__ = 'root'
-from nbdiff.diff import (
+from .diff import (
     create_grid,
     find_matches,
 )

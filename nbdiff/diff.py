@@ -78,7 +78,7 @@ def diff_points(grid):
             matched_rows.pop(0)
             comparison = grid[cur_col][cur_row]
             if hasattr(comparison, 'is_modified') and comparison.is_modified():
-                result.append('modified', cur_col, cur_row)
+                result.append(('modified', cur_col, cur_row))
             else:
                 result.append(('unchanged', cur_col, cur_row))
             cur_col += 1
