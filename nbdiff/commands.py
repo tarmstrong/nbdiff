@@ -110,4 +110,4 @@ def merge():
         from .server.local_server import app
         app.pre_merged_notebook = pre_merged_notebook
         app.run(debug=True)
-        open(filename, 'w').write(json.dumps(app.notebook_result, indent = 2))
+        open(filename, 'w').write(json.dumps(app.notebook_result, indent=2))
