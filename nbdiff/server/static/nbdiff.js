@@ -26,7 +26,7 @@ function nbdiff() {
             init_notebook_merge_rows();
 
             $('#nbdiff-save').click(function (event) {
-                save_merging_to_ipynb();
+                nbmerge_save();
             });
         } else {
             console.log('No nbdiff metadata in the notebook.');
@@ -190,7 +190,7 @@ var remove_metadata = function(cells) {
         delete cells[i].metadata.side;
     }
 };
-var save_merging_to_ipynb = function() {
+var nbmerge_save = function() {
     var mergedcells = $('#notebook-container-new .row .row-cell-merge-base .cell').clone(true);
     $('#notebook-container').empty();
 
