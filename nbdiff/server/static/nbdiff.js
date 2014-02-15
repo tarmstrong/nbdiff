@@ -178,12 +178,6 @@ function nbdiff() {
     init();
 };
 
-if (typeof IPython.notebook === 'undefined') {
-    $([IPython.events]).bind('notebook_loaded.Notebook', nbdiff);
-} else {
-    nbdiff();
-}
-
 var remove_metadata = function(cells) {
     for (var i = 0; i < cells.length; i++) {
         delete cells[i].metadata.state;
@@ -202,3 +196,10 @@ var nbmerge_save = function() {
 
     IPython.notebook.save_notebook();
 };
+
+if (typeof IPython.notebook === 'undefined') {
+    $([IPython.events]).bind('notebook_loaded.Notebook', nbdiff);
+} else {
+    nbdiff();
+}
+
