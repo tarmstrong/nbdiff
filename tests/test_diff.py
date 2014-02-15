@@ -1,5 +1,6 @@
 from nose.tools import eq_
 import itertools as it
+import collections
 from nbdiff.diff import (
     add_results,
     find_candidates,
@@ -10,29 +11,30 @@ from nbdiff.diff import (
     diff_points,
     create_grid,
     diff,
+    count_similar_lines,
+    check_modified,
 )
 
-
 def test_diff():
-    A = "abcabba"
-    B = "cbabac"
+    A = [{u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},{u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}]
+    B = [{u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}]
     result = diff(A, B)
     expected = [
-        {"state": 'deleted', 'value': 'a'},
-        {"state": 'added', 'value': 'c'},
-        {"state": 'unchanged', 'value': 'b'},
-        {"state": 'deleted', 'value': 'c'},
-        {"state": 'unchanged', 'value': 'a'},
-        {"state": 'unchanged', 'value': 'b'},
-        {"state": 'deleted', 'value': 'b'},
-        {"state": 'unchanged', 'value': 'a'},
-        {"state": 'added', 'value': 'c'},
+        {"state": 'unchanged', 'value': {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}},
+        {"state": 'deleted', 'value': {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}}
     ]
     eq_(result, expected)
-    diff("aaaaaaaaaaaaaaaaaaaa", "bbbbbbaaaaaaaaaaabbbbbbbbbbb")
-    diff("cabcdef", "abdef")
-    diff("ca", "abdef")
+    #diff("aaaaaaaaaaaaaaaaaaaa", "bbbbbbaaaaaaaaaaabbbbbbbbbbb")
+    #diff("cabcdef", "abdef")
+    #diff("ca", "abdef")
 
+def test_count_similar_lines():
+    A = {u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    B = {u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
+    result = count_similar_lines(A, B)
+
+    expected = 2
+    eq_(result, expected)
 
 def test_create_grid():
     A = "abcabba"
@@ -54,29 +56,23 @@ def test_create_grid():
     grid = create_grid(A, B)
     assert len([True for col in grid if len(col) == 0]) == 0
 
+def test_check_modified():
+    A = {u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    B = {u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
+
+    result = check_modified(A, B)
+    expected = True
+    eq_(result, expected)
 
 def test_diff_points():
-    grid = [
-        [False, False, True, False, True, False],
-        [False, True, False, True, False, False],
-        [True, False, False, False, False, True],
-        [False, False, True, False, True, False],
-        [False, True, False, True, False, False],
-        [False, True, False, True, False, False],
-        [False, False, True, False, True, False]
-    ]
-    result = diff_points(grid)
+    A = [{u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}]
+    B = [{u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}]
+
+    result = diff_points(A, B)
 
     expected = [
-        ('deleted', 0, None),
-        ('added', None, 0),
-        ('unchanged', 1, 1),
-        ('deleted', 2, None),
-        ('unchanged', 3, 2),
-        ('unchanged', 4, 3),
-        ('deleted', 5, None),
-        ('unchanged', 6, 4),
-        ('added', None, 5),
+        ('modified', 0, None),
+        ('modified', None, 0),
     ]
     eq_(result, expected)
 
