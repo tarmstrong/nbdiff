@@ -12,20 +12,37 @@ from .notebook_diff import notebook_diff
 
 
 def diff():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('notebook', nargs='*')
+    description = '''
+    Produce a diffed IPython Notebook from before and after notebooks.
+
+    If no arguments are given, nbdiff looks for modified notebook files in
+    the version control system.
+
+    The resulting diff is presented to the user in the browser at
+    http://localhost:5000.
+    '''
+    usage = 'nbdiff [-h] [before after]'
+    parser = argparse.ArgumentParser(
+        description=description,
+        usage=usage,
+    )
+    parser.add_argument('before', nargs='?',
+                        help='The notebook to diff against.')
+    parser.add_argument('after', nargs='?',
+                        help='The notebook to compare `before` to.')
     args = parser.parse_args()
-    # TODO take 0 or 2 arguments
-    # if 0, use version control (unstaged changes)
-    # if 2, use the files.
-    length = len(args.notebook)
+
     parser = NotebookParser()
-    if length == 2:
-        notebook1 = parser.parse(open(args.notebook[0]))
-        notebook2 = parser.parse(open(args.notebook[1]))
+
+    if args.before and args.after:
+        notebook1 = parser.parse(open(args.before))
+        notebook2 = parser.parse(open(args.after))
 
         result = notebook_diff(notebook1, notebook2)
-    elif length == 0:
+
+    elif not (args.before or args.after):
+        # No arguments have been given. Ask version control instead.
+
         output = subprocess.check_output("git ls-files --modified".split())
         fnames = output.splitlines()
         fname = fnames[0]  # TODO handle multiple notebooks
@@ -47,7 +64,21 @@ def diff():
 
 
 def merge():
-    parser = argparse.ArgumentParser()
+    description = '''
+    nbmerge is a tool for resolving merge conflicts in IPython Notebook
+    files.
+
+    If no arguments are given, nbmerge attempts to find the conflicting
+    file in the version control system.
+
+    Positional arguments are available for integration with version
+    control systems such as Git and Mercurial.
+    '''
+    usage = 'nbmerge [-h] [local base remote [result]]'
+    parser = argparse.ArgumentParser(
+        description=description,
+        usage=usage,
+    )
     parser.add_argument('notebook', nargs='*')
     args = parser.parse_args()
     length = len(args.notebook)
