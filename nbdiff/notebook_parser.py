@@ -1,11 +1,9 @@
-__author__ = 'root'
-
-import json
+import IPython.nbformat.current as current
 
 
 class NotebookParser:
 
     def parse(self, json_data):
-        data = json.load(json_data)
+        data = current.read(json_data, 'ipynb')
         json_data.close()
         return data
