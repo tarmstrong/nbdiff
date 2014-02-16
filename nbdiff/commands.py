@@ -11,6 +11,7 @@ import sys
 from .notebook_diff import notebook_diff
 import IPython.nbformat.current as nbformat
 
+
 def diff():
     parser = argparse.ArgumentParser()
     parser.add_argument('notebook', nargs='*')
@@ -113,7 +114,7 @@ def merge():
         def save_notebook(notebook_result):
             #import json
             #parsed = json.loads(notebook_result)
-            parsed = nbformat.reads(notebook_result, 'json') 
+            parsed = nbformat.reads(notebook_result, 'json')
             with open(filename, 'w') as targetfile:
                 #targetfile.write(json.dumps(parsed, indent=2))
                 nbformat.write(parsed, targetfile, 'ipynb')
