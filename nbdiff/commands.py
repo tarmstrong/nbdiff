@@ -161,9 +161,6 @@ def merge():
             parsed = nbformat.reads(notebook_result, 'json')
             with open(filename, 'w') as targetfile:
                 nbformat.write(parsed, targetfile, 'ipynb')
-            f = open(filename)
-            for line in f:
-                print(line)
 
         app.shutdown = save_notebook
 
