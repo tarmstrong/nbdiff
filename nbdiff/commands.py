@@ -9,6 +9,7 @@ from .notebook_parser import NotebookParser
 import json
 import sys
 from .notebook_diff import notebook_diff
+import IPython.nbformat.current as nbformat
 
 
 def diff():
@@ -90,6 +91,7 @@ def merge():
         # TODO ignore non-.ipynb files.
         output = subprocess.check_output("git ls-files --unmerged".split())
         output_array = [line.split() for line in output.splitlines()]
+        filename = output_array[0][3]
 
         if len(output_array) != 3:
             # TODO This should work for multiple conflicting notebooks.
@@ -154,4 +156,15 @@ def merge():
     else:
         from .server.local_server import app
         app.pre_merged_notebook = pre_merged_notebook
+
+        def save_notebook(notebook_result):
+            parsed = nbformat.reads(notebook_result, 'json')
+            with open(filename, 'w') as targetfile:
+                nbformat.write(parsed, targetfile, 'ipynb')
+            f = open(filename)
+            for line in f:
+                print(line)
+
+        app.shutdown = save_notebook
+
         app.run(debug=True)

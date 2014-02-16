@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request
 import jinja2
 import json
 import IPython.html
@@ -26,11 +26,16 @@ def home():
                            base_kernel_url='/', notebook_id='test_notebook')
 
 
-@app.route('/notebooks/test_notebook')
+@app.route('/notebooks/test_notebook', methods=['GET', 'PUT'])
 def notebookjson():
-    parsed = app.pre_merged_notebook
-    return json.dumps(parsed)
-
+    if request.method == 'PUT':
+        app.notebook_result = request.data
+        app.shutdown(request.data)
+        request.environ.get('werkzeug.server.shutdown')()
+        return ""
+    else:
+        parsed = app.pre_merged_notebook
+        return json.dumps(parsed)
 
 if __name__ == '__main__':
     app.run(debug=True)
