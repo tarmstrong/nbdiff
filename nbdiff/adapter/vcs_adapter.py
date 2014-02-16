@@ -3,7 +3,7 @@ __author__ = 'root'
 import re
 
 
-class VcsAdapter:
+class VcsAdapter(object):
 
     def get_modified_files(self):
         raise NotImplementedError("Subclass must implement abstract method")
