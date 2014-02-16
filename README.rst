@@ -38,20 +38,12 @@ From Source
 ~~~~~~~~~~~
 
 1. Download the code from this repository
-2. Run ``python setup.py install``
-
-Install the Extension
-~~~~~~~~~~~~~~~~~~~~~
-
-NBDiff ships with an IPython Notebook extension used modify the Notebook interface for merging.
-To create a profile with this extension installed, run the following:
-
-::
-
-    $ nbdiff-install
+2. Run ``python setup.py develop``
 
 Configure Git/Mercurial
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+*Configuring nbmerge to work with your version control system can be helpful but is not required.*
 
 NBMerge is compatible with Mercurial out of the box by running ``hg merge --tool=nbmerge <branch>``.
 
@@ -81,60 +73,48 @@ Usage
 NBDiff
 ~~~~~~
 
-TODO. This command doesn't work yet. But when it does, it will show a diff of
-two ``.ipynb`` files.
+NBDiff launches a server at ``localhost:5000`` and allows you to view a simple
+2-pane diff of two notebook files.
 
 ::
 
-    usage: nbdiff [-h] [--cached] before after
+    usage: nbdiff [-h] [before after]
 
-      Produce a diffed notebook from before and after notebooks.
-
-      If no arguments are given, nbdiff asks git for a list
-      of modified files.
+    Produce a diffed IPython Notebook from before and after notebooks. If no
+    arguments are given, nbdiff looks for modified notebook files in the version
+    control system. The resulting diff is presented to the user in the browser at
+    http://localhost:5000.
 
     positional arguments:
-      before  first version of the notebook
-      after   second version of the notebook
+      before      The notebook to diff against.
+      after       The notebook to compare `before` to.
 
     optional arguments:
       -h, --help  show this help message and exit
-      --cached    instead of unstaged changes, look at staged changes.
+
 
 NBMerge
 ~~~~~~~
 
-The ``nbmerge`` command generates a valid notebook file containing all the cells
-from all branches of the notebook. It adds cell metadata indicating which
-branch a cell is on, and whether it is an addition, deletion, modification, or
-neither.
+nbmerge launches
 
 ::
+
 
     usage: nbmerge [-h] [local base remote [result]]
 
-      If no arguments are given, nbmerge asks git for a list of unmerged files
-      and uses those as input.
+    nbmerge is a tool for resolving merge conflicts in IPython Notebook files. If
+    no arguments are given, nbmerge attempts to find the conflicting file in the
+    version control system. Positional arguments are available for integration
+    with version control systems such as Git and Mercurial.
+
+    Once nbmerge is run, the UI can be accessed at http://localhost:5000
 
     positional arguments:
-      local   the local branch's version of the notebook
-      base    the common ancestor version of local and remote notebooks
-      remote  the remote branch's version of the notebook
+      notebook
 
     optional arguments:
       -h, --help  show this help message and exit
-
-
-The NBDiff Notebook extension (see above section for installation instructions)
-provides a user interface for turning this "merge-able" notebook into a single,
-merged notebook. If you installed it through ``nbdiff-install``, open it with
-the following command:
-
-::
-
-    $ ipython notebook --profile nbdiff 
-
-Open the mergeable notebook and click save to complete the merge (TODO).
 
 
 Developing
