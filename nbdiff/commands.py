@@ -9,6 +9,8 @@ from .notebook_parser import NotebookParser
 import json
 import sys
 from .notebook_diff import notebook_diff
+import threading
+import webbrowser
 
 
 def diff():
@@ -154,4 +156,11 @@ def merge():
     else:
         from .server.local_server import app
         app.pre_merged_notebook = pre_merged_notebook
-        app.run(debug=True)
+        try:
+            browser = webbrowser.get()
+        except webbrowser.Error as e:
+            browser = None
+        if browser:
+            b = lambda : browser.open("http://127.0.0.1:5000", new=2)
+            threading.Thread(target=b).start()
+            app.run(debug=True)
