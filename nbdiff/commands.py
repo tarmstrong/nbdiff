@@ -112,11 +112,8 @@ def merge():
         app.pre_merged_notebook = pre_merged_notebook
 
         def save_notebook(notebook_result):
-            #import json
-            #parsed = json.loads(notebook_result)
             parsed = nbformat.reads(notebook_result, 'json')
             with open(filename, 'w') as targetfile:
-                #targetfile.write(json.dumps(parsed, indent=2))
                 nbformat.write(parsed, targetfile, 'ipynb')
             f = open(filename)
             for line in f:
