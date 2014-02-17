@@ -1,5 +1,8 @@
 *.py[cod]
 
+scripts/merge-conflict-testfolder*
+scripts/merge-diff-testfolder*
+
 node_modules
 
 # C extensions
