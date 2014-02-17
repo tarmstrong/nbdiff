@@ -50,11 +50,15 @@ def diff():
 
         modified_notebooks = git.get_modified_notebooks()
 
-        # only first notebook
-        current_notebook = parser.parse(modified_notebooks[0][0])
-        head_version = parser.parse(modified_notebooks[0][1])
+        if not len(modified_notebooks) == 0:
+            # only first notebook
+            current_notebook = parser.parse(modified_notebooks[0][0])
+            head_version = parser.parse(modified_notebooks[0][1])
 
-        result = notebook_diff(head_version, current_notebook)
+            result = notebook_diff(head_version, current_notebook)
+        else:
+            print("No modified files to diff.")
+            return 0
     else:
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1

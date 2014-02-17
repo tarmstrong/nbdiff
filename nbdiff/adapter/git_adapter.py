@@ -8,19 +8,31 @@ from .vcs_adapter import VcsAdapter
 class GitAdapter(VcsAdapter):
 
     def get_modified_notebooks(self):
-        output = subprocess.check_output("git ls-files --modified".split())
-        fnames = output.splitlines()
+        # get modified file names
+        modified = subprocess.check_output("git ls-files --modified".split())
+        fnames = modified.splitlines()
+
+        # get unmerged file info
+        unmerged = subprocess.check_output("git ls-files --unmerged".split())
+        unmerged_array = [line.split() for line in unmerged.splitlines()]
+
+        # get unmerged file names
+        unmerged_array_names = [x[3] for x in unmerged_array]
+
+        # ignore unmerged files, get unique names
+        fnames = list(set(fnames) - set(unmerged_array_names))
+
         nb_diff = []
-        for index in xrange(0, len(fnames), 3):
+        for item in fnames:
             head_version_show = subprocess.Popen(
-                ['git', 'show', 'HEAD:' + fnames[index]],
+                ['git', 'show', 'HEAD:' + item],
                 stdout=subprocess.PIPE
             )
 
-            current_local_notebook = open(fnames[index])
+            current_local_notebook = open(item)
             committed_notebook = head_version_show.stdout
 
-            nb_diff.append((current_local_notebook, committed_notebook, fnames[index]))
+            nb_diff.append((current_local_notebook, committed_notebook, item))
 
         return super(GitAdapter, self).filter_modified_notebooks(nb_diff)
 
