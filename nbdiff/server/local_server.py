@@ -11,8 +11,13 @@ class NbFlask(Flask):
         os.path.dirname(os.path.realpath(__file__)) + '/templates'
     ])
 
+    notebooks = []
+
     def shutdown_callback(self, callback):
         self.shutdown = callback
+
+    def add_notebook(self, nb):
+        self.notebooks.append(nb)
 
 app = NbFlask(__name__, static_folder=IPython.html.__path__[0] + '/static')
 
@@ -36,7 +41,7 @@ def notebookjson():
         request.environ.get('werkzeug.server.shutdown')()
         return ""
     else:
-        parsed = app.pre_merged_notebook
+        parsed = app.notebooks[0]
         return json.dumps(parsed)
 
 if __name__ == '__main__':
