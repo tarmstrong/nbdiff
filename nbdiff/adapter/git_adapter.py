@@ -2,15 +2,28 @@ __author__ = 'root'
 
 import sys
 import subprocess
-from nbdiff.adapter.vcs_adapter import VcsAdapter
+from .vcs_adapter import VcsAdapter
 
 
 class GitAdapter(VcsAdapter):
 
     def get_modified_files(self):
-        pass
+        output = subprocess.check_output("git ls-files --modified".split())
+        fnames = output.splitlines()
+        fname = fnames[0]  # TODO handle multiple notebooks
 
-    def get_modified_notebooks(self):
+        head_version_show = subprocess.Popen(
+            ['git', 'show', 'HEAD:' + fname],
+            stdout=subprocess.PIPE
+        )
+
+        current_local_notebook = open(fname)
+        committed_notebook = head_version_show.stdout
+
+        nb_diff = (current_local_notebook, committed_notebook, fname)
+        return nb_diff
+
+    def get_modified_notebooks(self, file_hooks):
         return super().get_unmerged_notebooks()
 
     def get_unmerged_files(self):
