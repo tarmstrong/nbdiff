@@ -61,6 +61,7 @@ def diff():
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1
 
+    from . import server
     from .server.local_server import app
     app.add_notebook(result)
     app.run(debug=True)
@@ -156,6 +157,7 @@ def merge():
         with open(args.notebook[3], 'w') as resultfile:
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
+        from . import server
         from .server.local_server import app
 
         app.add_notebook(pre_merged_notebook)
