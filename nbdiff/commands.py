@@ -89,7 +89,7 @@ def merge():
         # use only git for now
         git = GitAdapter()
 
-        modified_files = git.get_modified_files()
+        modified_files = git.get_unmerged_files()
 
         unmerged_notebooks = git.get_unmerged_notebooks(modified_files)
 

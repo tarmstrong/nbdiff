@@ -24,7 +24,7 @@ class GitAdapter(VcsAdapter):
         return nb_diff
 
     def get_modified_notebooks(self, file_hooks):
-        return super().get_unmerged_notebooks()
+        return super(GitAdapter, self).get_unmerged_notebooks()
 
     def get_unmerged_files(self):
         # TODO error handling.
@@ -62,12 +62,12 @@ class GitAdapter(VcsAdapter):
                 stdout=subprocess.PIPE
             )
             file_name = hash[3]
-            result_file_hooks.append((local, base, remote, file_name))
+            result_file_hooks.append((local.stdout, base.stdout, remote.stdout, file_name))
 
         return result_file_hooks
 
     def get_unmerged_notebooks(self, file_hooks):
-        return super().get_unmerged_notebooks(file_hooks)
+        return super(GitAdapter, self).get_unmerged_notebooks(file_hooks)
 
     def stage_file(self, file, contents=None):
         pass
