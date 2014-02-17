@@ -62,7 +62,8 @@ class GitAdapter(VcsAdapter):
                 stdout=subprocess.PIPE
             )
             file_name = hash[3]
-            result_file_hooks.append((local.stdout, base.stdout, remote.stdout, file_name))
+            result_file_hooks.append((local.stdout, base.stdout,
+                                      remote.stdout, file_name))
 
         return result_file_hooks
 
