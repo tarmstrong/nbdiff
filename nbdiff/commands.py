@@ -91,7 +91,6 @@ def merge():
     if length == 0:
         # use only git for now
         git = GitAdapter()
-        filename = output_array[0][3]
 
         modified_files = git.get_unmerged_files()
 
@@ -101,6 +100,8 @@ def merge():
         nb_local = parser.parse(unmerged_notebooks[0][0])
         nb_base = parser.parse(unmerged_notebooks[0][1])
         nb_remote = parser.parse(unmerged_notebooks[0][2])
+
+        filename = unmerged_notebooks[0][3]
 
     elif length == 3 or length == 4:
         nb_local = parser.parse(open(args.notebook[0]))
