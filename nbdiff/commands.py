@@ -10,6 +10,7 @@ import json
 import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
+from .server.local_server import app
 import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
@@ -62,7 +63,6 @@ def diff():
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1
 
-    from .server.local_server import app
     app.add_notebook(result)
     open_browser()
     app.run(debug=True)
@@ -140,8 +140,6 @@ def merge():
         with open(args.notebook[3], 'w') as resultfile:
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
-        from .server.local_server import app
-
         app.add_notebook(pre_merged_notebook)
 
         def save_notebook(notebook_result):
