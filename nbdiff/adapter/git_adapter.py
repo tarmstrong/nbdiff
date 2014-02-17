@@ -23,9 +23,6 @@ class GitAdapter(VcsAdapter):
         nb_diff = (current_local_notebook, committed_notebook, fname)
         return nb_diff
 
-    def get_modified_notebooks(self, file_hooks):
-        return super(GitAdapter, self).get_modified_notebooks()
-
     def get_unmerged_files(self):
         # TODO error handling.
 
@@ -66,9 +63,6 @@ class GitAdapter(VcsAdapter):
                                       remote.stdout, file_name))
 
         return result_file_hooks
-
-    def get_unmerged_notebooks(self, file_hooks):
-        return super(GitAdapter, self).get_unmerged_notebooks(file_hooks)
 
     def stage_file(self, file, contents=None):
         pass
