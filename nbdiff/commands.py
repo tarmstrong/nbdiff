@@ -157,14 +157,14 @@ def merge():
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
         from .server.local_server import app
-        app.pre_merged_notebook = pre_merged_notebook
+        app.add_notebook(pre_merged_notebook)
 
         def save_notebook(notebook_result):
             parsed = nbformat.reads(notebook_result, 'json')
             with open(filename, 'w') as targetfile:
                 nbformat.write(parsed, targetfile, 'ipynb')
 
-        app.shutdown = save_notebook
+        app.shutdown_callback(save_notebook)
 
         try:
             browser = webbrowser.get()
