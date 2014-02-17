@@ -62,7 +62,7 @@ def diff():
         return -1
 
     from .server.local_server import app
-    app.pre_merged_notebook = result
+    app.add_notebook(result)
     app.run(debug=True)
 
 
@@ -157,6 +157,7 @@ def merge():
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
         from .server.local_server import app
+
         app.add_notebook(pre_merged_notebook)
 
         def save_notebook(notebook_result):
