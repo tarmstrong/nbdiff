@@ -11,6 +11,9 @@ class NbFlask(Flask):
         os.path.dirname(os.path.realpath(__file__)) + '/templates'
     ])
 
+    def shutdown_callback(self, callback):
+        self.shutdown = callback
+
 app = NbFlask(__name__, static_folder=IPython.html.__path__[0] + '/static')
 
 
@@ -29,7 +32,6 @@ def home():
 @app.route('/notebooks/test_notebook', methods=['GET', 'PUT'])
 def notebookjson():
     if request.method == 'PUT':
-        app.notebook_result = request.data
         app.shutdown(request.data)
         request.environ.get('werkzeug.server.shutdown')()
         return ""

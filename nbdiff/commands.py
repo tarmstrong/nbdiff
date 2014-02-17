@@ -162,6 +162,6 @@ def merge():
             with open(filename, 'w') as targetfile:
                 nbformat.write(parsed, targetfile, 'ipynb')
 
-        app.shutdown = save_notebook
+        app.shutdown_callback(save_notebook)
 
         app.run(debug=True)
