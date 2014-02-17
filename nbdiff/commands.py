@@ -163,4 +163,4 @@ def merge():
         if browser:
             b = lambda : browser.open("http://127.0.0.1:5000", new=2)
             threading.Thread(target=b).start()
-            app.run(debug=True)
+        app.run(debug=True)
