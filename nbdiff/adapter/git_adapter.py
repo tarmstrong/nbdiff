@@ -24,7 +24,7 @@ class GitAdapter(VcsAdapter):
         return nb_diff
 
     def get_modified_notebooks(self, file_hooks):
-        return super(GitAdapter, self).get_unmerged_notebooks()
+        return super(GitAdapter, self).get_modified_notebooks()
 
     def get_unmerged_files(self):
         # TODO error handling.
