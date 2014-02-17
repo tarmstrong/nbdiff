@@ -1,7 +1,7 @@
 *.py[cod]
 
-scripts/merge-conflict-testfolder*
-scripts/merge-diff-testfolder*
+*merge-conflict-testfolder*
+*merge-diff-testfolder*
 
 node_modules
 
