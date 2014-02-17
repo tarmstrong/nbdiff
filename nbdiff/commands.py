@@ -2,7 +2,6 @@
 Entry points for the nbdiff package.
 '''
 from __future__ import print_function
-import subprocess
 import argparse
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
@@ -47,12 +46,13 @@ def diff():
 
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
+        # only git for now
         git = GitAdapter()
 
         modified_notebooks = git.get_modified_notebooks()
 
         if not len(modified_notebooks) == 0:
-            # only first notebook
+            # only the first unmerged notebook for now. should open all
             current_notebook = parser.parse(modified_notebooks[0][0])
             head_version = parser.parse(modified_notebooks[0][1])
 
@@ -96,7 +96,7 @@ def merge():
 
         unmerged_notebooks = git.get_unmerged_notebooks()
 
-        # only the first unmerged notebook
+        # only the first unmerged notebook for now. should open all
         nb_local = parser.parse(unmerged_notebooks[0][0])
         nb_base = parser.parse(unmerged_notebooks[0][1])
         nb_remote = parser.parse(unmerged_notebooks[0][2])
