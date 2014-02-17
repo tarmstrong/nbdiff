@@ -3,7 +3,7 @@ __author__ = 'root'
 import sys
 import subprocess
 from .vcs_adapter import VcsAdapter
-
+import IPython.nbformat.current as nbformat
 
 class GitAdapter(VcsAdapter):
 
@@ -78,4 +78,10 @@ class GitAdapter(VcsAdapter):
         return super(GitAdapter, self).filter_unmerged_notebooks(file_hooks)
 
     def stage_file(self, file, contents=None):
-        pass
+        # should probably refactor saving notebook
+        if contents is not None:
+            parsed = nbformat.reads(file, 'json')
+            with open("Notebook.ipynb", 'w') as targetfile:
+                nbformat.write(parsed, targetfile, 'ipynb')
+        command = "git add " + file
+        return subprocess.call(command.split())
