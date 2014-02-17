@@ -62,9 +62,9 @@ def diff():
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1
 
-    from . import server
     from .server.local_server import app
     app.add_notebook(result)
+    open_browser()
     app.run(debug=True)
 
 
@@ -140,7 +140,6 @@ def merge():
         with open(args.notebook[3], 'w') as resultfile:
             resultfile.write(json.dumps(pre_merged_notebook, indent=2))
     else:
-        from . import server
         from .server.local_server import app
 
         app.add_notebook(pre_merged_notebook)
@@ -151,12 +150,15 @@ def merge():
                 nbformat.write(parsed, targetfile, 'ipynb')
 
         app.shutdown_callback(save_notebook)
-
-        try:
-            browser = webbrowser.get()
-        except webbrowser.Error:
-            browser = None
-        if browser:
-            b = lambda: browser.open("http://127.0.0.1:5000", new=2)
-            threading.Thread(target=b).start()
+        open_browser()
         app.run(debug=True)
+
+
+def open_browser():
+    try:
+        browser = webbrowser.get()
+    except webbrowser.Error:
+        browser = None
+    if browser:
+        b = lambda: browser.open("http://127.0.0.1:5000", new=2)
+        threading.Thread(target=b).start()
