@@ -92,6 +92,7 @@ def merge():
 
     if length == 0:
         # use only git for now
+        # could be factory: AdapterFactory.getAdapter()
         git = GitAdapter()
 
         unmerged_notebooks = git.get_unmerged_notebooks()

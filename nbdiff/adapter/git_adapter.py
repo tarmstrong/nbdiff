@@ -5,6 +5,7 @@ import subprocess
 from .vcs_adapter import VcsAdapter
 import IPython.nbformat.current as nbformat
 
+
 class GitAdapter(VcsAdapter):
 
     def get_modified_notebooks(self):
