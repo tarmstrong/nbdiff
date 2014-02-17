@@ -209,6 +209,40 @@ MergeRow.prototype = {
         this._fillColumn(row, this._cells.local);
         this._fillColumn(row, this._cells.base);
         this._fillColumn(row, this._cells.remote);
+
+        if (this._cells.local.state() !== 'unchanged' &&
+                 this._cells.local.state() !== 'empty' ) {
+            row.find("input.merge-arrow-right").click(function(state) {
+                return function() {
+                    // TODO we need to keep track, in memory, of the in-memory cells we're moving around
+                    //      so that we can exfiltrate the data and save the resulting notebook.
+                    var rightCell = row.find('.row-cell-merge-local .cell').clone(true);
+                    rightCell.addClass(getStateCSS(state));
+                    var htmlClass = ".row-cell-merge-base";
+                    // TODO this shouldn't obliterate the base cell -- we should
+                    //      be able to undo this operation.
+                    // TODO allow me to change my mind and merge the
+                    //      local version instead of the remote.
+                    row.children(htmlClass).find('.cell').replaceWith(rightCell);
+                };
+            }(this._cells.local.state()));
+        } else {
+            row.find("input.merge-arrow-right").hide();
+        }
+
+        if (this._cells.remote.state() !== 'unchanged' &&
+               this._cells.remote.state() !== 'empty' ) {
+            row.find("input.merge-arrow-left").click(function(state) {
+                return function() {
+                    var rightCell = row.find('.row-cell-merge-remote .cell').clone(true);
+                    rightCell.addClass(getStateCSS(state));
+                    var htmlClass = ".row-cell-merge-base";
+                    row.children(htmlClass).find('.cell').replaceWith(rightCell);
+                };
+            }(this._cells.remote.state()));
+        } else {
+            row.find("input.merge-arrow-left").hide();
+        }
         return row;
     },
     _fillColumn: function (target, nbcell) {
