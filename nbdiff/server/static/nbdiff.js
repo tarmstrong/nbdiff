@@ -61,7 +61,7 @@ function nbdiff() {
                     // TODO we need to keep track, in memory, of the in-memory cells we're moving around
                     //      so that we can exfiltrate the data and save the resulting notebook.
                     var rightCell = row.find('.row-cell-merge-local .cell').clone(true);
-                    rightCell.addClass(get_state_css(state));
+                    rightCell.addClass(getStateCSS(state));
                     var htmlClass = ".row-cell-merge-base";
                     // TODO this shouldn't obliterate the base cell -- we should
                     //      be able to undo this operation.
@@ -105,7 +105,7 @@ function nbdiff() {
 
     var generate_merge_column = function(side, state, index) {
         var cellHTML = cellElements[index];
-        cellHTML.addClass(get_state_css(state));
+        cellHTML.addClass(getStateCSS(state));
         var lastRow = $("#notebook-container-new").children().last();
         var htmlClass = ".row-cell-merge-" + side;
         lastRow.children(htmlClass).append(cellHTML);
@@ -137,7 +137,7 @@ function nbdiff() {
         }
     };
 
-    var get_state_css = function(state) {
+    var getStateCSS = function(state) {
         if (state === cellState[0]) {
             return "added-cell";
         } else if (state == cellState[1]) {
@@ -178,28 +178,261 @@ function nbdiff() {
     init();
 };
 
-var remove_metadata = function(cells) {
-    for (var i = 0; i < cells.length; i++) {
-        delete cells[i].metadata.state;
-        delete cells[i].metadata.side;
+(function () {
+
+var cellState = ['added', 'deleted', 'modified', 'unchanged', 'empty'];
+var cellSide = ['local', 'base', 'remote'];
+
+function getStateCSS(state) {
+    if (state === cellState[0]) {
+        return "added-cell";
+    } else if (state == cellState[1]) {
+        return "deleted";
+    } else if (state == cellState[2]) {
+        return "changed";
+    } else {
+        return "";
     }
 };
-var nbmerge_save = function() {
-    var mergedcells = $('#notebook-container-new .row .row-cell-merge-base .cell').clone(true);
-    $('#notebook-container').empty();
 
-    for (var index = 0; index < mergedcells.length; index++) {
-        $('#notebook-container').append(mergedcells[index]);
+function NBDiff(notebook, log) {
+    this.notebook = notebook;
+    if (log === true) {
+        this.log = function () {
+            console.log(arguments);
+        };
+    } else {
+        this.log = function () {};
     }
 
-    remove_metadata(IPython.notebook.get_cells());
-
-    IPython.notebook.save_notebook();
-};
-
-if (typeof IPython.notebook === 'undefined') {
-    $([IPython.events]).bind('notebook_loaded.Notebook', nbdiff);
-} else {
-    nbdiff();
 }
 
+NBDiff.prototype = {
+    init: function () {
+        var self = this;
+        this._init_cells();
+        this.log('Initializing nbdiff.');
+        if (this._hasNBDiffMetadata() === true) {
+            $('#notebook-container').css("visibility", "hidden");
+            this.log('Found nbdiff metadata in the notebook.');
+            this.log('Hiding the normal notebook container.');
+            $('#notebook-container').hide();
+            this.log('Creating a new notebook container.');
+
+            if (this._isDiff() === true) {
+                this.controller = new Diff(this.notebook, this._nbcells);
+            } else if (this._isMerge() === true) {
+                this.controller = new Merge(this.notebook, this._nbcells);
+            }
+
+            $('#notebook').append(this._generateNotebookContainer());
+            this.controller.render($('#notebook'));
+
+            $('#nbdiff-save').click(function (event) {
+                self.save();
+            });
+        } else {
+            this.log('No nbdiff metadata in the notebook.');
+            this.log('Showing the normal notebook container.');
+        }
+    },
+    save: function () {
+        var nbdiffCells,
+            mergedCells,
+            mergedCellElements = $('#notebook-container-new .row .row-cell-merge-base .cell').clone(true),
+            index;
+
+        // Clear the original notebook div.
+        $('#notebook-container').empty();
+
+        // Copy the chosen cells into the original notebook div.
+        for (index = 0; index < mergedcells.length; index++) {
+            $('#notebook-container').append(mergedCellElements[index]);
+        }
+
+        mergedCells = IPython.notebook.get_cells();
+        nbdiffCells = mergedCells.forEach(function (cell) {
+            return new NBDiffCell(cell);
+        });
+
+        nbdiffCells.forEach(function (item) {
+            item.remove_metadata();
+        });
+
+        IPython.notebook.save_notebook();
+    },
+    _init_cells: function () {
+        var self = this;
+        this._cells = IPython.notebook.get_cells();
+        this._nbcells = [];
+        this._cells.forEach(function (cell) {
+            self._nbcells.push(new NBDiffCell(cell));
+        });
+    },
+    _hasNBDiffMetadata: function () {
+        return this._nbcells.length > 0 && this._nbcells[0].state() !== 'undefined';
+    },
+    _isDiff: function () {
+        return typeof this.notebook.metadata['nbdiff-type'] !== 'undefined' && this.notebook.metadata['nbdiff-type'] === 'diff';
+    },
+    _isMerge: function () {
+        return typeof this.notebook.metadata['nbdiff-type'] !== 'undefined' && this.notebook.metadata['nbdiff-type'] === 'merge';
+    },
+    _generateNotebookContainer: function() {
+        return "<div class='container' id='notebook-container-new' style='display:inline'></div>";
+    }
+};
+
+function Merge(notebook, nbcells) {
+    this._nb = notebook;
+    this._nbcells = nbcells;
+    this._container = null;
+}
+
+Merge.prototype = {
+    render: function (container) {
+        var self = this,
+            rows;
+        this._container = container;
+        rows = this._generateRows();
+        rows.forEach(function (mr) {
+            console.log('hello');
+            self._container.append(mr.render());
+        });
+        console.log('rows', rows);
+    },
+    _generateRows: function () {
+        var rows = [];
+        this._nbcells.forEach(function (nbcell) {
+            var mr;
+            if (nbcell.side() === cellSide[0]) {
+                mr = new MergeRow();
+                mr.addLocal(nbcell);
+                rows.push(mr);
+            } else {
+                mr = rows[rows.length-1];
+                if (nbcell.side() === cellSide[1]) {
+                    mr.addBase(nbcell);
+                } else {
+                    mr.addRemote(nbcell);
+                }
+            }
+        });
+        return rows;
+    }
+};
+
+function Diff(notebook) {
+    this.nb = notebook;
+    this.rows = [];
+}
+
+Diff.prototype = {
+    render: function (container) {
+        var self = this,
+            rows;
+        this._container = container;
+        rows = this._generateRows();
+        rows.forEach(function (mr) {
+            console.log('hello');
+            self._container.append(mr.render());
+        });
+        console.log('rows', rows);
+    },
+    _generateRows: function () {
+        var rows = [];
+        this._nbcells.forEach(function (nbcell) {
+            console.log(nbcell);
+        });
+        return rows;
+    }
+};
+
+function MergeRow() {
+    this._cells = {};
+}
+
+MergeRow.prototype = {
+    render: function () {
+        var row;
+        row = this._emptyRow();
+        this._fillColumn(row, this._cells.local);
+        this._fillColumn(row, this._cells.base);
+        this._fillColumn(row, this._cells.remote);
+        return row;
+    },
+    _fillColumn: function (target, nbcell) {
+        console.log(nbcell);
+        var cellHTML = nbcell.element();
+        cellHTML.addClass(getStateCSS(nbcell.state()));
+        var htmlClass = ".row-cell-merge-" + nbcell.side();
+        target.children(htmlClass).append(cellHTML);
+    },
+    _emptyRow: function () {
+        var html;
+        html = "<div class='row'>" + "<div class='row-cell-merge-local'></div>" + "<div class='row-cell-merge-controls-local'>" + this._generateMergeControlColumn("local") + "</div>" + "<div class='row-cell-merge-remote'></div>" + "<div class='row-cell-merge-controls-remote'>" + this._generateMergeControlColumn("remote") + "</div>" + "<div class='row-cell-merge-base'></div>" + "</div>";
+        return $(html);
+    },
+    _generateMergeControlColumn: function(side) {
+        var mergeArrowClass = 'merge-arrow-left';
+        if (side === cellSide[0]) {
+            return "<input value='->' data-cell-idx='0' class='merge-arrow-right' type='button'>";
+        } else {
+            return "<input value='<-' data-cell-idx='0' class='merge-arrow-left' type='button'>";
+        }
+    },
+    addLocal: function (nbcell) {
+        this._cells.local = nbcell;
+    },
+    addBase: function (nbcell) {
+        this._cells.base = nbcell;
+    },
+    addRemote: function (nbcell) {
+        this._cells.remote = nbcell;
+    }
+};
+
+function DiffRow(cells) {
+    this.before = cells.before;
+    this.after = cells.after;
+}
+
+DiffRow.prototype = {
+    render: function () {
+    }
+};
+
+// Decorator for cells.
+function NBDiffCell(cell) {
+    this.cell = cell;
+}
+
+NBDiffCell.prototype = {
+    side: function () {
+        return this.cell.metadata.side;
+    },
+    state: function () {
+        return this.cell.metadata.state;
+    },
+    removeMetadata: function () {
+        delete this.cell.metadata.state;
+        delete this.cell.metadata.side;
+    },
+    element: function () {
+        return this.cell.element;
+    }
+};
+
+
+function nbdiff_init() {
+    var main = new NBDiff(IPython.notebook, true);
+    main.init();
+}
+
+if (typeof IPython.notebook === 'undefined') {
+    $([IPython.events]).bind('notebook_loaded.Notebook', nbdiff_init);
+} else {
+    nbdiff_init();
+}
+
+}());
