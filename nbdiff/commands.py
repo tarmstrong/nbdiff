@@ -9,6 +9,7 @@ from .notebook_parser import NotebookParser
 import json
 import sys
 from .notebook_diff import notebook_diff
+from .adapter.git_adapter import GitAdapter
 import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
@@ -88,38 +89,19 @@ def merge():
     parser = NotebookParser()
 
     if length == 0:
-        # TODO error handling.
-        # TODO handle more than one notebook file.
-        # TODO ignore non-.ipynb files.
-        output = subprocess.check_output("git ls-files --unmerged".split())
-        output_array = [line.split() for line in output.splitlines()]
+        # use only git for now
+        git = GitAdapter()
         filename = output_array[0][3]
 
-        if len(output_array) != 3:
-            # TODO This should work for multiple conflicting notebooks.
-            sys.stderr.write(
-                "Can't find the conflicting notebook. Quitting.\n")
-            sys.exit(-1)
+        modified_files = git.get_modified_files()
 
-        hash_array = []
-        for line in output_array:
-            hash = line[1]
-            hash_array.append(hash)
-        local_show = subprocess.Popen(
-            ['git', 'show', hash_array[1]],
-            stdout=subprocess.PIPE
-        )
-        nb_local = parser.parse(local_show.stdout)
-        base_show = subprocess.Popen(
-            ['git', 'show', hash_array[0]],
-            stdout=subprocess.PIPE
-        )
-        nb_base = parser.parse(base_show.stdout)
-        remote_show = subprocess.Popen(
-            ['git', 'show', hash_array[2]],
-            stdout=subprocess.PIPE
-        )
-        nb_remote = parser.parse(remote_show.stdout)
+        unmerged_notebooks = git.get_unmerged_notebooks(modified_files)
+
+        # only the first unmerged notebook
+        nb_local = parser.parse(unmerged_notebooks[0][0])
+        nb_base = parser.parse(unmerged_notebooks[0][1])
+        nb_remote = parser.parse(unmerged_notebooks[0][2])
+
     elif length == 3 or length == 4:
         nb_local = parser.parse(open(args.notebook[0]))
         nb_base = parser.parse(open(args.notebook[1]))
