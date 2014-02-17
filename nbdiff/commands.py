@@ -45,17 +45,14 @@ def diff():
         result = notebook_diff(notebook1, notebook2)
 
     elif not (args.before or args.after):
-        # No arguments have been given. Ask version control instead.
+        # No arguments have been given. Ask version control instead
+        git = GitAdapter()
 
-        output = subprocess.check_output("git ls-files --modified".split())
-        fnames = output.splitlines()
-        fname = fnames[0]  # TODO handle multiple notebooks
-        current_notebook = parser.parse(open(fname))
-        head_version_show = subprocess.Popen(
-            ['git', 'show', 'HEAD:' + fname],
-            stdout=subprocess.PIPE
-        )
-        head_version = parser.parse(head_version_show.stdout)
+        modified_notebooks = git.get_modified_notebooks()
+
+        # only first notebook
+        current_notebook = parser.parse(modified_notebooks[0][0])
+        head_version = parser.parse(modified_notebooks[0][1])
 
         result = notebook_diff(head_version, current_notebook)
     else:
@@ -92,9 +89,7 @@ def merge():
         # use only git for now
         git = GitAdapter()
 
-        modified_files = git.get_unmerged_files()
-
-        unmerged_notebooks = git.get_unmerged_notebooks(modified_files)
+        unmerged_notebooks = git.get_unmerged_notebooks()
 
         # only the first unmerged notebook
         nb_local = parser.parse(unmerged_notebooks[0][0])

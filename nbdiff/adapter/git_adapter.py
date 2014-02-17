@@ -7,23 +7,24 @@ from .vcs_adapter import VcsAdapter
 
 class GitAdapter(VcsAdapter):
 
-    def get_modified_files(self):
+    def get_modified_notebooks(self):
         output = subprocess.check_output("git ls-files --modified".split())
         fnames = output.splitlines()
-        fname = fnames[0]  # TODO handle multiple notebooks
+        nb_diff = []
+        for index in xrange(0, len(fnames), 3):
+            head_version_show = subprocess.Popen(
+                ['git', 'show', 'HEAD:' + fnames[index]],
+                stdout=subprocess.PIPE
+            )
 
-        head_version_show = subprocess.Popen(
-            ['git', 'show', 'HEAD:' + fname],
-            stdout=subprocess.PIPE
-        )
+            current_local_notebook = open(fnames[index])
+            committed_notebook = head_version_show.stdout
 
-        current_local_notebook = open(fname)
-        committed_notebook = head_version_show.stdout
+            nb_diff.append((current_local_notebook, committed_notebook, fnames[index]))
 
-        nb_diff = (current_local_notebook, committed_notebook, fname)
-        return nb_diff
+        return super(GitAdapter, self).filter_modified_notebooks(nb_diff)
 
-    def get_unmerged_files(self):
+    def get_unmerged_notebooks(self):
         # TODO error handling.
 
         output = subprocess.check_output("git ls-files --unmerged".split())
@@ -62,7 +63,7 @@ class GitAdapter(VcsAdapter):
             result_file_hooks.append((local.stdout, base.stdout,
                                       remote.stdout, file_name))
 
-        return result_file_hooks
+        return super(GitAdapter, self).filter_unmerged_notebooks(result_file_hooks)
 
     def stage_file(self, file, contents=None):
         pass
