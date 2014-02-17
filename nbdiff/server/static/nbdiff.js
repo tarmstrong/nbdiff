@@ -74,6 +74,7 @@ NBDiff.prototype = {
             this.controller.render(nbcontainer);
 
             $('#nbdiff-save').click(function (event) {
+                event.preventDefault();
                 self.save();
             });
         } else {
