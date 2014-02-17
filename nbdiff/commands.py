@@ -9,12 +9,9 @@ from .notebook_parser import NotebookParser
 import json
 import sys
 from .notebook_diff import notebook_diff
-<<<<<<< HEAD
 import threading
 import webbrowser
-=======
 import IPython.nbformat.current as nbformat
->>>>>>> master
 
 
 def diff():
@@ -171,11 +168,9 @@ def merge():
 
         try:
             browser = webbrowser.get()
-        except webbrowser.Error as e:
+        except webbrowser.Error:
             browser = None
         if browser:
-            b = lambda : browser.open("http://127.0.0.1:5000", new=2)
+            b = lambda: browser.open("http://127.0.0.1:5000", new=2)
             threading.Thread(target=b).start()
-
-
         app.run(debug=True)
