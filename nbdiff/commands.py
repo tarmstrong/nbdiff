@@ -11,7 +11,7 @@ import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
 from .server.local_server import app
-import threading
+import multiprocessing
 import webbrowser
 import IPython.nbformat.current as nbformat
 
@@ -26,10 +26,17 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [before after]'
+    usage = 'nbdiff [-h] [--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
+    )
+    # TODO share this code with merge()
+    parser.add_argument(
+        '--browser',
+        '-b',
+        default=None,
+        help='Browser to launch nbdiff/nbmerge in',
     )
     parser.add_argument('before', nargs='?',
                         help='The notebook to diff against.')
@@ -64,8 +71,8 @@ def diff():
         return -1
 
     app.add_notebook(result)
-    open_browser()
-    app.run(debug=True)
+    open_browser(args.browser)
+    app.run(debug=False)
 
 
 def merge():
@@ -79,12 +86,19 @@ def merge():
     Positional arguments are available for integration with version
     control systems such as Git and Mercurial.
     '''
-    usage = 'nbmerge [-h] [local base remote [result]]'
+    usage = 'nbmerge [-h] [--browser=<browser>] [local base remote [result]]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
     )
     parser.add_argument('notebook', nargs='*')
+    # TODO share this code with diff()
+    parser.add_argument(
+        '--browser',
+        '-b',
+        default=None,
+        help='Browser to launch nbdiff/nbmerge in',
+    )
     args = parser.parse_args()
     length = len(args.notebook)
     parser = NotebookParser()
@@ -148,15 +162,15 @@ def merge():
                 nbformat.write(parsed, targetfile, 'ipynb')
 
         app.shutdown_callback(save_notebook)
-        open_browser()
-        app.run(debug=True)
+        open_browser(args.browser)
+        app.run(debug=False)
 
 
-def open_browser():
+def open_browser(browser_exe):
     try:
-        browser = webbrowser.get()
+        browser = webbrowser.get(browser_exe)
     except webbrowser.Error:
         browser = None
     if browser:
         b = lambda: browser.open("http://127.0.0.1:5000", new=2)
-        threading.Thread(target=b).start()
+        multiprocessing.Process(target=b).start()
