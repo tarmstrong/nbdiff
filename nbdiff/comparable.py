@@ -1,7 +1,6 @@
 from .diff import (
     create_grid,
     find_matches,
-    diff,
 )
 
 

@@ -143,7 +143,17 @@ def diff_result_to_cell(item):
 
 def cells_diff(before_cells, after_cells, check_modified=False):
     '''Diff two arrays of cells.'''
-    before_comps = [CellComparator(cell, check_modified=check_modified) for cell in before_cells]
-    after_comps = [CellComparator(cell, check_modified=check_modified) for cell in after_cells]
-    diff_result = diff.diff(before_comps, after_comps, check_modified=check_modified)
+    before_comps = [
+        CellComparator(cell, check_modified=check_modified)
+        for cell in before_cells
+    ]
+    after_comps = [
+        CellComparator(cell, check_modified=check_modified)
+        for cell in after_cells
+    ]
+    diff_result = diff.diff(
+        before_comps,
+        after_comps,
+        check_modified=check_modified
+    )
     return diff_result
