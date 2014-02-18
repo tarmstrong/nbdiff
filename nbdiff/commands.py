@@ -46,13 +46,11 @@ def diff():
 
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
-        # only git for now
         git = GitAdapter()
 
         modified_notebooks = git.get_modified_notebooks()
 
         if not len(modified_notebooks) == 0:
-            # only the first unmerged notebook for now. should open all
             current_notebook = parser.parse(modified_notebooks[0][0])
             head_version = parser.parse(modified_notebooks[0][1])
 
@@ -91,13 +89,10 @@ def merge():
     parser = NotebookParser()
 
     if length == 0:
-        # use only git for now
-        # could be factory: AdapterFactory.getAdapter()
         git = GitAdapter()
 
         unmerged_notebooks = git.get_unmerged_notebooks()
 
-        # only the first unmerged notebook for now. should open all
         nb_local = parser.parse(unmerged_notebooks[0][0])
         nb_base = parser.parse(unmerged_notebooks[0][1])
         nb_remote = parser.parse(unmerged_notebooks[0][2])
