@@ -2,7 +2,6 @@
 Entry points for the nbdiff package.
 '''
 from __future__ import print_function
-import subprocess
 import argparse
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
@@ -11,7 +10,7 @@ import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
 from .server.local_server import app
-import threading
+import multiprocessing
 import webbrowser
 import IPython.nbformat.current as nbformat
 
@@ -26,10 +25,17 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [before after]'
+    usage = 'nbdiff [-h] [--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
+    )
+    # TODO share this code with merge()
+    parser.add_argument(
+        '--browser',
+        '-b',
+        default=None,
+        help='Browser to launch nbdiff/nbmerge in',
     )
     parser.add_argument('before', nargs='?',
                         help='The notebook to diff against.')
@@ -46,26 +52,26 @@ def diff():
         result = notebook_diff(notebook1, notebook2)
 
     elif not (args.before or args.after):
-        # No arguments have been given. Ask version control instead.
+        # No arguments have been given. Ask version control instead
+        git = GitAdapter()
 
-        output = subprocess.check_output("git ls-files --modified".split())
-        fnames = output.splitlines()
-        fname = fnames[0]  # TODO handle multiple notebooks
-        current_notebook = parser.parse(open(fname))
-        head_version_show = subprocess.Popen(
-            ['git', 'show', 'HEAD:' + fname],
-            stdout=subprocess.PIPE
-        )
-        head_version = parser.parse(head_version_show.stdout)
+        modified_notebooks = git.get_modified_notebooks()
 
-        result = notebook_diff(head_version, current_notebook)
+        if not len(modified_notebooks) == 0:
+            current_notebook = parser.parse(modified_notebooks[0][0])
+            head_version = parser.parse(modified_notebooks[0][1])
+
+            result = notebook_diff(head_version, current_notebook)
+        else:
+            print("No modified files to diff.")
+            return 0
     else:
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1
 
     app.add_notebook(result)
-    open_browser()
-    app.run(debug=True)
+    open_browser(args.browser)
+    app.run(debug=False)
 
 
 def merge():
@@ -79,25 +85,28 @@ def merge():
     Positional arguments are available for integration with version
     control systems such as Git and Mercurial.
     '''
-    usage = 'nbmerge [-h] [local base remote [result]]'
+    usage = 'nbmerge [-h] [--browser=<browser>] [local base remote [result]]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
     )
     parser.add_argument('notebook', nargs='*')
+    # TODO share this code with diff()
+    parser.add_argument(
+        '--browser',
+        '-b',
+        default=None,
+        help='Browser to launch nbdiff/nbmerge in',
+    )
     args = parser.parse_args()
     length = len(args.notebook)
     parser = NotebookParser()
 
     if length == 0:
-        # use only git for now
         git = GitAdapter()
 
-        modified_files = git.get_unmerged_files()
+        unmerged_notebooks = git.get_unmerged_notebooks()
 
-        unmerged_notebooks = git.get_unmerged_notebooks(modified_files)
-
-        # only the first unmerged notebook
         nb_local = parser.parse(unmerged_notebooks[0][0])
         nb_base = parser.parse(unmerged_notebooks[0][1])
         nb_remote = parser.parse(unmerged_notebooks[0][2])
@@ -148,15 +157,15 @@ def merge():
                 nbformat.write(parsed, targetfile, 'ipynb')
 
         app.shutdown_callback(save_notebook)
-        open_browser()
-        app.run(debug=True)
+        open_browser(args.browser)
+        app.run(debug=False)
 
 
-def open_browser():
+def open_browser(browser_exe):
     try:
-        browser = webbrowser.get()
+        browser = webbrowser.get(browser_exe)
     except webbrowser.Error:
         browser = None
     if browser:
         b = lambda: browser.open("http://127.0.0.1:5000", new=2)
-        threading.Thread(target=b).start()
+        multiprocessing.Process(target=b).start()

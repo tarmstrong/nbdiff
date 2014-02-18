@@ -7,23 +7,36 @@ from .vcs_adapter import VcsAdapter
 
 class GitAdapter(VcsAdapter):
 
-    def get_modified_files(self):
-        output = subprocess.check_output("git ls-files --modified".split())
-        fnames = output.splitlines()
-        fname = fnames[0]  # TODO handle multiple notebooks
+    def get_modified_notebooks(self):
+        # get modified file names
+        modified = subprocess.check_output("git ls-files --modified".split())
+        fnames = modified.splitlines()
 
-        head_version_show = subprocess.Popen(
-            ['git', 'show', 'HEAD:' + fname],
-            stdout=subprocess.PIPE
-        )
+        # get unmerged file info
+        unmerged = subprocess.check_output("git ls-files --unmerged".split())
+        unmerged_array = [line.split() for line in unmerged.splitlines()]
 
-        current_local_notebook = open(fname)
-        committed_notebook = head_version_show.stdout
+        # get unmerged file names
+        unmerged_array_names = [x[3] for x in unmerged_array]
 
-        nb_diff = (current_local_notebook, committed_notebook, fname)
-        return nb_diff
+        # ignore unmerged files, get unique names
+        fnames = list(set(fnames) - set(unmerged_array_names))
 
-    def get_unmerged_files(self):
+        nb_diff = []
+        for item in fnames:
+            head_version_show = subprocess.Popen(
+                ['git', 'show', 'HEAD:' + item],
+                stdout=subprocess.PIPE
+            )
+
+            current_local_notebook = open(item)
+            committed_notebook = head_version_show.stdout
+
+            nb_diff.append((current_local_notebook, committed_notebook, item))
+
+        return super(GitAdapter, self).filter_modified_notebooks(nb_diff)
+
+    def get_unmerged_notebooks(self):
         # TODO error handling.
 
         output = subprocess.check_output("git ls-files --unmerged".split())
@@ -43,7 +56,7 @@ class GitAdapter(VcsAdapter):
             file_name = output_array[index][3]
             hash_list.append((local_hash, base_hash, remote_hash, file_name))
 
-        result_file_hooks = []
+        file_hooks = []
 
         for hash in hash_list:
             local = subprocess.Popen(
@@ -59,10 +72,14 @@ class GitAdapter(VcsAdapter):
                 stdout=subprocess.PIPE
             )
             file_name = hash[3]
-            result_file_hooks.append((local.stdout, base.stdout,
-                                      remote.stdout, file_name))
+            file_hooks.append((local.stdout, base.stdout,
+                              remote.stdout, file_name))
 
-        return result_file_hooks
+        return super(GitAdapter, self).filter_unmerged_notebooks(file_hooks)
 
     def stage_file(self, file, contents=None):
-        pass
+        if contents is not None:
+            with open(file, 'w') as result_file:
+                result_file.write(file)
+        command = ["git", "add", file]
+        return subprocess.call(command)
