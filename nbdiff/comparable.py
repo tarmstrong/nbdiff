@@ -1,8 +1,8 @@
-__author__ = 'root'
 from .diff import (
     create_grid,
     find_matches,
 )
+
 
 class BooleanPlus(object):
 
@@ -18,6 +18,7 @@ class BooleanPlus(object):
 
     def is_modified(self):
         return self.modified
+
 
 class LineComparator(object):
 
@@ -39,29 +40,26 @@ class LineComparator(object):
             return BooleanPlus(True, False)
 
         unchanged_count = self.count_similar_words(line1, line2)
-        similarity_percent = (2.0 * unchanged_count) / (len(line1) + len(line2))
+        similarity_percent = \
+            (2.0 * unchanged_count) / (len(line1) + len(line2))
         if similarity_percent >= 0.50:
             return BooleanPlus(True, True)
         return BooleanPlus(False, False)
 
-
     def count_similar_words(self, line1, line2):
-
         words1 = line1.split()
         words2 = line2.split()
         grid = create_grid(words1, words2)
         matches = []
+
         for colnum in range(len(grid)):
-            new_matches = find_matches(grid[colnum],colnum)
+            new_matches = find_matches(grid[colnum], colnum)
             matches = matches + new_matches
 
         matched_cols = [r[0] for r in matches]
         matched_rows = [r[1] for r in matches]
-
-        unique_cols = []
-        [unique_cols.append(col) for col in matched_cols if col not in unique_cols]
-        unique_rows = []
-        [unique_rows.append(row) for row in matched_rows if row not in unique_rows]
+        unique_cols = set(matched_cols)
+        unique_rows = set(matched_rows)
 
         return min(len(unique_cols), len(unique_rows))
 
@@ -83,8 +81,7 @@ class CellComparator():
         elif self.istextcell(cell1):
             return cell1["source"] == cell2["source"]
         else:
-            return self.compare_cells(cell1,cell2)
-
+            return self.compare_cells(cell1, cell2)
 
     def istextcell(self, cell):
         return "source" in cell
@@ -101,16 +98,14 @@ class CellComparator():
         grid = create_grid(cell1['input'], cell2['input'])
         matches = []
         for colnum in range(len(grid)):
-            new_matches = find_matches(grid[colnum],colnum)
+            new_matches = find_matches(grid[colnum], colnum)
             matches = matches + new_matches
 
         matched_cols = [r[0] for r in matches]
         matched_rows = [r[1] for r in matches]
 
-        unique_cols = []
-        [unique_cols.append(col) for col in matched_cols if col not in unique_cols]
-        unique_rows = []
-        [unique_rows.append(row) for row in matched_rows if row not in unique_rows]
+        unique_cols = set(matched_cols)
+        unique_rows = set(matched_rows)
 
         return min(len(unique_cols), len(unique_rows))
 
@@ -126,9 +121,8 @@ class CellComparator():
         if eqlanguage and eqinput and eqoutputs:
             return BooleanPlus(True, False)
         unchanged_count = self.count_similar_lines(cell1, cell2)
-        similarity_percent = (2.0 * unchanged_count) / (len(cell1) + len(cell2))
+        similarity_percent = \
+            (2.0 * unchanged_count) / (len(cell1) + len(cell2))
         if similarity_percent >= 0.50:
             return BooleanPlus(True, True)
         return BooleanPlus(False, False)
-
-
