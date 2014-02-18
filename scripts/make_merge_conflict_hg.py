@@ -20,7 +20,7 @@ os.mkdir(folder_name)
 os.chdir(folder_name)
 print subprocess.check_output('hg init'.split())
 with open('test.ipynb', 'w') as f:
-    f.write(open('../example.ipynb').read())
+    f.write(open('../merge-example.ipynb').read())
 
 print subprocess.check_output('hg add test.ipynb'.split())
 print subprocess.check_output(['hg', 'commit', '-A', '-m', 'b'])
@@ -30,13 +30,13 @@ print subprocess.check_output('hg bookmark friend'.split())
 print subprocess.check_output('hg update friend'.split())
 
 with open('test.ipynb', 'w') as f:
-    f.write(open('../example-remote.ipynb').read())
+    f.write(open('../merge-example-remote.ipynb').read())
 
 print subprocess.check_output(['hg', 'commit', '-A', '-m', 'r'], stderr=sys.stdout)
 
 print subprocess.check_output('hg update main'.split())
 with open('test.ipynb', 'w') as f:
-    f.write(open('../example-local.ipynb').read())
+    f.write(open('../merge-example-local.ipynb').read())
 
 print subprocess.check_output(['hg', 'commit', '-A', '-m', 'l'])
 
