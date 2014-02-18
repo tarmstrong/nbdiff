@@ -209,7 +209,6 @@ Diff.prototype = {
                 rows.push(new DiffRow(nbcell));
             }
         });
-        rows.push(new LineDiff(null, null));
         return rows;
     }
 };
@@ -364,12 +363,7 @@ LineDiff.prototype = {
         return container;
     },
     _getDiffData: function () {
-        return [
-            {state: 'added', value: 'print "Hello, world!"'},
-            {state: 'unchanged', value: 'x = 10'},
-            {state: 'deleted', value: 'y = 10'},
-            {state: 'added', value: 'y = 11'}
-        ];
+        return this._nbcell.lineDiffData();
     },
     _line: function (left, right) {
         var row;
@@ -416,6 +410,9 @@ NBDiffCell.prototype = {
     },
     element: function () {
         return this.cell.element;
+    },
+    lineDiffData: function () {
+        return this.cell.metadata['line-diff'];
     }
 };
 

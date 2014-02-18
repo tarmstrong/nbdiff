@@ -378,8 +378,8 @@ def test_modified():
     # ensure CellComparators do actually produce booleanpluses
     # if they are similar enough
     # TODO this should be in its own test in a separate file.
-    c1 = c.CellComparator(cell1)
-    c2 = c.CellComparator(cell2)
+    c1 = c.CellComparator(cell1, check_modified=True)
+    c2 = c.CellComparator(cell2, check_modified=True)
 
     assert type(c1 == c2) == c.BooleanPlus
 

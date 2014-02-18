@@ -35,6 +35,17 @@ def diff(before, after, check_modified=False):
                 'originalvalue': before[col],
                 'modifiedvalue': after[row],
             })
+        elif (not check_modified) and kind == 'modified':
+            result.append({
+                'state': 'deleted',
+                'value': before[col],
+            })
+            result.append({
+                'state': 'added',
+                'value': after[row],
+            })
+        else:
+            raise Exception('We should not be here.')
     return result
 
 
@@ -43,8 +54,8 @@ def diff_modified_items(cellslist):
     for i in range(len(cellslist)):
         if cellslist[i]['state'] == 'modified':
             result[i] = diff(
-                cellslist[i]['originalvalue']["input"],
-                cellslist[i]['modifiedvalue']["input"],
+                cellslist[i]['originalvalue'].data["input"].splitlines(),
+                cellslist[i]['modifiedvalue'].data["input"].splitlines(),
             )
     return result
 

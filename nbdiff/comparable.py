@@ -1,6 +1,7 @@
 from .diff import (
     create_grid,
     find_matches,
+    diff,
 )
 
 
@@ -66,8 +67,9 @@ class LineComparator(object):
 
 class CellComparator():
 
-    def __init__(self, data):
+    def __init__(self, data, check_modified=False):
         self.data = data
+        self.check_modified = check_modified
 
     def __eq__(self, other):
         return self.equal(self.data, other.data)
@@ -118,11 +120,17 @@ class CellComparator():
         eqlanguage = cell1["language"] == cell2["language"]
         eqinput = cell1["input"] == cell2["input"]
         eqoutputs = self.equaloutputs(cell1["outputs"], cell2["outputs"])
+
         if eqlanguage and eqinput and eqoutputs:
-            return BooleanPlus(True, False)
+            return True
+        elif not self.check_modified:
+            return False
+
         unchanged_count = self.count_similar_lines(cell1, cell2)
-        similarity_percent = \
-            (2.0 * unchanged_count) / (len(cell1) + len(cell2))
-        if similarity_percent >= 0.50:
+        similarity_percent = (
+            (2.0 * unchanged_count)
+            / (len(cell1['input']) + len(cell2['input']))
+        )
+        if similarity_percent >= 0.65:
             return BooleanPlus(True, True)
         return BooleanPlus(False, False)
