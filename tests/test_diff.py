@@ -172,6 +172,7 @@ def test_lcs_noequals():
     # See issue #128
     grid = [[False, False], [False, False]]
     result = lcs(grid)
+    eq_(result, [])
 
 
 def test_add_results():
