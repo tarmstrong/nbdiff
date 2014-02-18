@@ -1,7 +1,20 @@
 {% extends "notebook.html" %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="/nbdiff/nbdiff.css">
+
+{{super()}}
+{% endblock %}
+
+{% block header %}
+<img src="/nbdiff/logo.png" id="nbdiff-logo" alt="NBDiff" />
+<div id="nbdiff-controls">
+  <button id='nbdiff-save'>Save</button>
+</div>
+{% endblock %}
+
 {% block script %}
 {{super()}}
-<script type="text/javascript" src="/nbdiff/merge_script.js"></script>
+<script type="text/javascript" src="/nbdiff/nbdiff.js"></script>
 
 {% endblock %}

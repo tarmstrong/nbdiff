@@ -27,7 +27,12 @@ setup(
     url='https://github.com/tarmstrong/nbdiff',
     packages=[
         'nbdiff',
+        'nbdiff.server',
+        'nbdiff.adapter',
     ],
+    package_data={
+        'nbdiff.server': ['templates/*', 'static/*'],
+    },
     package_dir={'nbdiff': 'nbdiff'},
     entry_points={'console_scripts': [
         'nbdiff = nbdiff.commands:diff',
