@@ -2,7 +2,6 @@
 Entry points for the nbdiff package.
 '''
 from __future__ import print_function
-import subprocess
 import argparse
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
@@ -53,19 +52,19 @@ def diff():
         result = notebook_diff(notebook1, notebook2)
 
     elif not (args.before or args.after):
-        # No arguments have been given. Ask version control instead.
+        # No arguments have been given. Ask version control instead
+        git = GitAdapter()
 
-        output = subprocess.check_output("git ls-files --modified".split())
-        fnames = output.splitlines()
-        fname = fnames[0]  # TODO handle multiple notebooks
-        current_notebook = parser.parse(open(fname))
-        head_version_show = subprocess.Popen(
-            ['git', 'show', 'HEAD:' + fname],
-            stdout=subprocess.PIPE
-        )
-        head_version = parser.parse(head_version_show.stdout)
+        modified_notebooks = git.get_modified_notebooks()
 
-        result = notebook_diff(head_version, current_notebook)
+        if not len(modified_notebooks) == 0:
+            current_notebook = parser.parse(modified_notebooks[0][0])
+            head_version = parser.parse(modified_notebooks[0][1])
+
+            result = notebook_diff(head_version, current_notebook)
+        else:
+            print("No modified files to diff.")
+            return 0
     else:
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1
@@ -104,14 +103,10 @@ def merge():
     parser = NotebookParser()
 
     if length == 0:
-        # use only git for now
         git = GitAdapter()
 
-        modified_files = git.get_unmerged_files()
+        unmerged_notebooks = git.get_unmerged_notebooks()
 
-        unmerged_notebooks = git.get_unmerged_notebooks(modified_files)
-
-        # only the first unmerged notebook
         nb_local = parser.parse(unmerged_notebooks[0][0])
         nb_base = parser.parse(unmerged_notebooks[0][1])
         nb_remote = parser.parse(unmerged_notebooks[0][2])
