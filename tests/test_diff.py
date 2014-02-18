@@ -292,121 +292,116 @@ def test_check_match():
     eq_(result, expected)
 
 
-    __author__ = 'Shurouq'
-
-# some test data
-
-cell1 = {
-     "cell_type": "code",
-     "collapsed": False,
-     "input": [
-         "x",
-         "x",
-         "x",
-         "x",
-         "x",
-         "x",
-         "y"
-     ],
-     "language": "python",
-     "metadata": {
-      "slideshow": {
-       "slide_type": "fragment"
-      }
-     },
-     "outputs": [
-      {
-       "output_type": "stream",
-       "stream": "stdout",
-       "text": [
-        "Hello, world!\n",
-        "Hello, world!\n"
-       ]
-      }
-     ],
-     "prompt_number": 29
-    }
+def test_modified():
+    cell1 = {
+        "cell_type": "code",
+        "collapsed": False,
+        "input": [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x",
+            "x",
+            "y"
+        ],
+        "language": "python",
+        "metadata": {
+        "slideshow": {
+        "slide_type": "fragment"
+        }
+        },
+        "outputs": [
+        {
+        "output_type": "stream",
+        "stream": "stdout",
+        "text": [
+            "Hello, world!\n",
+            "Hello, world!\n"
+        ]
+        }
+        ],
+        "prompt_number": 29
+        }
 
 
-cell2 =    {
-     "cell_type": "code",
-     "collapsed": False,
-     "input": [
-         "x",
-         "x",
-         "x",
-         "x",
-         "x",
-         "x"
-     ],
-     "language": "python",
-     "metadata": {
-      "slideshow": {
-       "slide_type": "fragment"
-      }
-     },
-     "outputs": [
-      {
-       "output_type": "stream",
-       "stream": "stdout",
-       "text": [
-        "Hello, world!\n",
-        "Hello, world!\n"
-       ]
-      }
-     ],
-     "prompt_number": 29
-    }
+    cell2 =    {
+        "cell_type": "code",
+        "collapsed": False,
+        "input": [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x",
+            "x"
+        ],
+        "language": "python",
+        "metadata": {
+        "slideshow": {
+        "slide_type": "fragment"
+        }
+        },
+        "outputs": [
+        {
+        "output_type": "stream",
+        "stream": "stdout",
+        "text": [
+            "Hello, world!\n",
+            "Hello, world!\n"
+        ]
+        }
+        ],
+        "prompt_number": 29
+        }
 
-import nbdiff
-import nbdiff.diff as d
-import nbdiff.comparable as c
+    import nbdiff.comparable as c
 
-class FakeComparator(object):
-    '''Test comparator object. Will compare as modified if it is "close to"
-    the specified values'''
-    def __init__(self, foo, closeto=[]):
-        self.foo = foo
-        self.closeto = closeto
+    class FakeComparator(object):
+        '''Test comparator object. Will compare as modified if it is "close to"
+        the specified values'''
+        def __init__(self, foo, closeto=[]):
+            self.foo = foo
+            self.closeto = closeto
 
-    def __eq__(self, other):
-        if other.foo in self.closeto:
-            return c.BooleanPlus(True, True)
-        else:
-            return self.foo == other.foo
+        def __eq__(self, other):
+            if other.foo in self.closeto:
+                return c.BooleanPlus(True, True)
+            else:
+                return self.foo == other.foo
 
 
-# this still works...
-print d.diff(['a', 'b', 'c'], ['b', 'c'], check_modified=False)
+    # ensure this doesn't crash at the least
+    result = diff(['a', 'b', 'c'], ['b', 'c'], check_modified=False)
+    assert result[0]['state'] == 'deleted'
+    assert result[0]['value'] == 'a'
 
-# it doesn't break strings when check_modified is True
-print d.diff(['a', 'b', 'c'], ['b', 'c'], check_modified=True)
+    # it doesn't break strings when check_modified is True
+    diff(['a', 'b', 'c'], ['b', 'c'], check_modified=True)
 
 
-# CellComparators do actually produce booleanpluses if they are similar enough
+    # CellComparators do actually produce booleanpluses if they are similar enough
+    # TODO this should be in its own test in a separate file.
+    c1 = c.CellComparator(cell1)
+    c2 = c.CellComparator(cell2)
 
-c1 = c.CellComparator(cell1)
-c2 = c.CellComparator(cell2)
+    assert type(c1 == c2) == c.BooleanPlus
 
-assert type(c1 == c2) == c.BooleanPlus
+    result = diff([c1, c2, c2, c2], [c2, c2, c2, c2], check_modified=True)
+    assert result[0]['state'] == 'modified'
 
-result = d.diff([c1, c2, c2, c2], [c2, c2, c2, c2], check_modified=True)
-print result
-assert result[0]['state'] == 'modified'
+    c1 = FakeComparator(1, [2, 3])
+    c2 = FakeComparator(2, [1, 3])
+    c3 = FakeComparator(10, [])
 
-c1 = FakeComparator(1, [2, 3])
-c2 = FakeComparator(2, [1, 3])
-c3 = FakeComparator(10, [])
+    c4 = FakeComparator(2, [])
+    c5 = FakeComparator(3, [])
 
-c4 = FakeComparator(2, [])
-c5 = FakeComparator(3, [])
+    # c1 -> c4
+    # c2 -> c5
+    # c3 -> deleted
+    result = diff([c1, c2, c3], [c4, c5], check_modified=True)
 
-# c1 -> c4
-# c2 -> c5
-# c3 -> deleted
-result = d.diff([c1, c2, c3], [c4, c5], check_modified=True)
-print result
-
-assert result[0]['state'] == 'modified'
-assert result[1]['state'] == 'modified'
-assert result[2]['state'] == 'deleted'
+    assert result[0]['state'] == 'modified'
+    assert result[1]['state'] == 'modified'
+    assert result[2]['state'] == 'deleted'
