@@ -89,6 +89,9 @@ def find_matches(col, colNum):
 
 def lcs(grid):
     kcs = find_candidates(grid)
+    ks = kcs.keys()
+    if len(ks) == 0:
+        return []
     highest = max(kcs.keys())
     last_point = kcs[highest][-1]
     cur = highest - 1
