@@ -65,18 +65,19 @@ NBDiff.prototype = {
 
             if (this._isDiff() === true) {
                 this.controller = new Diff(this.notebook, this._nbcells);
+                $('#nbdiff-save').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
+                $('#nbdiff-save').click(function (event) {
+                    event.preventDefault();
+                    self.save();
+                });
             }
 
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
             this.controller.render(nbcontainer);
 
-            $('#nbdiff-save').click(function (event) {
-                event.preventDefault();
-                self.save();
-            });
         } else {
             this.log('No nbdiff metadata in the notebook.');
             this.log('Showing the normal notebook container.');
@@ -86,6 +87,12 @@ NBDiff.prototype = {
         var mergedCellElements,
             nbcell,
             i;
+
+        if (this._isDiff() === true) {
+            // Not sure how this would have been called since the button is hidden.
+            // But if it is, we want to play it safe.
+            return;
+        }
 
         mergedCellElements = $('#notebook-container-new .row .row-cell-merge-base .cell').clone(true);
 
