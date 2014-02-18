@@ -4,6 +4,7 @@ import sys
 import subprocess
 from .vcs_adapter import VcsAdapter
 
+
 class GitAdapter(VcsAdapter):
 
     def get_modified_notebooks(self):
