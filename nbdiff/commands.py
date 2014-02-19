@@ -107,11 +107,15 @@ def merge():
 
         unmerged_notebooks = git.get_unmerged_notebooks()
 
-        nb_local = parser.parse(unmerged_notebooks[0][0])
-        nb_base = parser.parse(unmerged_notebooks[0][1])
-        nb_remote = parser.parse(unmerged_notebooks[0][2])
+        if not len(unmerged_notebooks) == 0:
+            nb_local = parser.parse(unmerged_notebooks[0][0])
+            nb_base = parser.parse(unmerged_notebooks[0][1])
+            nb_remote = parser.parse(unmerged_notebooks[0][2])
 
-        filename = unmerged_notebooks[0][3]
+            filename = unmerged_notebooks[0][3]
+        else:
+            print("No unmerged files to diff.")
+            return 0
 
     elif length == 3 or length == 4:
         nb_local = parser.parse(open(args.notebook[0]))
