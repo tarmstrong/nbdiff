@@ -164,7 +164,7 @@ Merge.prototype = {
         this._nbcells.forEach(function (nbcell) {
             var mr;
             if (nbcell.side() === cellSide[0]) {
-                mr = new MergeRow();
+                mr = new MergeRow(rows.length);
                 mr.addLocal(nbcell);
                 rows.push(mr);
             } else {
@@ -211,14 +211,15 @@ Diff.prototype = {
 /**
  * Class for rendering rows of the merge UI.
  */
-function MergeRow() {
+function MergeRow(id) {
+    this.rowID = id;
     this._cells = {};
 }
 
 MergeRow.prototype = {
     render: function () {
         var row;
-        row = this._emptyRow();
+        row = this._emptyRow(this.rowID);
         this._fillColumn(row, this._cells.local);
         this._fillColumn(row, this._cells.base);
         this._fillColumn(row, this._cells.remote);
@@ -266,9 +267,9 @@ MergeRow.prototype = {
 
         target.children(htmlClass).append(cellHTML);
     },
-    _emptyRow: function () {
+    _emptyRow: function (rowID) {
         var html;
-        html = "<div class='row'>" + "<div class='row-cell-merge-local'></div>" + "<div class='row-cell-merge-controls-local'>" + this._generateMergeControlColumn("local") + "</div>" + "<div class='row-cell-merge-remote'></div>" + "<div class='row-cell-merge-controls-remote'>" + this._generateMergeControlColumn("remote") + "</div>" + "<div class='row-cell-merge-base'></div>" + "</div>";
+        html = "<div id="+rowID+" class='row'>" + "<div class='row-cell-merge-local'></div>" + "<div class='row-cell-merge-controls-local'>" + this._generateMergeControlColumn("local") + "</div>" + "<div class='row-cell-merge-remote'></div>" + "<div class='row-cell-merge-controls-remote'>" + this._generateMergeControlColumn("remote") + "</div>" + "<div class='row-cell-merge-base'></div>" + "</div>";
         return $(html);
     },
     _generateMergeControlColumn: function(side) {
@@ -369,6 +370,8 @@ return {
 function nbdiff_init() {
     var main = new NBDiff.NBDiff(IPython.notebook, true);
     main.init();
+    var dd = new DragDrop();
+    dd.enable();
 }
 
 if (typeof IPython.notebook === 'undefined') {
