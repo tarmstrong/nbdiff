@@ -1,8 +1,30 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, send_from_directory, request
 import urllib2
+import jinja2
+import json
+import IPython.html
+import os
+import sys
 
-app = Flask('NB Diff')
 
+execfile("C:\\Users\\Azn0Richard0\\Documents\\GitHub\\nbdiff\\nbdiff\\merge.py")
+
+
+class NbFlask(Flask):
+    jinja_loader = jinja2.FileSystemLoader([
+        IPython.html.__path__[0] + '/templates',
+        os.path.dirname(os.path.realpath(__file__)) + '/templates'
+    ])
+
+    notebooks = []
+
+    def shutdown_callback(self, callback):
+        self.shutdown = callback
+
+    def add_notebook(self, nb):
+        self.notebooks.append(nb)
+
+app = NbFlask(__name__, static_folder=IPython.html.__path__[0] + '/static')
 
 @app.route("/")
 def upload():
