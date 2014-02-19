@@ -168,6 +168,13 @@ def test_lcs():
     eq_(result, expected)
 
 
+def test_lcs_noequals():
+    # See issue #128
+    grid = [[False, False], [False, False]]
+    result = lcs(grid)
+    eq_(result, [])
+
+
 def test_add_results():
     k = {1: [(0, 2)]}
     newk = {1: [(1, 1)], 2: [(1, 3)]}
