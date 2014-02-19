@@ -23,14 +23,14 @@ print subprocess.check_output('git init'.split())
 
 # create initial version of notebook
 with open('test.ipynb', 'w') as f:
-    f.write(open('../example.ipynb').read())
+    f.write(open('../diff-example.ipynb').read())
 
 print subprocess.check_output('git add test.ipynb'.split())
 print subprocess.check_output(['git', 'commit', '-am', 'b'])
 
 # overwrite with changes.
 with open('test.ipynb', 'w') as f:
-    f.write(open('../example-local.ipynb').read())
+    f.write(open('../diff-example-local.ipynb').read())
 
 print 'Diffable notebook available in folder: ' + folder_name
 
