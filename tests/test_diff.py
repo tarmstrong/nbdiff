@@ -1,5 +1,9 @@
 from nose.tools import eq_
 import itertools as it
+import collections
+import nbdiff
+import nbdiff.diff as d
+import nbdiff.comparable as c
 from nbdiff.diff import (
     add_results,
     find_candidates,
@@ -12,33 +16,27 @@ from nbdiff.diff import (
     diff,
 )
 
-
 def test_diff():
-    A = [
-        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
-        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
-    ]
-    B = [
-        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
-    ]
+    A = [{u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},{u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}]
+    B = [{u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}]
     result = diff(A, B)
     expected = [
-        {"state": 'unchanged',
-         'value': {u'input': [
-             u'x = [1,3,4]\n',
-             u'z = {1, 2, 3} \n',
-             u'\n',
-             u'm']}},
-        {"state": 'deleted',
-         'value': {u'input': [
-             u'x = [1,3,3]\n',
-             u'z = {1, 2, 3} \n',
-             u'\n',
-             u'z']}}
+        {"state": 'unchanged', 'value': {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}},
+        {"state": 'deleted', 'value': {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}}
     ]
     eq_(result, expected)
+    #diff("aaaaaaaaaaaaaaaaaaaa", "bbbbbbaaaaaaaaaaabbbbbbbbbbb")
+    #diff("cabcdef", "abdef")
+    #diff("ca", "abdef")
+'''
+def test_count_similar_lines():
+    A = {u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    B = {u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
+    result = count_similar_lines(A, B)
 
-
+    expected = 2
+    eq_(result, expected)
+'''
 def test_create_grid():
     A = "abcabba"
     B = "cbabac"
@@ -58,13 +56,20 @@ def test_create_grid():
     A, B = ("cabcdef", "abdef")
     grid = create_grid(A, B)
     assert len([True for col in grid if len(col) == 0]) == 0
+'''
+def test_check_modified():
+    A = {u'input':[u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    B = {u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
 
-
+    result = check_modified(A, B)
+    expected = True
+    eq_(result, expected)
+'''
 def test_diff_points():
     A = [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']
     B = [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']
 
-    grid = create_grid(A, B)
+    grid = create_grid(A,B)
 
     result = diff_points(grid)
 
@@ -297,102 +302,127 @@ def test_check_match():
     eq_(result, expected)
 
 
-def test_modified():
-    cell1 = {
-        "cell_type": "code",
-        "collapsed": False,
-        "input": [
-            "x",
-            "x",
-            "x",
-            "x",
-            "x",
-            "x",
-            "y"
-        ],
-        "language": "python",
-        "metadata": {
-            "slideshow": {
-                "slide_type": "fragment"
-            }
-        },
-        "outputs": [
-            {
-                "output_type": "stream",
-                "stream": "stdout",
-                "text": [
-                    "Hello, world!\n",
-                    "Hello, world!\n"
-                ]
-            }
-        ],
-        "prompt_number": 29
+# some test data
+
+cell1 = {
+     "cell_type": "code",
+     "collapsed": False,
+     "input": [
+         "x",
+         "x",
+         "x",
+         "x",
+         "x",
+         "x",
+         "y"
+     ],
+     "language": "python",
+     "metadata": {
+      "slideshow": {
+       "slide_type": "fragment"
+      }
+     },
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "Hello, world!\n",
+        "Hello, world!\n"
+       ]
+      }
+     ],
+     "prompt_number": 29
     }
 
-    cell2 = {
-        "cell_type": "code",
-        "collapsed": False,
-        "input": [
-            "x",
-            "x",
-            "x",
-            "x",
-            "x",
-            "x"
-        ],
-        "language": "python",
-        "metadata": {
-            "slideshow": {
-                "slide_type": "fragment"
-            }
-        },
-        "outputs": [
-            {
-                "output_type": "stream",
-                "stream": "stdout",
-                "text": [
-                    "Hello, world!\n",
-                    "Hello, world!\n"
-                ]
-            }
-        ],
-        "prompt_number": 29
+
+cell2 =    {
+     "cell_type": "code",
+     "collapsed": False,
+     "input": [
+         "x",
+         "x",
+         "x",
+         "x",
+         "x",
+         "x"
+     ],
+     "language": "python",
+     "metadata": {
+      "slideshow": {
+       "slide_type": "fragment"
+      }
+     },
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "Hello, world!\n",
+        "Hello, world!\n"
+       ]
+      }
+     ],
+     "prompt_number": 29
     }
 
-    import nbdiff.comparable as c
 
-    class FakeComparator(object):
-        '''Test comparator object. Will compare as modified if it is "close to"
-        the specified values'''
-        def __init__(self, foo, closeto=[]):
-            self.foo = foo
-            self.closeto = closeto
 
-        def __eq__(self, other):
-            if other.foo in self.closeto:
-                return c.BooleanPlus(True, True)
-            else:
-                return self.foo == other.foo
+class FakeComparator(object):
+    '''Test comparator object. Will compare as modified if it is "close to"
+    the specified values'''
+    def __init__(self, foo, closeto=[]):
+        self.foo = foo
+        self.closeto = closeto
 
-    # ensure this doesn't crash at the least
-    result = diff(['a', 'b', 'c'], ['b', 'c'], check_modified=False)
-    assert result[0]['state'] == 'deleted'
-    assert result[0]['value'] == 'a'
+    def __eq__(self, other):
+        if other.foo in self.closeto:
+            return c.BooleanPlus(True, True)
+        else:
+            return self.foo == other.foo
 
+def test_modified_false():
+    # this still works...
+    result = d.diff(['a', 'b', 'c'], ['b', 'c'], check_modified=False)
+    expected =  expected = [
+        {"state": 'deleted', 'value': 'a'},
+        {"state": 'unchanged', 'value': 'b'},
+        {"state": 'unchanged', 'value': 'c'},
+    ]
+    eq_(result, expected)
+
+
+def test_modified_true():
     # it doesn't break strings when check_modified is True
-    diff(['a', 'b', 'c'], ['b', 'c'], check_modified=True)
+    result =  d.diff(['a', 'b', 'c'], ['b', 'c'], check_modified=True)
+    expected = [
+        {"state": 'deleted', 'value': 'a'},
+        {"state": 'unchanged', 'value': 'b'},
+        {"state": 'unchanged', 'value': 'c'},
+    ]
+    eq_(result, expected)
 
-    # ensure CellComparators do actually produce booleanpluses
-    # if they are similar enough
-    # TODO this should be in its own test in a separate file.
-    c1 = c.CellComparator(cell1, check_modified=True)
-    c2 = c.CellComparator(cell2, check_modified=True)
 
-    assert type(c1 == c2) == c.BooleanPlus
+def test_cell_comparator():
+    # CellComparators do actually produce booleanpluses if they are similar enough
 
-    result = diff([c1, c2, c2, c2], [c2, c2, c2, c2], check_modified=True)
+    c1 = c.CellComparator(cell1)
+    c2 = c.CellComparator(cell2)
+
+  #  assert type(c1 == c2) == c.BooleanPlus
+
+    result = d.diff([c1, c2, c2, c2], [c2, c2, c2, c2], check_modified=True)
+    print result
+   # assert result[0]['state'] == 'modified'
+
     assert result[0]['state'] == 'modified'
+    assert result[1]['state'] == 'unchanged'
+    assert result[2]['state'] == 'unchanged'
+    assert result[3]['state'] == 'unchanged'
 
+ 
+
+def test_cell_fakeComparator():
     c1 = FakeComparator(1, [2, 3])
     c2 = FakeComparator(2, [1, 3])
     c3 = FakeComparator(10, [])
@@ -403,7 +433,12 @@ def test_modified():
     # c1 -> c4
     # c2 -> c5
     # c3 -> deleted
-    result = diff([c1, c2, c3], [c4, c5], check_modified=True)
+    result = d.diff([c1, c2, c3], [c4, c5], check_modified=True)
+    expected = [
+        {"state": 'modified', 'originalvalue': '1, [2, 3]', 'modifiedvalue': '2, []'},
+        {"state": 'modified', 'originalvalue': '2, [1, 3]', 'modifiedvalue': '3, []'},
+        {"state": 'deleted', 'value': '10, []'},
+    ]
 
     assert result[0]['state'] == 'modified'
     assert result[1]['state'] == 'modified'
