@@ -170,3 +170,35 @@
     display: none;
   }
 
+
+  /* Line diff stuff */
+
+  .line-diff {
+      border: 1px solid black;
+      min-width: 100%;
+      margin: 0 auto;
+      overflow-x: hidden;
+  }
+
+  .line-diff-line {
+      min-width: 100%;
+  }
+
+  .line-diff-right, .line-diff-left {
+  }
+
+  .line-diff-right {
+      position: relative;
+      left: 30px;
+  }
+
+  .line-diff-left-filled {
+      background-color: rgb(250, 200, 200);
+  }
+  .line-diff-right-filled {
+      background-color: rgb(200, 250, 200);
+  }
+
+  .line-diff-unchanged {
+      background-color: rgb(230, 230, 230);
+  }
