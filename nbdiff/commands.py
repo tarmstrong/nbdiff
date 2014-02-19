@@ -10,7 +10,7 @@ import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
 from .server.local_server import app
-import multiprocessing
+import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
 
@@ -172,4 +172,4 @@ def open_browser(browser_exe):
         browser = None
     if browser:
         b = lambda: browser.open("http://127.0.0.1:5000", new=2)
-        multiprocessing.Process(target=b).start()
+        threading.Thread(target=b).start()
