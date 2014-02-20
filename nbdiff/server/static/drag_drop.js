@@ -15,10 +15,11 @@ DragDrop.prototype = (function() {
             ev.dataTransfer.setData('data', JSON.stringify(data));
         };
     var allow_drop = function(ev) {
-            var sourceID = ev.dataTransfer.getData("data");
+            var data = JSON.parse(ev.dataTransfer.getData("data")); //TODO: chrome doesn't have dataTransfer here
+
             var $target = $(ev.target);
-            var targetIsBase = $target.closest("div.row").attr("id") == sourceID;
-            if(targetIsBase)
+            var sameRow = $target.closest("div.row").attr("id") == data.id;
+            if(sameRow)
             {
                 //prevent default event and allow drag and drop
                 console.log("allow_Drop");
@@ -38,7 +39,6 @@ DragDrop.prototype = (function() {
                 command = new MoveLeftCommand(MergeRows.rows[data.id]);
             }
             Invoker.storeAndExecute(command);
-            //var sourceID = ev.dataTransfer.getData("data");
             //the codemirror textbox is conflicting with the allow_drop/on_drop functions
             console.log("Drop");
      };
