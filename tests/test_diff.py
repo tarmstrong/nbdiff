@@ -1,9 +1,13 @@
 from nose.tools import eq_
 import itertools as it
+<<<<<<< HEAD
 import collections
 import nbdiff
 import nbdiff.diff as d
 import nbdiff.comparable as c
+=======
+from nbdiff.comparable import LineComparator
+>>>>>>> f9975d2... some line diff tests
 from nbdiff.diff import (
     add_results,
     find_candidates,
@@ -34,9 +38,36 @@ def test_count_similar_lines():
     B = {u'input':[u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
     result = count_similar_lines(A, B)
 
+<<<<<<< HEAD
     expected = 2
     eq_(result, expected)
 '''
+=======
+def test_diff_line_same():
+    line1 = "This is a line"
+    line2 = "This is a line"
+
+    A = LineComparator(line1)
+    B = LineComparator(line2)
+
+    result = diff(A, B)
+    expected = " "
+
+    eq_(result, expected)
+
+def test_diff_line():
+    line1 = "This is a line"
+    line2 = "This is another line. Line number 2"
+
+    A = LineComparator(line1)
+    B = LineComparator(line2)
+
+    result = diff(A, B)
+    expected = " "
+
+    eq_(result, expected)
+
+>>>>>>> f9975d2... some line diff tests
 def test_diff_empty():
     A = [
         {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
