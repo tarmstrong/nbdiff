@@ -69,6 +69,8 @@ NBDiff.prototype = {
                 $('#nbdiff-save').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
+                var dd = new DragDrop();
+                dd.enable();
                 $('#nbdiff-save').click(function (event) {
                     event.preventDefault();
                     self.save();
@@ -462,9 +464,7 @@ return {
 function nbdiff_init() {
     var main = new NBDiff.NBDiff(IPython.notebook, true);
     main.init();
-    var dd = new DragDrop();
     MergeRows.rows = main.getMergeRows();
-    dd.enable();
 }
 
 //there's probably a better way to get the rows
