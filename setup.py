@@ -40,6 +40,9 @@ setup(
     ]},
     include_package_data=True,
     install_requires=[
+        'flask',
+        'jinja2',
+        'ipython',
     ],
     license="MIT",
     zip_safe=False,
