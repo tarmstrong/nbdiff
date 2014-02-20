@@ -311,22 +311,9 @@ MergeRow.prototype = {
     moveLeft: function () {
         console.log("move left");
         this._cells.base.cell.set_text(this._cells.remote.cell.get_text());
-        // TODO we need to keep track, in memory, of the in-memory cells we're moving around
-        //      so that we can exfiltrate the data and save the resulting notebook.
-        //var rightCell = this._cells.local.clone(true);
-        //rightCell.addClass(getStateCSS(state));
-        //var htmlClass = ".row-cell-merge-base";
-        // TODO this shouldn't obliterate the base cell -- we should
-        //      be able to undo this operation.
-        // TODO allow me to change my mind and merge the
-        //      local version instead of the remote.
-        //row.children(htmlClass).find('.cell').replaceWith(rightCell);
     },
     moveRight: function () {
         console.log("move right");
-        //var rightCell = this._cells.remote.element().clone(true);
-        //rightCell.addClass(getStateCSS(this._cells.remote.state));
-        //this._cells.base.element().replaceWith(rightCell);
         this._cells.base.cell.set_text(this._cells.local.cell.get_text());
     },
     undo: function(base) {
