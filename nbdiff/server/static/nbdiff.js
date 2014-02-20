@@ -69,8 +69,6 @@ NBDiff.prototype = {
                 $('#nbdiff-save').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
-                var dd = new DragDrop();
-                dd.enable();
                 $('#nbdiff-save').click(function (event) {
                     event.preventDefault();
                     self.save();
@@ -80,6 +78,11 @@ NBDiff.prototype = {
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
             this.controller.render(nbcontainer);
+            if(this._isMerge() === true)
+            {
+                var dd = new DragDrop();
+                dd.enable();
+            }
             this.controller.add_button_listeners();
 
         } else {
