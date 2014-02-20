@@ -1,30 +1,30 @@
 
 
 var Invoker = (function () {
-    var _commands = [];
-    var _undone_commands = [];
+    var _undo_commands = [];
+    var _redo_commands = [];
     var storeAndExecute = function(command){
-        _commands.push(command);
+        _undo_commands.push(command);
         command.execute();
-        console.log("Undo list items: "+_commands.length);
-        console.log("Redo list items: "+_undone_commands.length);
+        console.log("Undo list items: "+_undo_commands.length);
+        console.log("Redo list items: "+_redo_commands.length);
     };
     var undo = function() {
-        if(_commands.length > 0)
+        if(_undo_commands.length > 0)
         {
-            var command = _commands.pop();
+            var command = _undo_commands.pop();
             command.undo();
-            _undone_commands.push(command);
-            console.log("Undo list items: "+_commands.length);
-            console.log("Redo list items: "+_undone_commands.length);
+            _redo_commands.push(command);
+            console.log("Undo list items: "+_undo_commands.length);
+            console.log("Redo list items: "+_redo_commands.length);
         }
         else
             throw "Nothing to undo."
     };
     var redo = function() {
-        if(_undone_commands.length > 0)
+        if(_redo_commands.length > 0)
         {
-            storeAndExecute(_undone_commands.pop());
+            storeAndExecute(_redo_commands.pop());
         }
         else
             throw "Nothing to redo.";
