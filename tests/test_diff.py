@@ -1,7 +1,7 @@
 from nose.tools import eq_
 import itertools as it
 from nbdiff.comparable import LineComparator
-from nbdiff.merge import cells_diff, lines_diff
+from nbdiff.merge import cells_diff, words_diff, lines_diff
 from nbdiff.diff import (
     add_results,
     find_candidates,
@@ -40,19 +40,30 @@ def test_diff():
     ]
     eq_(result, expected)
 
-def test_diff_line_same():
-    A = "This is a line"
-    B = "This is a line"
+def test_diff_lines():
+    A = ['this is a line', 'another line']
+    B = ['first line', 'another line']
 
     result = lines_diff(A, B)
-    assert result[0]['state'] == 'unchanged'
+    assert result[0]['state'] == 'deleted'
+    assert result[1]['state'] == 'added'
+    assert result[2]['state'] == 'unchanged'
 
-def test_diff_line():
-    A = "Thi"
-    B = "Ths"
+def test_diff_words_same():
+    A = "word is"
+    B = "word is"
 
-    result = lines_diff(A, B)
+    result = words_diff(A, B)
     assert result[0]['state'] == 'unchanged'
+    assert result[1]['state'] == 'unchanged'
+
+def test_diff_word():
+    A = "The"
+    B = "This"
+
+    result = words_diff(A, B)
+    assert result[0]['state'] == 'deleted'
+    assert result[1]['state'] == 'added'
 
 def test_diff_empty():
     A = [
