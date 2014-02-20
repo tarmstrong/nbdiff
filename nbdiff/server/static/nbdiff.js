@@ -183,30 +183,28 @@ Merge.prototype = {
     add_button_listeners: function() {
         var $buttons = $("input.merge-arrow-right");
         var rows = this.rows;
-        var click_action = function(row) {
+        var click_action_right = function(row) {
             var moveRight = new MoveRightCommand(row);
-            var s = new Invoker();
-            s.storeAndExecute(moveRight);
+            Invoker.storeAndExecute(moveRight);
         };
         $buttons.each(function(key, value)
         {
             var id = $(value).closest('.row').attr('id');
             var row = rows[id];
-            $(value).click(function() {click_action(row); });
+            $(value).click(function() {click_action_right(row); });
         });
 
         $buttons = $("input.merge-arrow-left");
         rows = this.rows;
-        click_action = function(row) {
+        var click_action_left = function(row) {
             var moveLeft = new MoveLeftCommand(row);
-            var s = new Invoker();
-            s.storeAndExecute(moveLeft);
+            Invoker.storeAndExecute(moveLeft);
         };
         $buttons.each(function(key, value)
         {
             var id = $(value).closest('.row').attr('id');
             var row = rows[id];
-            $(value).click(function() {click_action(row); });
+            $(value).click(function() {click_action_left(row); });
         });
     },
 
@@ -307,7 +305,7 @@ MergeRow.prototype = {
     },
     moveLeft: function () {
         console.log("move left");
-        this._cells.base.element().html(this._cells.remote.element().html());
+        this._cells.base.cell.set_text(this._cells.remote.cell.get_text());
         // TODO we need to keep track, in memory, of the in-memory cells we're moving around
         //      so that we can exfiltrate the data and save the resulting notebook.
         //var rightCell = this._cells.local.clone(true);
@@ -324,7 +322,10 @@ MergeRow.prototype = {
         //var rightCell = this._cells.remote.element().clone(true);
         //rightCell.addClass(getStateCSS(this._cells.remote.state));
         //this._cells.base.element().replaceWith(rightCell);
-        this._cells.base.element().html(this._cells.local.element().html());
+        this._cells.base.cell.set_text(this._cells.local.cell.get_text());
+    },
+    undo: function(base) {
+        this._cells.base.cell.set_text(base);
     }
 };
 

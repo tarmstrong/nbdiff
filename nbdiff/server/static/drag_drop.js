@@ -69,14 +69,8 @@ DragDrop.prototype = (function() {
         return {
             constructor: DragDrop,
 
-            enable: function()
-                {
-                    add_listeners();
-                },
-            disable: function()
-                {
-                    remove_listeners();
-                }
+            enable: add_listeners,
+            disable: remove_listeners
         };
     }
 )();
