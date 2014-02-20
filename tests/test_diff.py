@@ -40,14 +40,42 @@ def test_diff():
     ]
     eq_(result, expected)
 
-def test_diff_lines():
+
+def test_diff_modified():
+
+    A = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+    B = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'k']}
+    ]
+    result = diff(A, B, check_modified=True)
+    expected = [
+    ]
+    print 'jbmnb'
+    eq_(result, expected)
+
+
+def test_diff_lines1():
+    A = ['this is a line', 'another line']
+    B = ['another line', 'first line']
+
+    result = lines_diff(A, B, check_modified= True)
+    assert result[0]['state'] == 'deleted'
+    assert result[1]['state'] == 'unchanged'
+    assert result[2]['state'] == 'added'
+
+
+def test_diff_lines2():
     A = ['this is a line', 'another line']
     B = ['first line', 'another line']
 
-    result = lines_diff(A, B)
+    result = lines_diff(A, B, check_modified= True)
     assert result[0]['state'] == 'deleted'
-    assert result[1]['state'] == 'added'
-    assert result[2]['state'] == 'unchanged'
+    assert result[1]['state'] == 'unchanged'
+    assert result[2]['state'] == 'added'
+
 
 def test_diff_words_same():
     A = "word is"
@@ -57,6 +85,7 @@ def test_diff_words_same():
     assert result[0]['state'] == 'unchanged'
     assert result[1]['state'] == 'unchanged'
 
+
 def test_diff_word():
     A = "The"
     B = "This"
@@ -64,6 +93,7 @@ def test_diff_word():
     result = words_diff(A, B)
     assert result[0]['state'] == 'deleted'
     assert result[1]['state'] == 'added'
+
 
 def test_diff_empty():
     A = [
@@ -110,6 +140,7 @@ def test_diff_empty():
          u'input': []}]
     result = cells_diff(A, B, check_modified=True)
     assert result[0]['state'] == 'deleted'
+
 
 def test_diff_modified():
     A = [

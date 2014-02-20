@@ -39,13 +39,14 @@ class LineComparator(object):
         eqLine = line1 == line2
         if eqLine:
             return BooleanPlus(True, False)
-
-        unchanged_count = self.count_similar_words(line1, line2)
-        similarity_percent = \
-            (2.0 * unchanged_count) / (len(line1) + len(line2))
-        if similarity_percent >= 0.50:
-            return BooleanPlus(True, True)
-        return BooleanPlus(False, False)
+        else:
+            unchanged_count = self.count_similar_words(line1, line2)
+            similarity_percent = \
+                (2.0 * unchanged_count) / (len(line1.split()) + len(line2.split()))
+            print similarity_percent
+            if similarity_percent >= 0.50:
+                return BooleanPlus(True, True)
+            return BooleanPlus(False, False)
 
     def count_similar_words(self, line1, line2):
         words1 = line1.split()
