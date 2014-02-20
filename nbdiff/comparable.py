@@ -22,8 +22,9 @@ class BooleanPlus(object):
 
 class LineComparator(object):
 
-    def __init__(self, data):
+    def __init__(self, data, check_modified=False):
         self.data = data
+        self.check_modified = check_modified
 
     def __eq__(self, other):
         return self.equal(self.data, other.data)

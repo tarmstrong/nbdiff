@@ -1,6 +1,7 @@
 from nose.tools import eq_
 import itertools as it
 from nbdiff.comparable import LineComparator
+from nbdiff.merge import cells_diff, lines_diff
 from nbdiff.diff import (
     add_results,
     find_candidates,
@@ -40,76 +41,116 @@ def test_diff():
     eq_(result, expected)
 
 def test_diff_line_same():
-    line1 = "This is a line"
-    line2 = "This is a line"
+    A = "This is a line"
+    B = "This is a line"
 
-    A = LineComparator(line1)
-    B = LineComparator(line2)
-
-    result = diff(A, B)
-    expected = " "
-
-    eq_(result, expected)
+    result = lines_diff(A, B)
+    assert result[0]['state'] == 'unchanged'
 
 def test_diff_line():
-    line1 = "This is a line"
-    line2 = "This is another line. Line number 2"
+    A = "Thi"
+    B = "Ths"
 
-    A = LineComparator(line1)
-    B = LineComparator(line2)
-
-    result = diff(A, B)
-    expected = " "
-
-    eq_(result, expected)
+    result = lines_diff(A, B)
+    assert result[0]['state'] == 'unchanged'
 
 def test_diff_empty():
     A = [
-        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
-        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+        {'cell_type':"code",
+         'language': "python",
+          "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29,
+         u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {'cell_type':"code",
+         'language': "python",
+          "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29,
+         u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
     ]
-    B = []
-    result = diff(A, B, check_modified=True)
-    expected = [
-        {"state": 'deleted',
-         'value': {u'input': [
-             u'x = [1,3,4]\n',
-             u'z = {1, 2, 3} \n',
-             u'\n',
-             u'm']}},
-        {"state": 'deleted',
-         'value': {u'input': [
-             u'x = [1,3,3]\n',
-             u'z = {1, 2, 3} \n',
-             u'\n',
-             u'z']}}
-    ]
-    eq_(result, expected)
+    B = [
+        {'cell_type':"code",
+         'language': "python",
+          "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": []
+            }
+        ],
+        "prompt_number": 29,
+         u'input': []}]
+    result = cells_diff(A, B, check_modified=True)
+    assert result[0]['state'] == 'deleted'
 
 def test_diff_modified():
     A = [
-        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
-        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+        {'cell_type':"code",
+         'language': "python",
+          "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29,
+         u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {'cell_type':"code",
+         'language': "python",
+          "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29,
+         u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
     ]
     B = [
-        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'k']}
+        {'cell_type':"code",
+         'language': "python",
+          "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29,
+         u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'k']}
     ]
-    result = diff(A, B, check_modified=True)
-    expected = [
-        {"state": 'modified',
-         'value': {u'input': [
-             u'x = [1,3,4]\n',
-             u'z = {1, 2, 3} \n',
-             u'\n',
-             u'm']}},
-        {"state": 'deleted',
-         'value': {u'input': [
-             u'x = [1,3,3]\n',
-             u'z = {1, 2, 3} \n',
-             u'\n',
-             u'z']}}
-    ]
-    eq_(result, expected)
+    result = cells_diff(A, B, check_modified=True)
+
+    assert result[0]['state'] == 'modified'
+    assert result[1]['state'] == 'deleted'
 
 
 def test_create_grid():
