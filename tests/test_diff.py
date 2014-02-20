@@ -37,6 +37,55 @@ def test_count_similar_lines():
     expected = 2
     eq_(result, expected)
 '''
+def test_diff_empty():
+    A = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+    B = []
+    result = diff(A, B, check_modified=True)
+    expected = [
+        {"state": 'deleted',
+         'value': {u'input': [
+             u'x = [1,3,4]\n',
+             u'z = {1, 2, 3} \n',
+             u'\n',
+             u'm']}},
+        {"state": 'deleted',
+         'value': {u'input': [
+             u'x = [1,3,3]\n',
+             u'z = {1, 2, 3} \n',
+             u'\n',
+             u'z']}}
+    ]
+    eq_(result, expected)
+
+def test_diff_modified():
+    A = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+    B = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'k']}
+    ]
+    result = diff(A, B, check_modified=True)
+    expected = [
+        {"state": 'modified',
+         'value': {u'input': [
+             u'x = [1,3,4]\n',
+             u'z = {1, 2, 3} \n',
+             u'\n',
+             u'm']}},
+        {"state": 'deleted',
+         'value': {u'input': [
+             u'x = [1,3,3]\n',
+             u'z = {1, 2, 3} \n',
+             u'\n',
+             u'z']}}
+    ]
+    eq_(result, expected)
+
+
 def test_create_grid():
     A = "abcabba"
     B = "cbabac"
@@ -443,3 +492,4 @@ def test_cell_fakeComparator():
     assert result[0]['state'] == 'modified'
     assert result[1]['state'] == 'modified'
     assert result[2]['state'] == 'deleted'
+
