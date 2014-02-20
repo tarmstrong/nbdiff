@@ -41,6 +41,7 @@ function getStateCSS(state) {
  */
 function NBDiff(notebook, log) {
     this.notebook = notebook;
+    this.controller = null;
     if (log === true) {
         this.log = function () {
             console.log(arguments);
@@ -137,6 +138,9 @@ NBDiff.prototype = {
     },
     _generateNotebookContainer: function () {
         return $("<div class='container' id='notebook-container-new' style='display:inline'></div>");
+    },
+    getMergeRows: function() {
+        return this.controller.rows;
     }
 };
 
@@ -242,6 +246,7 @@ Diff.prototype = {
         return rows;
     }
 };
+
 
 /**
  * Class for rendering rows of the merge UI.
@@ -458,7 +463,13 @@ function nbdiff_init() {
     var main = new NBDiff.NBDiff(IPython.notebook, true);
     main.init();
     var dd = new DragDrop();
+    MergeRows.rows = main.getMergeRows();
     dd.enable();
+}
+
+//there's probably a better way to get the rows
+var MergeRows = function() {
+    this.rows = null;
 }
 
 if (typeof IPython.notebook === 'undefined') {

@@ -3,11 +3,16 @@ function DragDrop() {}
 
 DragDrop.prototype = (function() {
     //private functions
+    var that = function() {
+            return this;
+        };
     var drag_start = function(ev) {
             //TODO: create command containing drag source
-            var sourceID = $(ev.target).closest(".row").attr("id");
-            ev.dataTransfer.setData('data', sourceID);
-            console.log("Drag " + sourceID);
+            var rowID = $(ev.target).closest(".row").attr("id");
+
+            var isLeft = $(ev.target).closest(".row-cell-merge-local").length > 0;
+            var data = { id: rowID, isLeft: isLeft};
+            ev.dataTransfer.setData('data', JSON.stringify(data));
         };
     var allow_drop = function(ev) {
             var sourceID = ev.dataTransfer.getData("data");
@@ -22,10 +27,18 @@ DragDrop.prototype = (function() {
         };
     var on_drop = function(ev) {
             ev.preventDefault();
-            var sourceID = ev.dataTransfer.getData("data");
-            //TODO: set command destination
-            //TODO: execute command to set destination cell data to source data
-            //this would help with undo/redo
+            var data = JSON.parse(ev.dataTransfer.getData("data"));
+            var command = null;
+            if(data.isLeft)
+            {
+                command = new MoveRightCommand(MergeRows.rows[data.id]);
+            }
+            else
+            {
+                command = new MoveLeftCommand(MergeRows.rows[data.id]);
+            }
+            Invoker.storeAndExecute(command);
+            //var sourceID = ev.dataTransfer.getData("data");
             //the codemirror textbox is conflicting with the allow_drop/on_drop functions
             console.log("Drop");
      };
@@ -64,7 +77,8 @@ DragDrop.prototype = (function() {
                 cell.removeEventListener('drop', on_drop);
                 cell.removeEventListener('dragenter', on_drag_enter);
             });
-        }
+        };
+
         //return prototype with public functions
         return {
             constructor: DragDrop,

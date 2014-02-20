@@ -6,9 +6,8 @@ var Invoker = (function () {
     var storeAndExecute = function(command){
         _commands.push(command);
         command.execute();
-        _undone_commands = [];
-        console.log(_commands);
-        console.log(_undone_commands);
+        console.log("Undo list items: "+_commands.length);
+        console.log("Redo list items: "+_undone_commands.length);
     };
     var undo = function() {
         if(_commands.length > 0)
@@ -16,8 +15,8 @@ var Invoker = (function () {
             var command = _commands.pop();
             command.undo();
             _undone_commands.push(command);
-            console.log(_commands);
-            console.log(_undone_commands);
+            console.log("Undo list items: "+_commands.length);
+            console.log("Redo list items: "+_undone_commands.length);
         }
         else
             throw "Nothing to undo."
