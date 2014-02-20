@@ -34,7 +34,7 @@ function getStateCSS(state) {
     } else {
         return "";
     }
-};
+}
 
 /**
  * Main NBDiff controller for initiating merge/diff.
@@ -230,9 +230,14 @@ Diff.prototype = {
         });
     },
     _generateRows: function () {
-        var rows = [];
+        var self = this,
+            rows = [];
         this._nbcells.forEach(function (nbcell) {
-            rows.push(new DiffRow(nbcell));
+            if (nbcell.state() === 'modified') {
+                rows.push(new LineDiff(self._nb, nbcell));
+            } else {
+                rows.push(new DiffRow(nbcell));
+            }
         });
         return rows;
     }
@@ -373,6 +378,59 @@ DiffRow.prototype = {
     }
 };
 
+function LineDiff(notebook, nbcell) {
+    this._nb = notebook;
+    this._nbcell = nbcell;
+}
+
+LineDiff.prototype = {
+    render: function () {
+        var self = this,
+            diffs = this._getDiffData(),
+            container = this._empty();
+        diffs.forEach(function (item) {
+            var line;
+            if (item.state === 'deleted') {
+                line = self._line(item.value, null);
+            } else if (item.state === 'added') {
+                line = self._line(null, item.value);
+            } else if (item.state === 'unchanged') {
+                line = self._line(item.value, item.value);
+            }
+            container.find('.line-diff').append(line);
+        });
+        return container;
+    },
+    _getDiffData: function () {
+        return this._nbcell.lineDiffData();
+    },
+    _line: function (left, right) {
+        var row;
+        row = $('<div class="row-fluid line-diff-line"><div class="span6 line-diff-left"></div><div class="span6 line-diff-right"></div></div>');
+        if (left) {
+            row.find('.line-diff-left').append(left);
+            if (!right) {
+                row.find('.line-diff-left').addClass('line-diff-left-filled');
+            }
+        }
+        if (right) {
+            row.find('.line-diff-right').append(right);
+            if (!left) {
+                row.find('.line-diff-right').addClass('line-diff-right-filled');
+            }
+        }
+        if (left && right) {
+            row.find('.line-diff-right,.line-diff-left').addClass('line-diff-unchanged');
+        }
+        return row;
+    },
+    _empty: function () {
+        return $('<div class="row">' + // 'row' as in UI rows, not lines.
+            '<div class="line-diff"></div>' +
+            '</div>');
+    }
+};
+
 // Decorator for cells from IPython's cell.js
 function NBDiffCell(cell) {
     this.cell = cell;
@@ -391,6 +449,9 @@ NBDiffCell.prototype = {
     },
     element: function () {
         return this.cell.element;
+    },
+    lineDiffData: function () {
+        return this.cell.metadata['line-diff'];
     }
 };
 
@@ -400,7 +461,8 @@ return {
     Diff: Diff,
     DiffRow: DiffRow,
     MergeRow: MergeRow,
-    NBDiffCell: NBDiffCell
+    NBDiffCell: NBDiffCell,
+    LineDiff: LineDiff
 };
 
 }(jQuery));

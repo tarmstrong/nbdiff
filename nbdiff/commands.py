@@ -10,7 +10,7 @@ import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
 from .server.local_server import app
-import multiprocessing
+import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
 
@@ -107,11 +107,15 @@ def merge():
 
         unmerged_notebooks = git.get_unmerged_notebooks()
 
-        nb_local = parser.parse(unmerged_notebooks[0][0])
-        nb_base = parser.parse(unmerged_notebooks[0][1])
-        nb_remote = parser.parse(unmerged_notebooks[0][2])
+        if not len(unmerged_notebooks) == 0:
+            nb_local = parser.parse(unmerged_notebooks[0][0])
+            nb_base = parser.parse(unmerged_notebooks[0][1])
+            nb_remote = parser.parse(unmerged_notebooks[0][2])
 
-        filename = unmerged_notebooks[0][3]
+            filename = unmerged_notebooks[0][3]
+        else:
+            print("No unmerged files to diff.")
+            return 0
 
     elif length == 3 or length == 4:
         nb_local = parser.parse(open(args.notebook[0]))
@@ -168,4 +172,4 @@ def open_browser(browser_exe):
         browser = None
     if browser:
         b = lambda: browser.open("http://127.0.0.1:5000", new=2)
-        multiprocessing.Process(target=b).start()
+        threading.Thread(target=b).start()

@@ -129,14 +129,31 @@ def diff_result_to_cell(item):
     '''diff.diff returns a dictionary with all the information we need,
     but we want to extract the cell and change its metadata.'''
     state = item['state']
-    cell = item['value'].data
-    cell['metadata'] = {'state': state}
+    if state == 'modified':
+        new_cell = item['modifiedvalue'].data
+        old_cell = item['originalvalue'].data
+        new_cell['metadata']['state'] = state
+        new_cell['metadata']['original'] = old_cell
+        cell = new_cell
+    else:
+        cell = item['value'].data
+        cell['metadata']['state'] = state
     return cell
 
 
-def cells_diff(before_cells, after_cells):
+def cells_diff(before_cells, after_cells, check_modified=False):
     '''Diff two arrays of cells.'''
-    before_comps = [CellComparator(cell) for cell in before_cells]
-    after_comps = [CellComparator(cell) for cell in after_cells]
-    diff_result = diff.diff(before_comps, after_comps)
+    before_comps = [
+        CellComparator(cell, check_modified=check_modified)
+        for cell in before_cells
+    ]
+    after_comps = [
+        CellComparator(cell, check_modified=check_modified)
+        for cell in after_cells
+    ]
+    diff_result = diff.diff(
+        before_comps,
+        after_comps,
+        check_modified=check_modified
+    )
     return diff_result
