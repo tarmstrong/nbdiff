@@ -121,9 +121,9 @@ class CellComparator():
         eqoutputs = self.equaloutputs(cell1["outputs"], cell2["outputs"])
 
         if eqlanguage and eqinput and eqoutputs:
-            return True
+            return BooleanPlus(True, False)
         elif not self.check_modified:
-            return False
+            return BooleanPlus(False, False)
 
         unchanged_count = self.count_similar_lines(cell1, cell2)
         similarity_percent = (
