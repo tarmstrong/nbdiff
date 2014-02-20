@@ -1,5 +1,6 @@
 from nose.tools import eq_
 import itertools as it
+from nbdiff.comparable import LineComparator
 from nbdiff.diff import (
     add_results,
     find_candidates,
@@ -36,6 +37,30 @@ def test_diff():
              u'\n',
              u'z']}}
     ]
+    eq_(result, expected)
+
+def test_diff_line_same():
+    line1 = "This is a line"
+    line2 = "This is a line"
+
+    A = LineComparator(line1)
+    B = LineComparator(line2)
+
+    result = diff(A, B)
+    expected = " "
+
+    eq_(result, expected)
+
+def test_diff_line():
+    line1 = "This is a line"
+    line2 = "This is another line. Line number 2"
+
+    A = LineComparator(line1)
+    B = LineComparator(line2)
+
+    result = diff(A, B)
+    expected = " "
+
     eq_(result, expected)
 
 def test_diff_empty():
