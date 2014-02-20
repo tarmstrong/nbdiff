@@ -2,23 +2,44 @@
 
 var Invoker = (function () {
     var _commands = [];
+    var _undone_commands = [];
     var storeAndExecute = function(command){
         _commands.push(command);
         command.execute();
+        _undone_commands = [];
+        console.log(_commands);
+        console.log(_undone_commands);
     };
     var undo = function() {
-        var command = _commands.pop();
-        command.undo();
+        if(_commands.length > 0)
+        {
+            var command = _commands.pop();
+            command.undo();
+            _undone_commands.push(command);
+            console.log(_commands);
+            console.log(_undone_commands);
+        }
+        else
+            throw "Nothing to undo."
+    };
+    var redo = function() {
+        if(_undone_commands.length > 0)
+        {
+            storeAndExecute(_undone_commands.pop());
+        }
+        else
+            throw "Nothing to redo.";
     };
     return {
         storeAndExecute: storeAndExecute,
-        undo: undo
+        undo: undo,
+        redo: redo
     }
 })();
 
 function MoveLeftCommand(merge_row) {
     this.merge_row = merge_row;
-    this.base = merge_row._cells.base.cell.get_text();
+    this.text = merge_row._cells.base.cell.get_text();
 }
 
 /* The Command for turning on the light - ConcreteCommand #1 */
@@ -27,13 +48,13 @@ MoveLeftCommand.prototype = {
         this.merge_row.moveLeft();
     },
     undo: function() {
-        this.merge_row.undo(this.base);
+        this.merge_row.undo(this.text);
     }
 }
 
 function MoveRightCommand(merge_row) {
     this.merge_row = merge_row;
-    this.base = merge_row._cells.base.cell.get_text();
+    this.text = merge_row._cells.base.cell.get_text();
 }
 
 /* The Command for turning off the light - ConcreteCommand #2 */
@@ -42,6 +63,6 @@ MoveRightCommand.prototype = {
         this.merge_row.moveRight();
     },
     undo: function() {
-        this.merge_row.undo(this.base);
+        this.merge_row.undo(this.text);
     }
 }
