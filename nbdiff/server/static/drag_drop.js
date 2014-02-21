@@ -11,12 +11,23 @@ DragDrop.prototype = (function() {
             var rowID = $(ev.target).closest(".row").attr("id");
 
             var isLeft = $(ev.target).closest(".row-cell-merge-local").length > 0;
-            var data = { id: rowID, isLeft: isLeft};
+
+            var cell_class = $(ev.target).hasClass("nbdiff-added") ? "nbdiff-added" : "nbdiff-deleted"
+
+            var data = { id: rowID, isLeft: isLeft, class: cell_class};
             ev.dataTransfer.setData('data', JSON.stringify(data));
         };
     var allow_drop = function(ev) {
-            var data = JSON.parse(ev.dataTransfer.getData("data")); //TODO: chrome doesn't have dataTransfer here
-
+            var raw_data = ev.dataTransfer.getData("data");
+            var data = ""
+            if(raw_data == "")
+            {
+                data = {id: $(ev.srcElement).closest(".row").attr("id") };
+            }
+            else
+            {
+                data = JSON.parse(raw_data);
+            }
             var $target = $(ev.target);
             var sameRow = $target.closest("div.row").attr("id") == data.id;
             if(sameRow)
@@ -29,18 +40,26 @@ DragDrop.prototype = (function() {
     var on_drop = function(ev) {
             ev.preventDefault();
             var data = JSON.parse(ev.dataTransfer.getData("data"));
-            var command = null;
-            if(data.isLeft)
+
+            var $target = $(ev.target).closest("div.row");
+            var sameRow = $target.attr("id") == data.id;
+
+            if(sameRow)
             {
-                command = new MoveRightCommand(MergeRows.rows[data.id]);
+                var command = null;
+
+                if(data.isLeft)
+                {
+                    command = new MoveRightCommand(MergeRows.rows[data.id]);
+                }
+                else
+                {
+                    command = new MoveLeftCommand(MergeRows.rows[data.id]);
+                }
+                Invoker.storeAndExecute(command);
+                //the codemirror textbox is conflicting with the allow_drop/on_drop functions
+                console.log("Drop");
             }
-            else
-            {
-                command = new MoveLeftCommand(MergeRows.rows[data.id]);
-            }
-            Invoker.storeAndExecute(command);
-            //the codemirror textbox is conflicting with the allow_drop/on_drop functions
-            console.log("Drop");
      };
     var on_drag_enter = function(ev) {
             ev.preventDefault();
@@ -68,6 +87,7 @@ DragDrop.prototype = (function() {
             var cells = $(".nbdiff-added, .nbdiff-deleted");
             cells.each( function ( index, cell )
             {
+                cell.draggable = false;
                 cell.removeEventListener('dragstart', drag_start);
             });
             cells = $(".row-cell-merge-base > div");

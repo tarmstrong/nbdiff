@@ -39,6 +39,9 @@ var Invoker = (function () {
 function MoveLeftCommand(merge_row) {
     this.merge_row = merge_row;
     this.text = merge_row._cells.base.cell.get_text();
+    this.old_classes = merge_row._cells.base.element().attr("class");
+    this.output = merge_row._cells.base.element().find("div.output_wrapper").clone(true);
+    this.old_state = merge_row._cells.base.state();
 }
 
 /* The Command for turning on the light - ConcreteCommand #1 */
@@ -47,13 +50,16 @@ MoveLeftCommand.prototype = {
         this.merge_row.moveLeft();
     },
     undo: function() {
-        this.merge_row.undo(this.text);
+        this.merge_row.undo(this.text, this.old_classes, this.output, this.old_state);
     }
 }
 
 function MoveRightCommand(merge_row) {
     this.merge_row = merge_row;
     this.text = merge_row._cells.base.cell.get_text();
+    this.old_classes = merge_row._cells.base.element().attr("class");
+    this.output = merge_row._cells.base.element().find("div.output_wrapper").clone(true);
+    this.old_state = merge_row._cells.base.state();
 }
 
 /* The Command for turning off the light - ConcreteCommand #2 */
@@ -62,6 +68,6 @@ MoveRightCommand.prototype = {
         this.merge_row.moveRight();
     },
     undo: function() {
-        this.merge_row.undo(this.text);
+        this.merge_row.undo(this.text, this.old_classes, this.output, this.old_state);
     }
 }

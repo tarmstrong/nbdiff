@@ -321,13 +321,27 @@ MergeRow.prototype = {
     moveLeft: function () {
         console.log("move left");
         this._cells.base.cell.set_text(this._cells.remote.cell.get_text());
+        this._cells.base.cell.element.removeClass();
+        this._cells.base.cell.element.addClass(this._cells.remote.cell.element.attr("class"));
+        var output = this._cells.remote.element().find("div.output_wrapper").clone(true);
+        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
+        this._cells.base.set_state(this._cells.remote.state())
     },
     moveRight: function () {
         console.log("move right");
         this._cells.base.cell.set_text(this._cells.local.cell.get_text());
+        this._cells.base.cell.element.removeClass();
+        this._cells.base.cell.element.addClass(this._cells.local.cell.element.attr("class"));
+        var output = this._cells.local.element().find("div.output_wrapper").clone(true);
+        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
+        this._cells.base.set_state(this._cells.local.state())
     },
-    undo: function(base) {
+    undo: function(base, cell_class, output, old_state) {
         this._cells.base.cell.set_text(base);
+        this._cells.base.cell.element.removeClass();
+        this._cells.base.cell.element.addClass(cell_class);
+        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
+        this._cells.base.set_state(old_state)
     }
 };
 
@@ -439,6 +453,9 @@ NBDiffCell.prototype = {
     },
     state: function () {
         return this.cell.metadata.state;
+    },
+    set_state: function (state) {
+        this.cell.metadata.state = state;
     },
     removeMetadata: function () {
         delete this.cell.metadata.state;
