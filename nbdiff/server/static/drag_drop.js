@@ -26,7 +26,7 @@ DragDrop.prototype = (function() {
                 data = JSON.parse(raw_data);
             }
             var $target = $(ev.target);
-            var sameRow = $target.closest("div.row").attr("id") == data.id;
+            var sameRow = $target.closest("div.row").attr("id") === data.id;
             if(sameRow) {
                 //prevent default event and allow drag and drop
                 console.log("allow_Drop");
@@ -38,7 +38,7 @@ DragDrop.prototype = (function() {
             var data = JSON.parse(ev.dataTransfer.getData("data"));
 
             var $target = $(ev.target).closest("div.row");
-            var sameRow = $target.attr("id") == data.id;
+            var sameRow = $target.attr("id") === data.id;
 
             if(sameRow) {
                 var command = null;
