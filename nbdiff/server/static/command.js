@@ -19,7 +19,7 @@ var Invoker = (function () {
             console.log("Redo list items: "+_redo_commands.length);
         }
         else
-            throw "Nothing to undo."
+            throw "Nothing to undo.";
     };
     var redo = function() {
         if(_redo_commands.length > 0)
@@ -33,7 +33,7 @@ var Invoker = (function () {
         storeAndExecute: storeAndExecute,
         undo: undo,
         redo: redo
-    }
+    };
 })();
 
 function MoveLeftCommand(merge_row) {
@@ -52,7 +52,7 @@ MoveLeftCommand.prototype = {
     undo: function() {
         this.merge_row.undo(this.text, this.old_classes, this.output, this.old_state);
     }
-}
+};
 
 function MoveRightCommand(merge_row) {
     this.merge_row = merge_row;
@@ -70,4 +70,4 @@ MoveRightCommand.prototype = {
     undo: function() {
         this.merge_row.undo(this.text, this.old_classes, this.output, this.old_state);
     }
-}
+};
