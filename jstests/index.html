@@ -3,21 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title></title>
-  <script src="../lib/qunit/jquery-2.1.0.js"></script>
+  <script src="../lib/jquery-2.1.0.js"></script>
   <link rel="stylesheet" href="../../lib/qunit/qunit-1.12.0.css">
   <script src="../lib/qunit/qunit-1.12.0.js"></script>
   <script>
-    $ = function () {
-      return {
-        ready: function (f) {
-          f();
-        },
-        append: function (a) {
-        },
-        css: function () {
-        }
-      };
-    };
     IPython = {
       notebook: {
         get_cells: function () {
@@ -26,10 +15,12 @@
       }
     };
   </script>
-  <script src="../extension/static/custom/merge_script.js"></script>
+  <script src="../nbdiff/server/static/nbdiff.js"></script>
   <script>
-    test("test_merge", function () {
-      equal(true, true);
+    test("test_nbdiff_construct", function () {
+        var nbdiff = new NBDiff.NBDiff(IPython.notebook, false);
+        nbdiff.log('hi');
+        equal(true, true);
     });
   </script>
 </head>
