@@ -27,9 +27,9 @@ var cellSide = ['local', 'base', 'remote'];
 function getStateCSS(state) {
     if (state === cellState[0]) {
         return "added-cell";
-    } else if (state == cellState[1]) {
+    } else if (state === cellState[1]) {
         return "deleted";
-    } else if (state == cellState[2]) {
+    } else if (state === cellState[2]) {
         return "changed";
     } else {
         return "";

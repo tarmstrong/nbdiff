@@ -10,24 +10,23 @@ var Invoker = (function () {
         console.log("Redo list items: "+_redo_commands.length);
     };
     var undo = function() {
-        if(_undo_commands.length > 0)
-        {
+        if(_undo_commands.length > 0) {
             var command = _undo_commands.pop();
             command.undo();
             _redo_commands.push(command);
             console.log("Undo list items: "+_undo_commands.length);
             console.log("Redo list items: "+_redo_commands.length);
         }
-        else
+        else {
             throw "Nothing to undo.";
+        }
     };
     var redo = function() {
-        if(_redo_commands.length > 0)
-        {
+        if(_redo_commands.length > 0) {
             storeAndExecute(_redo_commands.pop());
-        }
-        else
+        } else {
             throw "Nothing to redo.";
+        }
     };
     return {
         storeAndExecute: storeAndExecute,
