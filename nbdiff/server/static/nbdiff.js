@@ -67,11 +67,19 @@ NBDiff.prototype = {
             if (this._isDiff() === true) {
                 this.controller = new Diff(this.notebook, this._nbcells);
                 $('#nbdiff-save').hide();
+                $('#nbdiff-undo').hide();
+                $('#nbdiff-redo').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
                 $('#nbdiff-save').click(function (event) {
                     event.preventDefault();
                     self.save();
+                });
+                $('#nbdiff-undo').click(function () {
+                    Invoker.undo();
+                });
+                $('#nbdiff-redo').click(function () {
+                    Invoker.redo();
                 });
             }
 
