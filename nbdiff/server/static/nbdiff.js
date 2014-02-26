@@ -27,9 +27,9 @@ var cellSide = ['local', 'base', 'remote'];
 function getStateCSS(state) {
     if (state === cellState[0]) {
         return "added-cell";
-    } else if (state == cellState[1]) {
+    } else if (state === cellState[1]) {
         return "deleted";
-    } else if (state == cellState[2]) {
+    } else if (state === cellState[2]) {
         return "changed";
     } else {
         return "";
@@ -333,7 +333,7 @@ MergeRow.prototype = {
         this._cells.base.cell.element.addClass(this._cells.remote.cell.element.attr("class"));
         var output = this._cells.remote.element().find("div.output_wrapper").clone(true);
         this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
-        this._cells.base.set_state(this._cells.remote.state())
+        this._cells.base.set_state(this._cells.remote.state());
     },
     moveRight: function () {
         console.log("move right");
@@ -342,14 +342,14 @@ MergeRow.prototype = {
         this._cells.base.cell.element.addClass(this._cells.local.cell.element.attr("class"));
         var output = this._cells.local.element().find("div.output_wrapper").clone(true);
         this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
-        this._cells.base.set_state(this._cells.local.state())
+        this._cells.base.set_state(this._cells.local.state());
     },
     undo: function(base, cell_class, output, old_state) {
         this._cells.base.cell.set_text(base);
         this._cells.base.cell.element.removeClass();
         this._cells.base.cell.element.addClass(cell_class);
         this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
-        this._cells.base.set_state(old_state)
+        this._cells.base.set_state(old_state);
     }
 };
 
@@ -498,7 +498,7 @@ function nbdiff_init() {
 //there's probably a better way to get the rows
 var MergeRows = function() {
     this.rows = null;
-}
+};
 
 if (typeof IPython.notebook === 'undefined') {
     $([IPython.events]).bind('notebook_loaded.Notebook', nbdiff_init);

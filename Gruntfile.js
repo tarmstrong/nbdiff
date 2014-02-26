@@ -9,7 +9,10 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'nbdiff/server/static/*.js'
-      ]
+      ],
+      options: {
+        jshintrc: '.jshintrc'
+      }
     }
   });
 

@@ -12,6 +12,7 @@ python:
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
+  - npm install
   - pip install -r requirements.txt --use-mirrors
   - pip install flake8 --use-mirrors
 
@@ -20,6 +21,7 @@ script:
   - python setup.py nosetests
   - flake8 nbdiff
   - flake8 tests
+  - grunt
 
 notifications:
   email:
