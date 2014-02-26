@@ -126,9 +126,9 @@ NBDiff.prototype = {
             if (nbcell.state() === 'added' || nbcell.state() === 'unchanged') {
                 nbcell.removeMetadata();
             }
-            else {
-            }
         });
+
+        delete IPython.notebook.metadata['nbdiff-type'];
 
         IPython.notebook.save_notebook();
     },
