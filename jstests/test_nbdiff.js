@@ -18,3 +18,33 @@ test("test_nbcell", function () {
     equal(nbcell.side(), 'local', '.side() returns "local"');
     deepEqual(nbcell.lineDiffData(), [], 'lineDiffData() returns []');
 });
+
+test("test_diff_linebased_basic", function () {
+    var cell = {
+        lineDiffData: function () {
+            return [
+                {state: 'added', value: 'a'},
+                {state: 'deleted', value: 'b'},
+                {state: 'unchanged', value: 'c'}
+            ];
+        }
+    };
+    var nb = {};
+    var linediff = new NBDiff.LineDiff(nb, cell);
+    var result = linediff.render();
+    equal(result.find('.line-diff-line').length, 3, 'Three rows of output were created.');
+});
+
+// LineDiff shouldn't choke on an empty diff.
+test("test_diff_linebased_empty", function () {
+    var cell = {
+        lineDiffData: function () {
+            return [
+            ];
+        }
+    };
+    var nb = {};
+    var linediff = new NBDiff.LineDiff(nb, cell);
+    var result = linediff.render();
+    equal(result.find('.line-diff-line').length, 0, 'Empty line-based diff was created.');
+});
