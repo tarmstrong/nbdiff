@@ -1,0 +1,14 @@
+{
+  "curly": true,
+  "eqnull": true,
+  "eqeqeq": true,
+  "undef": false,
+  "newcap": true,
+  "globals": {
+    "jQuery": true,
+    "window": true,
+    "document": true,
+    "IPython": true,
+    "console": true
+  }
+}

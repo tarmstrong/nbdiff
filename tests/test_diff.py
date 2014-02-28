@@ -14,24 +14,29 @@ from nbdiff.diff import (
 
 
 def test_diff():
-    A = "abcabba"
-    B = "cbabac"
+    A = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+    B = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}
+    ]
     result = diff(A, B)
     expected = [
-        {"state": 'deleted', 'value': 'a'},
-        {"state": 'added', 'value': 'c'},
-        {"state": 'unchanged', 'value': 'b'},
-        {"state": 'deleted', 'value': 'c'},
-        {"state": 'unchanged', 'value': 'a'},
-        {"state": 'unchanged', 'value': 'b'},
-        {"state": 'deleted', 'value': 'b'},
-        {"state": 'unchanged', 'value': 'a'},
-        {"state": 'added', 'value': 'c'},
+        {"state": 'unchanged',
+         'value': {u'input': [
+             u'x = [1,3,4]\n',
+             u'z = {1, 2, 3} \n',
+             u'\n',
+             u'm']}},
+        {"state": 'deleted',
+         'value': {u'input': [
+             u'x = [1,3,3]\n',
+             u'z = {1, 2, 3} \n',
+             u'\n',
+             u'z']}}
     ]
     eq_(result, expected)
-    diff("aaaaaaaaaaaaaaaaaaaa", "bbbbbbaaaaaaaaaaabbbbbbbbbbb")
-    diff("cabcdef", "abdef")
-    diff("ca", "abdef")
 
 
 def test_create_grid():
@@ -56,27 +61,20 @@ def test_create_grid():
 
 
 def test_diff_points():
-    grid = [
-        [False, False, True, False, True, False],
-        [False, True, False, True, False, False],
-        [True, False, False, False, False, True],
-        [False, False, True, False, True, False],
-        [False, True, False, True, False, False],
-        [False, True, False, True, False, False],
-        [False, False, True, False, True, False]
-    ]
+    A = [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']
+    B = [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']
+
+    grid = create_grid(A, B)
+
     result = diff_points(grid)
 
     expected = [
         ('deleted', 0, None),
         ('added', None, 0),
         ('unchanged', 1, 1),
-        ('deleted', 2, None),
-        ('unchanged', 3, 2),
-        ('unchanged', 4, 3),
-        ('deleted', 5, None),
-        ('unchanged', 6, 4),
-        ('added', None, 5),
+        ('unchanged', 2, 2),
+        ('deleted', 3, None),
+        ('added', None, 3),
     ]
     eq_(result, expected)
 
@@ -166,6 +164,13 @@ def test_lcs():
     result = lcs(grid)
     expected = [(0, 1), (1, 2)]
     eq_(result, expected)
+
+
+def test_lcs_noequals():
+    # See issue #128
+    grid = [[False, False], [False, False]]
+    result = lcs(grid)
+    eq_(result, [])
 
 
 def test_add_results():
@@ -290,3 +295,116 @@ def test_check_match():
     expected = None
     result = check_match(point, k)
     eq_(result, expected)
+
+
+def test_modified():
+    cell1 = {
+        "cell_type": "code",
+        "collapsed": False,
+        "input": [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x",
+            "x",
+            "y"
+        ],
+        "language": "python",
+        "metadata": {
+            "slideshow": {
+                "slide_type": "fragment"
+            }
+        },
+        "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29
+    }
+
+    cell2 = {
+        "cell_type": "code",
+        "collapsed": False,
+        "input": [
+            "x",
+            "x",
+            "x",
+            "x",
+            "x",
+            "x"
+        ],
+        "language": "python",
+        "metadata": {
+            "slideshow": {
+                "slide_type": "fragment"
+            }
+        },
+        "outputs": [
+            {
+                "output_type": "stream",
+                "stream": "stdout",
+                "text": [
+                    "Hello, world!\n",
+                    "Hello, world!\n"
+                ]
+            }
+        ],
+        "prompt_number": 29
+    }
+
+    import nbdiff.comparable as c
+
+    class FakeComparator(object):
+        '''Test comparator object. Will compare as modified if it is "close to"
+        the specified values'''
+        def __init__(self, foo, closeto=[]):
+            self.foo = foo
+            self.closeto = closeto
+
+        def __eq__(self, other):
+            if other.foo in self.closeto:
+                return c.BooleanPlus(True, True)
+            else:
+                return self.foo == other.foo
+
+    # ensure this doesn't crash at the least
+    result = diff(['a', 'b', 'c'], ['b', 'c'], check_modified=False)
+    assert result[0]['state'] == 'deleted'
+    assert result[0]['value'] == 'a'
+
+    # it doesn't break strings when check_modified is True
+    diff(['a', 'b', 'c'], ['b', 'c'], check_modified=True)
+
+    # ensure CellComparators do actually produce booleanpluses
+    # if they are similar enough
+    # TODO this should be in its own test in a separate file.
+    c1 = c.CellComparator(cell1, check_modified=True)
+    c2 = c.CellComparator(cell2, check_modified=True)
+
+    assert type(c1 == c2) == c.BooleanPlus
+
+    result = diff([c1, c2, c2, c2], [c2, c2, c2, c2], check_modified=True)
+    assert result[0]['state'] == 'modified'
+
+    c1 = FakeComparator(1, [2, 3])
+    c2 = FakeComparator(2, [1, 3])
+    c3 = FakeComparator(10, [])
+
+    c4 = FakeComparator(2, [])
+    c5 = FakeComparator(3, [])
+
+    # c1 -> c4
+    # c2 -> c5
+    # c3 -> deleted
+    result = diff([c1, c2, c3], [c4, c5], check_modified=True)
+
+    assert result[0]['state'] == 'modified'
+    assert result[1]['state'] == 'modified'
+    assert result[2]['state'] == 'deleted'

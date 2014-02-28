@@ -1,10 +1,8 @@
-__author__ = 'Lina'
-
 import itertools as it
 import collections
 
 
-def diff(before, after):
+def diff(before, after, check_modified=False):
     grid = create_grid(before, after)
     nrows = len(grid[0])
     ncols = len(grid)
@@ -13,34 +11,60 @@ def diff(before, after):
     for kind, col, row in dps:
         if kind == 'unchanged':
             value = before[col]
+            result.append({
+                'state': kind,
+                'value': value,
+            })
         elif kind == 'deleted':
             assert col < ncols
             value = before[col]
+            result.append({
+                'state': kind,
+                'value': value,
+            })
         elif kind == 'added':
-#            print
-#            print dps
-#            print 'row', row
-#            print 'after', after
             assert row < nrows
-            #if len(after) <= row:
-            #    print grid
             value = after[row]
-        result.append({
-            'state': kind,
-            'value': value,
-        })
+            result.append({
+                'state': kind,
+                'value': value,
+            })
+        elif check_modified and kind == 'modified':
+            result.append({
+                'state': kind,
+                'originalvalue': before[col],
+                'modifiedvalue': after[row],
+            })
+        elif (not check_modified) and kind == 'modified':
+            result.append({
+                'state': 'deleted',
+                'value': before[col],
+            })
+            result.append({
+                'state': 'added',
+                'value': after[row],
+            })
+        else:
+            raise Exception('We should not be here.')
+    return result
+
+
+def diff_modified_items(cellslist):
+    result = {}
+    for i in range(len(cellslist)):
+        if cellslist[i]['state'] == 'modified':
+            result[i] = diff(
+                cellslist[i]['originalvalue'].data["input"].splitlines(),
+                cellslist[i]['modifiedvalue'].data["input"].splitlines(),
+            )
     return result
 
 
 def diff_points(grid):
-    # cols = before; rows = after
     ncols = len(grid)
     nrows = len(grid[0])
 
     lcs_result = lcs(grid)
-#   print
-#    print
-#    print 'lcs', lcs_result
     matched_cols = [r[0] for r in lcs_result]
     matched_rows = [r[1] for r in lcs_result]
 
@@ -52,18 +76,26 @@ def diff_points(grid):
         passfirst = cur_col < ncols and cur_row < nrows
         goodrow = cur_row < nrows
         goodcol = cur_col < ncols
-        if passfirst and lcs_result and (cur_col, cur_row) == lcs_result[0]:
+        if passfirst and lcs_result \
+                and (cur_col, cur_row) == lcs_result[0]:
             lcs_result.pop(0)
             matched_cols.pop(0)
             matched_rows.pop(0)
-            result.append(('unchanged', cur_col, cur_row))
+            comparison = grid[cur_col][cur_row]
+            if hasattr(comparison, 'is_modified') \
+                    and comparison.is_modified():
+                result.append(('modified', cur_col, cur_row))
+            else:
+                result.append(('unchanged', cur_col, cur_row))
             cur_col += 1
             cur_row += 1
-        elif goodcol and (not matched_cols or cur_col != matched_cols[0]):
+        elif goodcol and \
+                (not matched_cols or cur_col != matched_cols[0]):
             assert cur_col < ncols
             result.append(('deleted', cur_col, None))
             cur_col += 1
-        elif goodrow and (not matched_rows or cur_row != matched_rows[0]):
+        elif goodrow and \
+                (not matched_rows or cur_row != matched_rows[0]):
             assert cur_row < nrows
             result.append(('added', None, cur_row))
             cur_row += 1
@@ -76,7 +108,10 @@ def create_grid(before, after):
     ncols = len(before)
     nrows = len(after)
     all_comps = [b == a for b, a in it.product(before, after)]
-    return [all_comps[col*(nrows):col*(nrows)+nrows] for col in range(ncols)]
+    return [
+        all_comps[col*(nrows):col*(nrows)+nrows]
+        for col in range(ncols)
+    ]
 
 
 def find_matches(col, colNum):
@@ -89,6 +124,9 @@ def find_matches(col, colNum):
 
 def lcs(grid):
     kcs = find_candidates(grid)
+    ks = kcs.keys()
+    if len(ks) == 0:
+        return []
     highest = max(kcs.keys())
     last_point = kcs[highest][-1]
     cur = highest - 1
@@ -117,7 +155,6 @@ def process_col(k, col, colNum):
         if not k and not d[1]:
             d[1].append((i, j))
         elif k:
-            #print 'check_match', (i, j), k
             x = check_match((i, j), k)
             if x is None:
                 continue
@@ -137,10 +174,10 @@ def check_match(point, k):
     for x in k_range:
         if x == 1:
             continue
+
         if point[1] < x-2:
             continue
-#        print
-#        print 'K = ', x
+
         above_key = x - 1
         above_x = above_key == new_max_k and \
             10000 or max([l[0] for l in k[above_key]])
