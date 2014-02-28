@@ -53,7 +53,7 @@ def merge():
     mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
 
     temp = tempfile.NamedTemporaryFile(delete=False)
-    json.dump(mergedNotebook, temp)
+    temp.write(json.dumps(mergedNotebook, indent=2))
     temp.close()
 
     nb_id = ntpath.basename(temp.name)
@@ -84,7 +84,7 @@ def mergeURL():
     mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
 
     temp = tempfile.NamedTemporaryFile(delete=False)
-    json.dump(mergedNotebook, temp)
+    temp.write(json.dumps(mergedNotebook, indent=2))
     temp.close()
 
     nb_id = ntpath.basename(temp.name)
@@ -98,10 +98,14 @@ def notebookRequest(path):
         request.environ.get('werkzeug.server.shutdown')()
         return ""
     else:
-        parsed = open(os.path.join(tempfile.gettempdir(), path))
-        return json.dumps(parsed.read())
+        filepath = os.path.join(tempfile.gettempdir(), path)
+        file = open(filepath)
+        notebook = file.read()
+        file.close()
+        #remove the tempfile in order to relieve server resource.
+        os.remove(filepath)
+        return notebook
 
-   
 if __name__ == "__main__":
     app.debug = False
     app.run()
