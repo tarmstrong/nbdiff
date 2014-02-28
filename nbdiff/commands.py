@@ -5,7 +5,6 @@ from __future__ import print_function
 import argparse
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
-import json
 import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
@@ -136,8 +135,16 @@ def merge():
         # 1. Local / Result (the file in your working directory)
         # 2. Base
         # 3. Remote
-        with open(args.notebook[0], 'w') as resultfile:
-            resultfile.write(json.dumps(pre_merged_notebook, indent=2))
+        app.add_notebook(pre_merged_notebook)
+
+        def save_notebook(notebook_result):
+            parsed = nbformat.reads(notebook_result, 'json')
+            with open(args.notebook[0], 'w') as targetfile:
+                nbformat.write(parsed, targetfile, 'ipynb')
+
+        app.shutdown_callback(save_notebook)
+        open_browser(args.browser)
+        app.run(debug=False)
     elif length == 4:
         # You need to run this before git mergetool will accept nbmerge
         # $ git config mergetool.nbmerge.cmd \
@@ -150,8 +157,16 @@ def merge():
         # 2. Base
         # 3. Remote
         # 4. Result (the file in your working directory)
-        with open(args.notebook[3], 'w') as resultfile:
-            resultfile.write(json.dumps(pre_merged_notebook, indent=2))
+        app.add_notebook(pre_merged_notebook)
+
+        def save_notebook(notebook_result):
+            parsed = nbformat.reads(notebook_result, 'json')
+            with open(args.notebook[3], 'w') as targetfile:
+                nbformat.write(parsed, targetfile, 'ipynb')
+
+        app.shutdown_callback(save_notebook)
+        open_browser(args.browser)
+        app.run(debug=False)
     else:
         app.add_notebook(pre_merged_notebook)
 
