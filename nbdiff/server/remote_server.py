@@ -44,9 +44,9 @@ def merge():
     local = request.form['localJSON']
     remote = request.form['remoteJSON']
     base = request.form['baseJSON']
- 
+
     parser = NotebookParser()
-    
+
     nb_local = parser.parseString(local)
     nb_base = parser.parseString(base)
     nb_remote = parser.parseString(remote)
@@ -55,44 +55,42 @@ def merge():
     temp = tempfile.NamedTemporaryFile(delete=False)
     json.dump(mergedNotebook, temp)
     temp.close()
-    
+
     nb_id = ntpath.basename(temp.name)
-    
-    return render_template('nbdiff.html', project='/', base_project_url='/',
-                       base_kernel_url='/', notebook_id=nb_id)
+
+    return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id)
 
 
 @app.route("/mergeURL", methods=['GET', 'POST'])
 def mergeURL():
-    
+
     #example url of a .ipynb
     #https://dl.dropboxusercontent.com/s/08n4aq6u6630iv1/left.ipynb
     #?dl=1&token_hash=AAGIQYzvIgsF1xvONTAtlhQK-kXPEcEIVgAgWLRnjAXInw
     localURL = request.form['localURL']
     localFile = urllib2.urlopen(localURL)
-    
+
     baseURL = request.form['baseURL']
     baseFile = urllib2.urlopen(baseURL)
-    
+
     remoteURL = request.form['remoteURL']
     remoteFile = urllib2.urlopen(remoteURL)
-    
+
     parser = NotebookParser()
-    
+
     nb_local = parser.parseString(localFile)
     nb_base = parser.parseString(baseFile)
     nb_remote = parser.parseString(remoteFile)
     mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
-    
+
     temp = tempfile.NamedTemporaryFile(delete=False)
     json.dump(mergedNotebook, temp)
     temp.close()
-    
+
     nb_id = ntpath.basename(temp.name)
-    
-    return render_template('nbdiff.html', project='/', base_project_url='/',
-                       base_kernel_url='/', notebook_id=nb_id)
-    
+
+    return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id)
+
 @app.route('/notebooks/<path:path>', methods=['GET', 'PUT'])
 def notebookRequest(path):
     if request.method == 'PUT':
@@ -103,7 +101,7 @@ def notebookRequest(path):
         parsed = open(os.path.join(tempfile.gettempdir(), path))
         return json.dumps(parsed.read())
 
-    
+   
 if __name__ == "__main__":
     app.debug = False
     app.run()

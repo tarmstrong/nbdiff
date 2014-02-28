@@ -9,9 +9,9 @@ class NotebookParser:
         data = current.read(json_data, 'ipynb')
         json_data.close()
         return data
-    
+
     #param:
     #json_data_string: raw unicode string
     def parseString(self, json_data_string):
         return current.reads(json_data_string, 'ipynb')
-       
+
