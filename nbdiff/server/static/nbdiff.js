@@ -245,6 +245,7 @@ Diff.prototype = {
         rows.forEach(function (dr) {
             self._container.append(dr.render());
         });
+        return this._container;
     },
     _generateRows: function () {
         var self = this,
