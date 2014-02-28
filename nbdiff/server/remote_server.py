@@ -5,9 +5,11 @@ import json
 import IPython.html
 import os
 import sys
+import tempfile
+import ntpath
 
-
-execfile("C:\\Users\\Azn0Richard0\\Documents\\GitHub\\nbdiff\\nbdiff\\merge.py")
+from ..merge import notebook_merge
+from ..notebook_parser import NotebookParser
 
 
 class NbFlask(Flask):
@@ -26,6 +28,12 @@ class NbFlask(Flask):
 
 app = NbFlask(__name__, static_folder=IPython.html.__path__[0] + '/static')
 
+#used to define the directory for resources used in html pages. 
+@app.route('/nbdiff/<path:filename>')
+def nbdiff_static(filename):
+    return send_from_directory(os.path.dirname(os.path.realpath(__file__))
+                               + '/static', filename)
+
 @app.route("/")
 def upload():
     return render_template('upload.html')
@@ -36,9 +44,22 @@ def merge():
     local = request.form['localJSON']
     remote = request.form['remoteJSON']
     base = request.form['baseJSON']
-    #do magical comparison here /*
-    comparedData = open("example-premerged-notebook.ipynb").read()
-    return render_template('Merge.html', comparedData=comparedData)
+ 
+    parser = NotebookParser()
+    
+    nb_local = parser.parseString(local)
+    nb_base = parser.parseString(base)
+    nb_remote = parser.parseString(remote)
+    mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
+
+    temp = tempfile.NamedTemporaryFile(delete=False)
+    json.dump(mergedNotebook, temp)
+    temp.close()
+    
+    nb_id = ntpath.basename(temp.name)
+    
+    return render_template('nbdiff.html', project='/', base_project_url='/',
+                       base_kernel_url='/', notebook_id=nb_id)
 
 
 @app.route("/mergeURL", methods=['GET', 'POST'])
@@ -49,21 +70,40 @@ def mergeURL():
     #?dl=1&token_hash=AAGIQYzvIgsF1xvONTAtlhQK-kXPEcEIVgAgWLRnjAXInw
     localURL = request.form['localURL']
     localFile = urllib2.urlopen(localURL)
-    localJSON = localFile.read()
     
     baseURL = request.form['baseURL']
     baseFile = urllib2.urlopen(baseURL)
-    baseJSON = baseFile.read()
     
     remoteURL = request.form['remoteURL']
     remoteFile = urllib2.urlopen(remoteURL)
-    remoteJSON = remoteFile.read()
     
-    #do magical comparison here /*
-    comparedData = open("example-premerged-notebook.ipynb").read()
-    return render_template('Merge.html', comparedData=comparedData)
+    parser = NotebookParser()
     
+    nb_local = parser.parseString(localFile)
+    nb_base = parser.parseString(baseFile)
+    nb_remote = parser.parseString(remoteFile)
+    mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
+    
+    temp = tempfile.NamedTemporaryFile(delete=False)
+    json.dump(mergedNotebook, temp)
+    temp.close()
+    
+    nb_id = ntpath.basename(temp.name)
+    
+    return render_template('nbdiff.html', project='/', base_project_url='/',
+                       base_kernel_url='/', notebook_id=nb_id)
+    
+@app.route('/notebooks/<path:path>', methods=['GET', 'PUT'])
+def notebookRequest(path):
+    if request.method == 'PUT':
+        app.shutdown(request.data)
+        request.environ.get('werkzeug.server.shutdown')()
+        return ""
+    else:
+        parsed = open(os.path.join(tempfile.gettempdir(), path))
+        return json.dumps(parsed.read())
 
+    
 if __name__ == "__main__":
-    app.debug = True
+    app.debug = False
     app.run()
