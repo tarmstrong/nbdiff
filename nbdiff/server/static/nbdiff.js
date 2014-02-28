@@ -86,12 +86,11 @@ NBDiff.prototype = {
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
             this.controller.render(nbcontainer);
-            if(this._isMerge() === true)
-            {
+            if(this._isMerge() === true) {
                 var dd = new DragDrop();
                 dd.enable();
+                this.controller.addButtonListeners();
             }
-            this.controller.add_button_listeners();
 
         } else {
             this.log('No nbdiff metadata in the notebook.');
@@ -197,7 +196,7 @@ Merge.prototype = {
         });
         return rows;
     },
-    add_button_listeners: function() {
+    addButtonListeners: function() {
         var $buttons = $("input.merge-arrow-right");
         var rows = this.rows;
         var click_action_right = function(row) {
