@@ -1,5 +1,6 @@
 from flask import Flask, render_template, send_from_directory, request
 import urllib2
+import urllib
 import jinja2
 import json
 import IPython.html
@@ -63,24 +64,25 @@ def merge():
 
 @app.route("/mergeURL", methods=['GET', 'POST'])
 def mergeURL():
-
     #example url of a .ipynb
-    #https://dl.dropboxusercontent.com/s/08n4aq6u6630iv1/left.ipynb
-    #?dl=1&token_hash=AAGIQYzvIgsF1xvONTAtlhQK-kXPEcEIVgAgWLRnjAXInw
+    #https://dl.dropboxusercontent.com/s/08n4aq6u6630iv1/left.ipynb?dl=1&token_hash=AAGIQYzvIgsF1xvONTAtlhQK-kXPEcEIVgAgWLRnjAXInw
+    parser = NotebookParser()
+
     localURL = request.form['localURL']
     localFile = urllib2.urlopen(localURL)
+    nb_local = parser.parse(localFile)
+    localFile.close()
 
     baseURL = request.form['baseURL']
     baseFile = urllib2.urlopen(baseURL)
+    nb_base = parser.parse(baseFile)
+    baseFile.close()
 
     remoteURL = request.form['remoteURL']
     remoteFile = urllib2.urlopen(remoteURL)
+    nb_remote = parser.parse(remoteFile)
+    remoteFile.close()
 
-    parser = NotebookParser()
-
-    nb_local = parser.parseString(localFile)
-    nb_base = parser.parseString(baseFile)
-    nb_remote = parser.parseString(remoteFile)
     mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
 
     temp = tempfile.NamedTemporaryFile(delete=False)
@@ -90,6 +92,7 @@ def mergeURL():
     nb_id = ntpath.basename(temp.name)
 
     return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id)
+
 
 @app.route('/notebooks/<path:path>', methods=['GET', 'PUT'])
 def notebookRequest(path):

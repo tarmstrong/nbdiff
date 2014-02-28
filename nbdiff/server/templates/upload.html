@@ -69,22 +69,22 @@
     <div class="tab-pane" id="tabs-2">
         <form action="/mergeURL" method="POST">
             <div>
-                <label for="localFile">Specify <b>Local</b> .ipynb notebook URL:</label>
+                <label for="localURL">Specify <b>Local</b> .ipynb notebook URL:</label>
                 <br/>
-                <input type="text" id="localFile" name="localFile" style="width:90%" data-validate="url,required"/>
+                <input type="text" id="localURL" name="localURL" style="width:90%" data-validate="url,required"/>
             </div>
             <div>
-                <label for="baseFile">Specify <b>base</b> .ipynb notebook URL:</label>
+                <label for="baseURL">Specify <b>base</b> .ipynb notebook URL:</label>
                 <br/>
-                <input type="text" id="baseFile" name="baseFile" style="width:90%" data-validate="url,required"/>
+                <input type="text" id="baseURL" name="baseURL" style="width:90%" data-validate="url,required"/>
             </div>
             <div>
-                <label for="remoteFile">Specify <b>Remote</b> .ipynb notebook URL:</label>
+                <label for="remoteURL">Specify <b>Remote</b> .ipynb notebook URL:</label>
                 <br/>
-                <input type="text" id="remoteFile" name="remoteFile" style="width:90%" data-validate="url,required"/>
+                <input type="text" id="remoteURL" name="remoteURL" style="width:90%" data-validate="url,required"/>
             </div>
             <div style=" text-align: center;">
-                <input id="submitBtn2" class="disableBtn" type="submit" value="Generate Merge Conflicts" />
+                <input id="submitBtn2" class="enableBtn" type="submit" value="Generate Merge Conflicts" />
             </div>
         </form>
     </div>
