@@ -1,4 +1,4 @@
-from .diff import diff_modified_items
+from .diff import diff
 from .merge import cells_diff, diff_result_to_cell
 
 
@@ -21,3 +21,13 @@ def notebook_diff(nb1, nb2, check_modified=True):
     nb1['metadata']['nbdiff-type'] = 'diff'
 
     return nb1
+
+def diff_modified_items(cellslist):
+    result = {}
+    for i in range(len(cellslist)):
+        if cellslist[i]['state'] == 'modified':
+            result[i] = diff(
+                cellslist[i]['originalvalue'].data["input"].splitlines(),
+                cellslist[i]['modifiedvalue'].data["input"].splitlines(),
+            )
+    return result
