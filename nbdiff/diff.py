@@ -53,10 +53,16 @@ def diff_modified_items(cellslist):
     result = {}
     for i in range(len(cellslist)):
         if cellslist[i]['state'] == 'modified':
-            result[i] = diff(
-                cellslist[i]['originalvalue'].data["input"].splitlines(),
-                cellslist[i]['modifiedvalue'].data["input"].splitlines(),
-            )
+            if cellslist[i]['cell_type'] == 'heading':
+                result[i] = diff(
+                    cellslist[i]['originalvalue'].data["source"].split(),
+                    cellslist[i]['modifiedvalue'].data["source"].split(),
+                )
+            else:
+                result[i] = diff(
+                    cellslist[i]['originalvalue'].data["input"].splitlines(),
+                    cellslist[i]['modifiedvalue'].data["input"].splitlines(),
+                )
     return result
 
 

@@ -501,10 +501,10 @@ NBDiffCell.prototype = {
         return this.cell.element;
     },
     lineDiffData: function () {
-        return this.cell.metadata['line-diff'];    
+        return this.cell.metadata['extra-diff-data'];    
     },
     headerDiffData: function () {
-        return this.cell.metadata['header-diff'];
+        return this.cell.metadata['extra-diff-data'];
     }
 };
 

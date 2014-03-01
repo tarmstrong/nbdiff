@@ -77,8 +77,24 @@ class CellComparator():
         if not cell1["cell_type"] == cell2["cell_type"]:
             return False
         if cell1["cell_type"] == "heading":
-            return cell1["source"] == cell2["source"] and \
-                cell1["level"] == cell2["level"]
+            if not cell1["level"] == cell2["level"]:
+                return False
+            else:
+                if cell1['source'] == cell2['source']:
+                    return True
+                result = diff.diff(cell1["source"].split(' '), cell2["source"].split(' '))
+                modified = 0
+                unchanged = 0
+                for dict in result:
+                    if dict['state'] == "added" or dict['state'] == "deleted":
+                        modified += 1
+                    elif dict['state'] == "unchanged":
+                        unchanged += 1
+                modifiedness = unchanged/(modified + unchanged)
+                if modifiedness >= 0.6:
+                    return BooleanPlus(True, True)
+                else:
+                    return False
         elif self.istextcell(cell1):
             return cell1["source"] == cell2["source"]
         else:
