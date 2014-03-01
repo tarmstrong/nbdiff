@@ -16,6 +16,27 @@ def notebook_diff(nb1, nb2, check_modified=True):
         if i in line_diffs:
             cell['metadata']['line-diff'] = line_diffs[i]
         cell_list.append(cell)
+    cell_list.append({
+        'cell_type': 'heading',
+        'level': 1,
+        'source': 'potato',
+        'metadata': {
+            'state': 'modified',
+            'header-diff': [
+                {'state': 'added', 'value': 'isAdded adsf'},
+                {'state': 'deleted', 'value': 'isDeleted'},
+                {'state': 'unchanged', 'value': 'isUnchanged'},
+            ]
+        }
+    })
+    cell_list.append({
+        'cell_type': 'heading',
+        'level': 1,
+        'source': 'potato',
+        'metadata': {
+            'state': 'unchanged',
+        }
+    })
 
     nb1['worksheets'][0]['cells'] = cell_list
     nb1['metadata']['nbdiff-type'] = 'diff'
