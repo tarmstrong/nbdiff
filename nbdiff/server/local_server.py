@@ -16,8 +16,8 @@ class NbFlask(Flask):
     def shutdown_callback(self, callback):
         self.shutdown = callback
 
-    def add_notebook(self, nb):
-        self.notebooks.append(nb)
+    def add_notebook(self, nb, fname):
+        self.notebooks.append((nb, fname))
 
 app = NbFlask(__name__, static_folder=IPython.html.__path__[0] + '/static')
 
@@ -28,20 +28,19 @@ def nbdiff_static(filename):
                                + '/static', filename)
 
 
-@app.route('/')
-def home():
+@app.route('/<int:notebookid>')
+def home(notebookid):
     return render_template('nbdiff.html', project='/', base_project_url='/',
-                           base_kernel_url='/', notebook_id='test_notebook')
+                           base_kernel_url='/', notebook_id='test_notebook' + str(notebookid) )
 
 
-@app.route('/notebooks/test_notebook', methods=['GET', 'PUT'])
-def notebookjson():
+@app.route('/notebooks/test_notebook<int:notebookid>', methods=['GET', 'PUT'])
+def notebookjson(notebookid):
     if request.method == 'PUT':
-        app.shutdown(request.data)
-        request.environ.get('werkzeug.server.shutdown')()
+        app.shutdown(request.data, app.notebooks[notebookid][1])
         return ""
     else:
-        parsed = app.notebooks[0]
+        parsed = app.notebooks[notebookid][0]
         return json.dumps(parsed)
 
 if __name__ == '__main__':

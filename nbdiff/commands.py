@@ -5,7 +5,6 @@ from __future__ import print_function
 import argparse
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
-import json
 import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
@@ -105,11 +104,33 @@ def merge():
     if length == 0:
         git = GitAdapter()
         unmerged_notebooks = git.get_unmerged_notebooks()
+        
     elif length == 3 or length == 4:
-        unmerged_notebooks = []
-        unmerged_notebooks[0] = []
-        for arg in args.notebook:
-            unmerged_notebooks[0].append(open(arg))
+        unmerged_notebooks = [[open(arg) for arg in args.notebook[:3]]]
+
+        if length == 3:
+            # hg usage:
+            # $ hg merge -t nbmerge <branch>
+
+            # Mercurial gives three arguments:
+            # 1. Local / Result (the file in your working directory)
+            # 2. Base
+            # 3. Remote
+            filename = args.notebook[0]
+        elif length == 4:
+            # You need to run this before git mergetool will accept nbmerge
+            # $ git config mergetool.nbmerge.cmd \
+            #        "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
+            # and then you can invoke it with:
+            # $ git mergetool -t nbmerge
+            #
+            # Git gives four arguments (these are configurable):
+            # 1. Local
+            # 2. Base
+            # 3. Remote
+            # 4. Result (the file in your working directory)
+            filename = args.notebook[3]
+        unmerged_notebooks[0].append(filename)
     else:
         sys.stderr.write('Incorrect number of arguments. Quitting.\n')
         sys.exit(-1)
@@ -120,62 +141,20 @@ def merge():
             nb_base = parser.parse(nbook[1])
             nb_remote = parser.parse(nbook[2])
 
-            if length == 0:
-                filename = nbook[3]
-
             pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
 
-            if length == 3:
-                # hg usage:
-                # $ hg merge -t nbmerge <branch>
+            filename = nbook[3]
 
-                # Mercurial gives three arguments:
-                # 1. Local / Result (the file in your working directory)
-                # 2. Base
-                # 3. Remote
-                app.add_notebook(pre_merged_notebook)
+            app.add_notebook(pre_merged_notebook, filename)
 
-                def save_notebook(notebook_result):
-                    parsed = nbformat.reads(notebook_result, 'json')
-                    with open(args.notebook[0], 'w') as targetfile:
-                        nbformat.write(parsed, targetfile, 'ipynb')
+        def save_notebook(notebook_result, filename):
+            parsed = nbformat.reads(notebook_result, 'json')
+            with open(filename, 'w') as targetfile:
+                nbformat.write(parsed, targetfile, 'ipynb')
 
-                app.shutdown_callback(save_notebook)
-                open_browser(args.browser)
-                app.run(debug=False)
-            elif length == 4:
-                # You need to run this before git mergetool will accept nbmerge
-                # $ git config mergetool.nbmerge.cmd \
-                #        "nbmerge \$LOCAL \$BASE \$REMOTE \$MERGED"
-                # and then you can invoke it with:
-                # $ git mergetool -t nbmerge
-                #
-                # Git gives four arguments (these are configurable):
-                # 1. Local
-                # 2. Base
-                # 3. Remote
-                # 4. Result (the file in your working directory)
-                app.add_notebook(pre_merged_notebook)
-
-                def save_notebook(notebook_result):
-                    parsed = nbformat.reads(notebook_result, 'json')
-                    with open(args.notebook[3], 'w') as targetfile:
-                        nbformat.write(parsed, targetfile, 'ipynb')
-
-                app.shutdown_callback(save_notebook)
-                open_browser(args.browser)
-                app.run(debug=False)
-            else:
-                app.add_notebook(pre_merged_notebook)
-
-                def save_notebook(notebook_result):
-                    parsed = nbformat.reads(notebook_result, 'json')
-                    with open(filename, 'w') as targetfile:
-                        nbformat.write(parsed, targetfile, 'ipynb')
-
-                app.shutdown_callback(save_notebook)
-                open_browser(args.browser)
-                app.run(debug=False)
+        app.shutdown_callback(save_notebook)
+        open_browser(args.browser)
+        app.run(debug=False)
     else:
         print("No unmerged files to diff.")
         return 0
