@@ -83,7 +83,10 @@ class CellComparator():
             else:
                 if cell1['source'] == cell2['source']:
                     return True
-                result = diff(cell1["source"].split(' '), cell2["source"].split(' '))
+                result = diff(
+                    cell1["source"].split(' '),
+                    cell2["source"].split(' ')
+                )
                 modified = 0.0
                 unchanged = 0.0
                 for dict in result:
