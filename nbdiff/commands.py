@@ -105,27 +105,26 @@ def merge():
     if length == 0:
         git = GitAdapter()
         unmerged_notebooks = git.get_unmerged_notebooks()
-    
     elif length == 3 or length == 4:
-        unmerged_notebooks = [][]
+        unmerged_notebooks = []
+        unmerged_notebooks[0] = []
         for arg in args.notebook:
-            unmerged_notebook[0].append(open(arg))
-            
-     else:
+            unmerged_notebooks[0].append(open(arg))
+    else:
         sys.stderr.write('Incorrect number of arguments. Quitting.\n')
         sys.exit(-1)
 
     if not len(unmerged_notebooks) == 0:
-        for nbook in umerged_notebooks:
+        for nbook in unmerged_notebooks:
             nb_local = parser.parse(nbook[0])
             nb_base = parser.parse(nbook[1])
             nb_remote = parser.parse(nbook[2])
-            
+
             if length == 0:
                 filename = nbook[3]
-            
+
             pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
-            
+
             if length == 3:
                 # TODO ignore non-.ipynb files.
 
@@ -138,7 +137,6 @@ def merge():
                 # 3. Remote
                 with open(args.notebook[0], 'w') as resultfile:
                     resultfile.write(json.dumps(pre_merged_notebook, indent=2))
-                    
             elif length == 4:
                 # You need to run this before git mergetool will accept nbmerge
                 # $ git config mergetool.nbmerge.cmd \
@@ -153,7 +151,6 @@ def merge():
                 # 4. Result (the file in your working directory)
                 with open(args.notebook[3], 'w') as resultfile:
                     resultfile.write(json.dumps(pre_merged_notebook, indent=2))
-                    
             else:
                 app.add_notebook(pre_merged_notebook)
 
@@ -165,10 +162,10 @@ def merge():
                 app.shutdown_callback(save_notebook)
                 open_browser(args.browser)
                 app.run(debug=False)
-            
     else:
         print("No unmerged files to diff.")
         return 0
+
 
 def open_browser(browser_exe):
     try:
