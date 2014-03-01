@@ -9,7 +9,7 @@ test("test_nbcell", function () {
         metadata: {
             side: 'local',
             state: 'added',
-            'line-diff': [
+            'extra-diff-data': [
             ]
         }
     };
