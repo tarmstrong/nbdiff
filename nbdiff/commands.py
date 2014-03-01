@@ -104,7 +104,7 @@ def merge():
     if length == 0:
         git = GitAdapter()
         unmerged_notebooks = git.get_unmerged_notebooks()
-        
+
     elif length == 3 or length == 4:
         unmerged_notebooks = [[open(arg) for arg in args.notebook[:3]]]
 
