@@ -1,5 +1,5 @@
 from . import diff
-from .comparable import CellComparator
+from .comparable import CellComparator, LineComparator
 import itertools as it
 import copy
 
@@ -150,6 +150,34 @@ def cells_diff(before_cells, after_cells, check_modified=False):
     after_comps = [
         CellComparator(cell, check_modified=check_modified)
         for cell in after_cells
+    ]
+    diff_result = diff.diff(
+        before_comps,
+        after_comps,
+        check_modified=check_modified
+    )
+    return diff_result
+
+def words_diff(before_words, after_words):
+    '''Diff two arrays of words.'''
+    before_comps = before_words.split()
+    after_comps = after_words.split()
+
+    diff_result = diff.diff(
+        before_comps,
+        after_comps
+    )
+    return diff_result
+
+def lines_diff(before_lines, after_lines, check_modified=False):
+    '''Diff two arrays of lines.'''
+    before_comps = [
+        LineComparator(line, check_modified=check_modified)
+        for line in before_lines
+    ]
+    after_comps = [
+        LineComparator(line, check_modified=check_modified)
+        for line in after_lines
     ]
     diff_result = diff.diff(
         before_comps,
