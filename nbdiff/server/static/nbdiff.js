@@ -273,16 +273,16 @@ function HeaderDiff(nbcell) {
 
 HeaderDiff.prototype = {
     render: function () {
-    var diffData, htmlObject;
-    diffData = this._nbcell.headerDiffData();
-    htmlObject = $('<h2 class = "diffed-header"></h2>');
-    diffData.forEach(function (word) {
-        var span = $('<span></span>');
-        span.addClass(word.state + '-word');
-        span.append(' ' + word.value);
-        htmlObject.append(span);
-    });
-    return htmlObject;
+        var diffData, htmlObject;
+        diffData = this._nbcell.headerDiffData();
+        htmlObject = $('<h2 class = "diffed-header"></h2>');
+        diffData.forEach(function (word) {
+            var span = $('<span></span>');
+            span.addClass(word.state + '-word');
+            span.append(' ' + word.value);
+            htmlObject.append(span);
+        });
+        return htmlObject;
     }
 };
 
@@ -505,12 +505,6 @@ NBDiffCell.prototype = {
     },
     headerDiffData: function () {
         return this.cell.metadata['header-diff'];
-        return[
-        {state: 'added', value: 'isAdded'},
-        {state: 'deleted', value: 'isDeleted'},
-        {state: 'unchanged', value: 'isUnchanged'},
-        ]
-        
     }
 };
 
