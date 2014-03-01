@@ -104,28 +104,31 @@ def merge():
 
     if length == 0:
         git = GitAdapter()
-
         unmerged_notebooks = git.get_unmerged_notebooks()
-
-        if not len(unmerged_notebooks) == 0:
-            nb_local = parser.parse(unmerged_notebooks[0][0])
-            nb_base = parser.parse(unmerged_notebooks[0][1])
-            nb_remote = parser.parse(unmerged_notebooks[0][2])
-
-            filename = unmerged_notebooks[0][3]
-        else:
-            print("No unmerged files to diff.")
-            return 0
-
+    
     elif length == 3 or length == 4:
-        nb_local = parser.parse(open(args.notebook[0]))
-        nb_base = parser.parse(open(args.notebook[1]))
-        nb_remote = parser.parse(open(args.notebook[2]))
-    else:
+        unmerged_notebooks = [][]
+        for arg in args.notebook:
+            unmerged_notebook[0].append(open(arg))
+            
+     else:
         sys.stderr.write('Incorrect number of arguments. Quitting.\n')
         sys.exit(-1)
 
+    if not len(unmerged_notebooks) == 0:
+        for nbook in umerged_notebooks:
+            nb_local = parser.parse(nbook[0])
+            nb_base = parser.parse(nbook[1])
+            nb_remote = parser.parse(nbook[2])
+            
+            if length == 0:
+                filename = nbook[3]
+    else:
+        print("No unmerged files to diff.")
+        return 0
+
     pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
+    
     if length == 3:
         # TODO ignore non-.ipynb files.
 
