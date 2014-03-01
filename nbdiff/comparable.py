@@ -1,4 +1,5 @@
 from .diff import (
+    diff,
     create_grid,
     find_matches,
 )
@@ -82,9 +83,9 @@ class CellComparator():
             else:
                 if cell1['source'] == cell2['source']:
                     return True
-                result = diff.diff(cell1["source"].split(' '), cell2["source"].split(' '))
-                modified = 0
-                unchanged = 0
+                result = diff(cell1["source"].split(' '), cell2["source"].split(' '))
+                modified = 0.0
+                unchanged = 0.0
                 for dict in result:
                     if dict['state'] == "added" or dict['state'] == "deleted":
                         modified += 1
