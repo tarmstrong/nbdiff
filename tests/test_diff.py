@@ -126,6 +126,16 @@ def test_diff_lines2():
     assert result[2]['state'] == 'added'
 
 
+def test_diff_lines():
+	A = ['first line']
+	B = ['another new one', 'second one', 'first line']
+	
+	result = lines_diff(A, B, check_modified=True)
+	assert result[0]['state'] == 'added'
+	assert result[1]['state'] == 'added'
+	assert result[2]['state'] == 'unchanged'
+	
+
 def test_diff_words_same():
     A = "word is"
     B = "word is"
@@ -135,6 +145,25 @@ def test_diff_words_same():
     assert result[1]['state'] == 'unchanged'
 
 
+def test_empty_lines():
+	A = ['this is a line'];
+	B = [''];
+	
+	result = lines_diff(A,B, check_modified=True)
+	assert result[0]['state'] == 'deleted'
+	
+
+def test_empty_words():
+	A = "this is a line";
+	B = " ";
+	
+	result = words_diff(A,B)
+	assert result[0]['state'] == 'deleted'
+	assert result[1]['state'] == 'deleted'
+	assert result[2]['state'] == 'deleted'
+	assert result[3]['state'] == 'deleted'
+
+	
 def test_diff_word():
     A = "The"
     B = "This"
