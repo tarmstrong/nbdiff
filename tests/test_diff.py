@@ -14,7 +14,7 @@ from nbdiff.diff import (
 )
 
 
-def test_diff():
+def test_diff1():
     A = [
         {'cell_type': "code",
          'language': "python",
@@ -244,6 +244,48 @@ def test_diff_modified2():
     assert result[0]['state'] == 'modified'
     assert result[1]['state'] == 'deleted'
 
+def test_diff2():
+    A = [
+        {},
+        ]
+    B = [
+        {}
+        ]
+    result = diff(A, B)
+    expected = [
+        {"state": 'unchanged', 'value':{}}
+    ]
+    eq_(result, expected)
+
+def test_diff3():
+    A = [
+        {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+    B = [
+    ]
+
+    result = diff(A, B)
+    expected = [
+        {"state": 'deleted', 'value': {u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']}},
+        {"state": 'deleted', 'value': {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}},
+    ]
+    eq_(result, expected)
+
+def test_diff4():
+    A = [
+        {u'input': [u'x = [0,2,4]\n', u'y = {5, 6, 7} \n', u'm']},
+    ]
+    B = [
+        {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+
+    result = diff(A, B)
+    expected = [
+        {"state": 'deleted', 'value': {u'input': [u'x = [0,2,4]\n', u'y = {5, 6, 7} \n', u'm']}},
+        {"state": 'added', 'value': {u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}},
+    ]
+    eq_(result, expected)
 
 def test_create_grid():
     A = "abcabba"
