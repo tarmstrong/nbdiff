@@ -3,6 +3,8 @@
 *merge-conflict-testfolder*
 *merge-diff-testfolder*
 
+*.idea*
+
 node_modules
 
 # C extensions
