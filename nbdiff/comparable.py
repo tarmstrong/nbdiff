@@ -1,4 +1,5 @@
 from .diff import (
+    diff,
     create_grid,
     find_matches,
 )
@@ -22,8 +23,9 @@ class BooleanPlus(object):
 
 class LineComparator(object):
 
-    def __init__(self, data):
+    def __init__(self, data, check_modified=False):
         self.data = data
+        self.check_modified = check_modified
 
     def __eq__(self, other):
         return self.equal(self.data, other.data)
@@ -38,13 +40,15 @@ class LineComparator(object):
         eqLine = line1 == line2
         if eqLine:
             return BooleanPlus(True, False)
-
-        unchanged_count = self.count_similar_words(line1, line2)
-        similarity_percent = \
-            (2.0 * unchanged_count) / (len(line1) + len(line2))
-        if similarity_percent >= 0.50:
-            return BooleanPlus(True, True)
-        return BooleanPlus(False, False)
+        else:
+            unchanged_count = self.count_similar_words(line1, line2)
+            similarity_percent = (
+                (2.0 * unchanged_count) /
+                (len(line1.split()) + len(line2.split()))
+            )
+            if similarity_percent >= 0.50:
+                return BooleanPlus(True, True)
+            return BooleanPlus(False, False)
 
     def count_similar_words(self, line1, line2):
         words1 = line1.split()
@@ -76,9 +80,28 @@ class CellComparator():
     def equal(self, cell1, cell2):
         if not cell1["cell_type"] == cell2["cell_type"]:
             return False
-        if cell1["cell_type"] == "heading":
-            return cell1["source"] == cell2["source"] and \
-                cell1["level"] == cell2["level"]
+        elif cell1["cell_type"] == "heading":
+            if not cell1["level"] == cell2["level"]:
+                return False
+            else:
+                if cell1['source'] == cell2['source']:
+                    return True
+                result = diff(
+                    cell1["source"].split(' '),
+                    cell2["source"].split(' ')
+                )
+                modified = 0.0
+                unchanged = 0.0
+                for dict in result:
+                    if dict['state'] == "added" or dict['state'] == "deleted":
+                        modified += 1
+                    elif dict['state'] == "unchanged":
+                        unchanged += 1
+                modifiedness = unchanged/(modified + unchanged)
+                if modifiedness >= 0.6:
+                    return BooleanPlus(True, True)
+                else:
+                    return False
         elif self.istextcell(cell1):
             return cell1["source"] == cell2["source"]
         else:
@@ -121,9 +144,9 @@ class CellComparator():
         eqoutputs = self.equaloutputs(cell1["outputs"], cell2["outputs"])
 
         if eqlanguage and eqinput and eqoutputs:
-            return True
+            return BooleanPlus(True, False)
         elif not self.check_modified:
-            return False
+            return BooleanPlus(False, False)
 
         unchanged_count = self.count_similar_lines(cell1, cell2)
         similarity_percent = (
