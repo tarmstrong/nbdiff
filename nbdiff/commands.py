@@ -51,7 +51,6 @@ def diff():
         result = notebook_diff(notebook1, notebook2)
 
         app.add_notebook(result, 'no_filename')
-        app.add_notebook(result, 'no_filename')
         open_browser(args.browser)
         app.run(debug=False)
 
@@ -151,7 +150,6 @@ def merge():
 
             filename = nbook[3]
 
-            app.add_notebook(pre_merged_notebook, filename)
             app.add_notebook(pre_merged_notebook, filename)
 
         def save_notebook(notebook_result, filename):
