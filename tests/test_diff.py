@@ -106,6 +106,26 @@ def test_diff_modified():
     assert result[1]['state'] == 'deleted'
 
 
+def test_diff_lines_same():
+	A = ['first line', 'second line']
+	B = ['first line', 'second line']
+	
+	result = lines_diff(A, B)
+	assert result[0]['state'] == 'unchanged'
+	assert result[1]['state'] == 'unchanged'
+	
+
+def test_diff_lines_different():
+	A = ['first line', 'second line']
+	B = ['this is a line', 'another one']
+	
+	result = lines_diff(A, B, check_modified=True)
+	assert result[0]['state'] == 'deleted'
+	assert result[1]['state'] == 'deleted'
+	assert result[2]['state'] == 'added'
+	assert result[3]['state'] == 'added'
+		
+		
 def test_diff_lines1():
     A = ['this is a line', 'another line']
     B = ['another line', 'first line']
@@ -126,7 +146,7 @@ def test_diff_lines2():
     assert result[2]['state'] == 'added'
 
 
-def test_diff_lines():
+def test_diff_line3():
 	A = ['first line']
 	B = ['another new one', 'second one', 'first line']
 	
@@ -136,6 +156,27 @@ def test_diff_lines():
 	assert result[2]['state'] == 'unchanged'
 	
 
+def test_diff_lines4():
+	A = ['fist line', 'first line']
+	B = ['first lin', 'second one', 'first lin']
+	
+	result = lines_diff(A, B, check_modified=True)
+	assert result[0]['state'] == 'deleted'
+	assert result[1]['state'] == 'modified'
+	assert result[2]['state'] == 'added'
+	assert result[3]['state'] == 'added'
+		
+	
+def test_diff_lines5():
+	A = ['test', ' ']
+	B = ['diff']
+	
+	result = lines_diff(A, B, check_modified=True)
+	assert result[0]['state'] == 'deleted'
+	assert result[1]['state'] == 'deleted'
+	assert result[2]['state'] == 'added'
+		
+	
 def test_diff_words_same():
     A = "word is"
     B = "word is"
@@ -163,6 +204,17 @@ def test_empty_words():
 	assert result[2]['state'] == 'deleted'
 	assert result[3]['state'] == 'deleted'
 
+	
+def test_diff_words_different():
+	A = "second one"
+	B = "first test"
+	
+	result = words_diff(A, B)
+	assert result[0]['state'] == 'deleted'
+	assert result[1]['state'] == 'deleted'
+	assert result[2]['state'] == 'added'
+	assert result[3]['state'] == 'added'
+	
 	
 def test_diff_word():
     A = "The"
