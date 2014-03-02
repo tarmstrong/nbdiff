@@ -22,7 +22,11 @@ print subprocess.check_output('git init'.split())
 with open('test.ipynb', 'w') as f:
     f.write(open('../merge-example.ipynb').read())
 
+with open('test2.ipynb', 'w') as f:
+    f.write(open('../merge-example2.ipynb').read())
+
 print subprocess.check_output('git add test.ipynb'.split())
+print subprocess.check_output('git add test2.ipynb'.split())
 print subprocess.check_output(['git', 'commit', '-am', 'b'])
 
 print subprocess.check_output('git checkout -b your-friends-branch'.split())
@@ -30,11 +34,17 @@ print subprocess.check_output('git checkout -b your-friends-branch'.split())
 with open('test.ipynb', 'w') as f:
     f.write(open('../merge-example-remote.ipynb').read())
 
+with open('test2.ipynb', 'w') as f:
+    f.write(open('../merge-example2-remote.ipynb').read())
+
 print subprocess.check_output(['git', 'commit', '-am', 'r'], stderr=sys.stdout)
 
 print subprocess.check_output('git checkout master'.split())
 with open('test.ipynb', 'w') as f:
     f.write(open('../merge-example-local.ipynb').read())
+
+with open('test2.ipynb', 'w') as f:
+    f.write(open('../merge-example2-local.ipynb').read())
 
 print subprocess.check_output(['git', 'commit', '-am', 'l'])
 
