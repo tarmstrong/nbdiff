@@ -13,6 +13,7 @@ import subprocess
 import random
 import hashlib
 import sys
+from util import copy_example_files
 
 SCRIPTS_DIR = os.path.realpath(os.path.dirname(__file__))
 EXAMPLE_NOTEBOOKS = os.path.join(SCRIPTS_DIR, 'example-notebooks/diff/')
@@ -24,24 +25,15 @@ randpart = hashlib.sha1(str(random.random())).hexdigest()[:4]
 folder_name = "merge-diff-testfolder-{}".format(randpart)
 os.mkdir(folder_name)
 os.chdir(folder_name)
-print subprocess.check_output('git init'.split())
+
+subprocess.check_output('git init'.split())
 
 
-# create initial version of notebooks
-for nb in example_diff_notebooks:
-    target_fname = 'test-{id}.ipynb'.format(id=nb)
-    with open(target_fname, 'w') as f:
-        ipynb_path = os.path.join(EXAMPLE_NOTEBOOKS, nb, 'before.ipynb')
-        f.write(open(ipynb_path).read())
-        print subprocess.check_output(['git', 'add', target_fname])
+copy_example_files('before.ipynb', EXAMPLE_NOTEBOOKS, example_diff_notebooks)
 
-print subprocess.check_output(['git', 'commit', '-am', 'b'])
+subprocess.check_output(['git', 'commit', '-am', 'b'])
 
-for nb in example_diff_notebooks:
-    target_fname = 'test-{id}.ipynb'.format(id=nb)
-    with open(target_fname, 'w') as f:
-        ipynb_path = os.path.join(EXAMPLE_NOTEBOOKS, nb, 'after.ipynb')
-        f.write(open(ipynb_path).read())
+copy_example_files('after.ipynb',EXAMPLE_NOTEBOOKS, example_diff_notebooks, add=False)
 
-print 'Diffable notebook available in folder: ' + folder_name
+print 'Diffable notebook available in folder: \n' + folder_name
 

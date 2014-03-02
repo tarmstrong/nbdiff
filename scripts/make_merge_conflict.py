@@ -12,41 +12,36 @@ import subprocess
 import random
 import hashlib
 import sys
+from util import copy_example_files
+
+SCRIPTS_DIR = os.path.realpath(os.path.dirname(__file__))
+EXAMPLE_NOTEBOOKS = os.path.join(SCRIPTS_DIR, 'example-notebooks/merge/')
+
+example_merge_notebooks = os.listdir(EXAMPLE_NOTEBOOKS)
 
 randpart = hashlib.sha1(str(random.random())).hexdigest()[:4]
-
 folder_name = "merge-conflict-testfolder-{}".format(randpart)
+
 os.mkdir(folder_name)
 os.chdir(folder_name)
-print subprocess.check_output('git init'.split())
-with open('test.ipynb', 'w') as f:
-    f.write(open('../merge-example.ipynb').read())
 
-with open('test2.ipynb', 'w') as f:
-    f.write(open('../merge-example2.ipynb').read())
+subprocess.check_output('git init'.split())
 
-print subprocess.check_output('git add test.ipynb'.split())
-print subprocess.check_output('git add test2.ipynb'.split())
-print subprocess.check_output(['git', 'commit', '-am', 'b'])
 
-print subprocess.check_output('git checkout -b your-friends-branch'.split())
+copy_example_files('base.ipynb',EXAMPLE_NOTEBOOKS, example_merge_notebooks)
+subprocess.check_output(['git', 'commit', '-am', 'b'])
 
-with open('test.ipynb', 'w') as f:
-    f.write(open('../merge-example-remote.ipynb').read())
+subprocess.check_output('git checkout -b your-friends-branch'.split())
 
-with open('test2.ipynb', 'w') as f:
-    f.write(open('../merge-example2-remote.ipynb').read())
+copy_example_files('remote.ipynb',EXAMPLE_NOTEBOOKS, example_merge_notebooks)
 
-print subprocess.check_output(['git', 'commit', '-am', 'r'], stderr=sys.stdout)
+subprocess.check_output(['git', 'commit', '-am', 'r'], stderr=sys.stdout)
 
-print subprocess.check_output('git checkout master'.split())
-with open('test.ipynb', 'w') as f:
-    f.write(open('../merge-example-local.ipynb').read())
+subprocess.check_output('git checkout master'.split())
 
-with open('test2.ipynb', 'w') as f:
-    f.write(open('../merge-example2-local.ipynb').read())
+copy_example_files('local.ipynb',EXAMPLE_NOTEBOOKS,  example_merge_notebooks)
 
-print subprocess.check_output(['git', 'commit', '-am', 'l'])
+subprocess.check_output(['git', 'commit', '-am', 'l'])
 
 
 try:
@@ -54,5 +49,6 @@ try:
     print subprocess.check_output('git merge your-friends-branch'.split())
 except:
     print 'Conflict!'
+    print folder_name
 
 
