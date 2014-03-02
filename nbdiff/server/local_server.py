@@ -32,7 +32,7 @@ def nbdiff_static(filename):
 def home(notebookid):
     return render_template('nbdiff.html', project='/', base_project_url='/',
                            base_kernel_url='/', notebook_id='test_notebook'
-                           + str(notebookid))
+                           + str(notebookid), num_nbks=str(len(app.notebooks)))
 
 
 @app.route('/notebooks/test_notebook<int:notebookid>', methods=['GET', 'PUT'])

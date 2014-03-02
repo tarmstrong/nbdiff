@@ -152,6 +152,7 @@ def merge():
             filename = nbook[3]
 
             app.add_notebook(pre_merged_notebook, filename)
+            app.add_notebook(pre_merged_notebook, filename)
 
         def save_notebook(notebook_result, filename):
             parsed = nbformat.reads(notebook_result, 'json')

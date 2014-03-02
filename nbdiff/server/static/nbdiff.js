@@ -511,9 +511,15 @@ var MergeRows = function() {
 };
 
 function LoadNextPage() {
-    var current = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
-    var next = parseInt(current.replace(/[^\d.,]+/,'')) + 1;
-    location.href = 'http://127.0.0.1:5000/' + next;
+    var num_nbks = parseInt(document.getElementsByClassName('num_notebooks')[0].getAttribute('num_notebooks'));
+    var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
+    var current_id = parseInt(current_nbid.replace(/[^\d.,]+/,''));
+    if (current_id < num_nbks-1) {
+        var next = current_id + 1;
+        location.href = 'http://127.0.0.1:5000/' + next;        
+    }
+    else
+        alert("There is no notebook after this one!");
 };
 
 function LoadPreviousPage() {
