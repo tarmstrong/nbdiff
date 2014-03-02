@@ -14,7 +14,7 @@ def notebook_diff(nb1, nb2, check_modified=True):
     for i, item in enumerate(diffed_nb):
         cell = diff_result_to_cell(item)
         if i in line_diffs:
-            cell['metadata']['line-diff'] = line_diffs[i]
+            cell['metadata']['extra-diff-data'] = line_diffs[i]
         cell_list.append(cell)
 
     nb1['worksheets'][0]['cells'] = cell_list

@@ -271,7 +271,11 @@ Diff.prototype = {
             rows = [];
         this._nbcells.forEach(function (nbcell) {
             if (nbcell.state() === 'modified') {
-                rows.push(new LineDiff(self._nb, nbcell));
+                if (nbcell.type() === 'heading') { 
+                    rows.push(new HeaderDiff(nbcell));
+                } else if (nbcell.type() === 'code') {
+                    rows.push(new LineDiff(self._nb, nbcell));
+                }
             } else {
                 rows.push(new DiffRow(nbcell));
             }
@@ -280,6 +284,27 @@ Diff.prototype = {
     }
 };
 
+/**
+ * Class for the word Markdown.
+ */
+function HeaderDiff(nbcell) {
+    this._nbcell = nbcell;
+}
+
+HeaderDiff.prototype = {
+    render: function () {
+        var diffData, htmlObject;
+        diffData = this._nbcell.headerDiffData();
+        htmlObject = $('<h2 class = "diffed-header"></h2>');
+        diffData.forEach(function (word) {
+            var span = $('<span></span>');
+            span.addClass(word.state + '-word');
+            span.append(' ' + word.value);
+            htmlObject.append(span);
+        });
+        return htmlObject;
+    }
+};
 
 /**
  * Class for rendering rows of the merge UI.
@@ -485,6 +510,9 @@ NBDiffCell.prototype = {
     set_state: function (state) {
         this.cell.metadata.state = state;
     },
+    type: function () {
+        return this.cell.cell_type;
+    },
     removeMetadata: function () {
         delete this.cell.metadata.state;
         delete this.cell.metadata.side;
@@ -493,7 +521,10 @@ NBDiffCell.prototype = {
         return this.cell.element;
     },
     lineDiffData: function () {
-        return this.cell.metadata['line-diff'];
+        return this.cell.metadata['extra-diff-data'];    
+    },
+    headerDiffData: function () {
+        return this.cell.metadata['extra-diff-data'];
     }
 };
 
@@ -514,6 +545,7 @@ function nbdiff_init() {
     main.init();
     MergeRows.rows = main.getMergeRows();
 }
+
 
 //there's probably a better way to get the rows
 var MergeRows = function() {
