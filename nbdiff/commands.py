@@ -49,6 +49,10 @@ def diff():
         notebook2 = parser.parse(open(args.after))
 
         result = notebook_diff(notebook1, notebook2)
+        
+        app.add_notebook(result)
+        open_browser(args.browser)
+        app.run(debug=False)
 
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
@@ -57,20 +61,21 @@ def diff():
         modified_notebooks = git.get_modified_notebooks()
 
         if not len(modified_notebooks) == 0:
-            current_notebook = parser.parse(modified_notebooks[0][0])
-            head_version = parser.parse(modified_notebooks[0][1])
+            for nbook in modified_notebooks:
+                current_notebook = parser.parse(nbook[0])
+                head_version = parser.parse(nbook[1])
 
             result = notebook_diff(head_version, current_notebook)
+            
+            app.add_notebook(result)
+            open_browser(args.browser)
+            app.run(debug=False)
         else:
             print("No modified files to diff.")
             return 0
     else:
         print ("Invalid number of arguments. Run nbdiff --help")
         return -1
-
-    app.add_notebook(result)
-    open_browser(args.browser)
-    app.run(debug=False)
 
 
 def merge():

@@ -18,6 +18,9 @@ class NbFlask(Flask):
 
     def add_notebook(self, nb, fname):
         self.notebooks.append((nb, fname))
+    
+    def add_notebook(self, nb):
+        self.notebooks.append(nb)
 
 app = NbFlask(__name__, static_folder=IPython.html.__path__[0] + '/static')
 
