@@ -81,16 +81,17 @@ NBDiff.prototype = {
                 $('#nbdiff-redo').click(function () {
                     Invoker.redo();
                 });
-                $('#nbdiff-previous').click(function () {
-                    LoadPreviousPage();
-                });
-                $('#nbdiff-next').click(function () {
-                    LoadNextPage();
-                });
-                $('#nbdiff-shutdown').click(function () {
-                    ShutdownServer();
-                });
             }
+            
+            $('#nbdiff-previous').click(function () {
+                LoadPreviousPage();
+            });
+            $('#nbdiff-next').click(function () {
+                LoadNextPage();
+            });
+            $('#nbdiff-shutdown').click(function () {
+                ShutdownServer();
+            });
 
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
