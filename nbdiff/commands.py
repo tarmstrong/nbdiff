@@ -65,9 +65,9 @@ def diff():
                 current_notebook = parser.parse(nbook[0])
                 head_version = parser.parse(nbook[1])
 
-            result = notebook_diff(head_version, current_notebook)
-
-            app.add_notebook(result, 'no_filename')
+                result = notebook_diff(head_version, current_notebook)
+                app.add_notebook(result, 'no_filename')
+    
             open_browser(args.browser)
             app.run(debug=False)
         else:
