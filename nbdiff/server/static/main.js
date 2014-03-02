@@ -1,5 +1,7 @@
 if (typeof IPython.notebook === 'undefined') {
-    $([IPython.events]).bind('notebook_loaded.Notebook', nbdiff_init);
+    $([IPython.events]).bind('notebook_loaded.Notebook', function () {
+        NBDiff.init();
+    });
 } else {
-    nbdiff_init();
+    NBDiff.init();
 }
