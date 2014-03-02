@@ -83,6 +83,16 @@ NBDiff.prototype = {
                 });
             }
             
+            var num_nbks = parseInt(document.getElementsByClassName('num_notebooks')[0].getAttribute('num_notebooks'));
+            var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
+            var current_nbk = parseInt(current_nbid.replace(/[^\d.,]+/,''));
+
+            if (current_nbk == 0)
+                $('#nbdiff-previous').hide();
+            
+            if (current_nbk == num_nbks-1)
+                $('#nbdiff-previous').hide();
+            
             $('#nbdiff-previous').click(function () {
                 LoadPreviousPage();
             });
