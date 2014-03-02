@@ -69,6 +69,8 @@ NBDiff.prototype = {
                 $('#nbdiff-save').hide();
                 $('#nbdiff-undo').hide();
                 $('#nbdiff-redo').hide();
+                $('#nbdiff-next').hide();
+                $('#nbdiff-shutdown').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
                 $('#nbdiff-save').click(function (event) {
@@ -80,6 +82,12 @@ NBDiff.prototype = {
                 });
                 $('#nbdiff-redo').click(function () {
                     Invoker.redo();
+                });
+                $('#nbdiff-next').click(function () {
+                    LoadNextPage();
+                });
+                $('#nbdiff-shutdown').click(function () {
+                    //shutdown_server(); not implemented yet
                 });
             }
 
@@ -498,4 +506,10 @@ function nbdiff_init() {
 //there's probably a better way to get the rows
 var MergeRows = function() {
     this.rows = null;
+};
+
+function LoadNextPage() {
+    var current = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
+    var next = parseInt(current.replace(/[^\d.,]+/,'')) + 1;
+    location.href = 'http://127.0.0.1:5000/' + next;
 };
