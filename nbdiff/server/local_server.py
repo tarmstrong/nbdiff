@@ -44,5 +44,11 @@ def notebookjson(notebookid):
         parsed = app.notebooks[notebookid][0]
         return json.dumps(parsed)
 
+
+@app.route('/shutdown')
+def shutdown():
+    request.environ.get('werkzeug.server.shutdown')()
+    return "The server was shutdown."
+
 if __name__ == '__main__':
     app.run(debug=True)

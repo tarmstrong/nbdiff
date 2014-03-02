@@ -69,8 +69,6 @@ NBDiff.prototype = {
                 $('#nbdiff-save').hide();
                 $('#nbdiff-undo').hide();
                 $('#nbdiff-redo').hide();
-                $('#nbdiff-next').hide();
-                $('#nbdiff-shutdown').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
                 $('#nbdiff-save').click(function (event) {
@@ -83,11 +81,14 @@ NBDiff.prototype = {
                 $('#nbdiff-redo').click(function () {
                     Invoker.redo();
                 });
+                $('#nbdiff-previous').click(function () {
+                    LoadPreviousPage();
+                });
                 $('#nbdiff-next').click(function () {
                     LoadNextPage();
                 });
                 $('#nbdiff-shutdown').click(function () {
-                    //shutdown_server(); not implemented yet
+                    ShutdownServer();
                 });
             }
 
@@ -512,4 +513,19 @@ function LoadNextPage() {
     var current = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
     var next = parseInt(current.replace(/[^\d.,]+/,'')) + 1;
     location.href = 'http://127.0.0.1:5000/' + next;
+};
+
+function LoadPreviousPage() {
+    var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
+    var current_id = parseInt(current_nbid.replace(/[^\d.,]+/,''));
+    if (current_id > 0) {
+        var prev_id = current_id - 1
+        location.href = 'http://127.0.0.1:5000/' + prev_id;
+    }
+    else
+        alert("There is no notebook before this one!");
+};
+
+function ShutdownServer() {
+    location.href = 'http://127.0.0.1:5000/shutdown';
 };
