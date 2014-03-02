@@ -225,6 +225,153 @@ def test_diff_word():
     assert result[1]['state'] == 'added'
 
 
+def test_diff_word2():
+    A = "hello world"
+    B = "hello beautiful"
+
+    result = words_diff(A, B)
+    assert result[0]['state'] == 'unchanged'
+    assert result[1]['state'] == 'deleted'
+    assert result[2]['state'] == 'added'
+
+
+def test_diff_cells_same():
+    A = [
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+
+    B = [
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']},
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+
+    result = cells_diff(A, B, check_modified=True)
+    assert result[0]['state'] == 'unchanged'
+    assert result[1]['state'] == 'unchanged'
+
+
+def test_diff_cells_different():
+    A = [
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,5]\n', u'z = {1} \n', u'\n', u'y']},
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']}
+    ]
+
+    B = [
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']},
+        {'cell_type': "code",
+         'language': "python",
+         "outputs": [
+             {
+                 "output_type": "stream",
+                 "stream": "stdout",
+                 "text": [
+                     "Hello, world!\n",
+                     "Hello, world!\n"
+                 ]
+             }
+         ],
+         "prompt_number": 29,
+         u'input': [u'x = [9,8,3]\n', u't = {8, 5, 6} \n', u'w']}
+    ]
+
+    result = cells_diff(A, B)
+    assert result[0]['state'] == 'deleted'
+    assert result[1]['state'] == 'unchanged'
+    assert result[2]['state'] == 'added'
+
+
 def test_diff_empty():
     A = [
         {'cell_type': "code",
