@@ -1,0 +1,11 @@
+from . import BaseCommand
+from flask import send_from_directory, request
+import os
+
+class ResourceRequestCommand(BaseCommand):
+
+  def process(self, request, filename):
+    return send_from_directory(os.path.abspath(os.path.join(os.path.dirname(__file__),"..")) + '/static', filename)
+    
+def newInstance():
+  return ResourceRequestCommand()

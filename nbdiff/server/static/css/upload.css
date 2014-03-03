@@ -19,14 +19,29 @@
     height:150px;
 }
 
-#errorMsg
+#beforeFileDrag, #afterFileDrag
+{
+	display: none;
+	font-weight: bold;
+	text-align: center;
+	padding: 1em 0;
+	margin: 1em 0;
+	color: #555;
+	border: 2px dashed #555;
+	border-radius: 7px; 
+	cursor: default;
+    width: 300px;
+    height:150px;
+}
+
+#mergeErrorMsg, #diffErrorMsg
 {
     color: red;
     font-weight: bold;
     text-align: center;
 }
 
-#localFileDrag.hover, #remoteFileDrag.hover, #baseFileDrag.hover
+#localFileDrag.hover, #remoteFileDrag.hover, #baseFileDrag.hover, #beforeFileDrag.hover, #afterFileDrag.hover
 {
 	color: #f00;
 	border-color: #f00;

@@ -11,14 +11,15 @@
 {% block content %}
 
 <ul class="nav nav-tabs" id="compareTabs">
-    <li class="active"><a href="#tabs-1" data-toggle="tab">Compare By Uploading Notebooks</a></li>
-    <li><a href="#tabs-2" data-toggle="tab">Compare Using URLs</a></li>
-    <li><a href="#tabs-3"data-toggle="tab">Compare Local Copy with Git</a></li>
+    <li class="active"><a href="#tabs-1" data-toggle="tab">Merge Notebooks By Uploading Notebooks</a></li>
+    <li><a href="#tabs-2" data-toggle="tab">Merge Notebooks Using URLs</a></li>
+    <li><a href="#tabs-3" data-toggle="tab">Diff Notebooks By Uploading Notebooks</a></li>
+    <li><a href="#tabs-4" data-toggle="tab">Diff Notebooks Using URLs</a></li>
 </ul>
 
 <div class="tab-content">
     <div class="tab-pane active" id="tabs-1">
-        <form action="/merge" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form action="/Merge" method="POST" enctype="multipart/form-data" onsubmit="return validateMergeForm()">
             <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />  
             <table align="center">
             <tr>
@@ -60,14 +61,15 @@
                 </td>
             </tr>
             </table>
-            <div id="errorMsg" style="display:none"></div>  
+            <br/><br/>
+            <div id="mergeErrorMsg" style="display:none"></div>  
             <div style=" text-align: center;">
                 <input id="submitBtn" class="disableBtn" type="submit" value="Generate Merge Conflicts" />
             </div>
         </form>
     </div>
     <div class="tab-pane" id="tabs-2">
-        <form action="/mergeURL" method="POST">
+        <form action="/MergeURL" method="POST">
             <div>
                 <label for="localURL">Specify <b>Local</b> .ipynb notebook URL:</label>
                 <br/>
@@ -83,11 +85,68 @@
                 <br/>
                 <input type="text" id="remoteURL" name="remoteURL" style="width:90%" data-validate="url,required"/>
             </div>
+            <br/><br/>
             <div style=" text-align: center;">
                 <input id="submitBtn2" class="enableBtn" type="submit" value="Generate Merge Conflicts" />
             </div>
         </form>
     </div>
-    <div class="tab-pane" id="tabs-3">Currently Unavailable</div>
+    <div class="tab-pane" id="tabs-3">
+        <form action="/Diff" method="POST" enctype="multipart/form-data" onsubmit="return validateDiffForm()">
+            <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />  
+            <table align="center">
+            <tr>
+                <td>
+                    <fieldset>
+                    <legend>Previous Version File Upload</legend>
+                    <div>
+                        <label for="beforeFile">Specify Previous Version of the .ipynb notebook File:</label>
+                        <br/>
+                        <input type="file" id="beforeFile" name="beforeFile"/>
+                        <input type="hidden" id="beforeJSON" name="beforeJSON" />
+                        <div id="beforeFileDrag">or drop files here</div>
+                    </div>
+                    </fieldset>
+                </td>
+                <td> <div style="padding:10px;"></div></td>
+                <td>
+                    <fieldset>
+                    <legend>Afterwards Version File Upload</legend>
+                    <div>
+                        <label for="afterFile">Specify Afterwards Version of the .ipynb notebook File:</label>
+                        <br/>
+                        <input type="file" id="afterFile" name="afterFile"/>
+                        <input type="hidden" id="afterJSON" name="afterJSON" />
+                        <div id="afterFileDrag">or drop files here</div>
+                    </div>
+                    </fieldset>
+                </td>
+            </tr>
+            </table>
+            <br/><br/>
+            <div id="diffErrorMsg" style="display:none"></div>  
+            <div style=" text-align: center;">
+                <input id="submitBtn3" class="disableBtn" type="submit" value="Generate Notebook Diff" />
+            </div>
+        </form>
+    </div>
+    <div class="tab-pane" id="tabs-4">
+        <form action="/DiffURL" method="POST">
+            <div>
+                <label for="beforeURL">Specify Previous Version of the .ipynb notebook URL:</label>
+                <br/>
+                <input type="text" id="beforeURL" name="beforeURL" style="width:90%" data-validate="url,required"/>
+            </div>
+            <div>
+                <label for="afterURL">Specify Afterwards Version of the .ipynb notebook URL:</label>
+                <br/>
+                <input type="text" id="afterURL" name="afterURL" style="width:90%" data-validate="url,required"/>
+            </div>
+            <br/><br/>
+            <div style=" text-align: center;">
+                <input id="submitBtn4" class="enableBtn" type="submit" value="Generate Notebook Diff" />
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
