@@ -66,45 +66,17 @@ NBDiff.prototype = {
 
             if (this._isDiff() === true) {
                 this.controller = new Diff(this.notebook, this._nbcells);
-                $('#nbdiff-save').hide();
-                $('#nbdiff-undo').hide();
-                $('#nbdiff-redo').hide();
             } else if (this._isMerge() === true) {
                 this.controller = new Merge(this.notebook, this._nbcells);
-                $('#nbdiff-save').click(function (event) {
-                    event.preventDefault();
+            }
+
+            initToolbar({
+                mode: this._isDiff() === true ? 'diff' : 'merge',
+                save: function () {
                     self.save();
-                });
-                $('#nbdiff-undo').click(function () {
-                    Invoker.undo();
-                });
-                $('#nbdiff-redo').click(function () {
-                    Invoker.redo();
-                });
-            }
-            
-            var num_nbks = parseInt(document.getElementById('num-notebooks').getAttribute('data-num-notebooks'), 10);
-            var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
-            var current_nbk = parseInt(current_nbid.replace(/[^\d.,]+/,''), 10);
-
-            if (current_nbk === 0) {
-                $('#nbdiff-previous').hide();
-            }
-            
-            if (current_nbk === num_nbks-1) {
-                $('#nbdiff-next').hide();
-            }
-            
-            $('#nbdiff-previous').click(function () {
-                loadPreviousPage();
+                }
             });
-            $('#nbdiff-next').click(function () {
-                loadNextPage();
-            });
-            $('#nbdiff-shutdown').click(function () {
-                shutdownServer();
-            });
-
+            
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
             this.controller.render(nbcontainer);
@@ -120,9 +92,7 @@ NBDiff.prototype = {
         }
     },
     save: function () {
-        var mergedCellElements,
-            nbcell,
-            i;
+        var mergedCellElements;
 
         if (this._isDiff() === true) {
             // Not sure how this would have been called since the button is hidden.
@@ -357,7 +327,6 @@ MergeRow.prototype = {
         return $(html);
     },
     _generateMergeControlColumn: function(side) {
-        var mergeArrowClass = 'merge-arrow-left';
         if (side === cellSide[0]) {
             return "<input value='->' data-cell-idx='0' class='merge-arrow-right' type='button'>";
         } else {
@@ -416,7 +385,7 @@ DiffRow.prototype = {
     },
     _fillColumn: function (lastRow, nbcell) {
         var cellHTML = nbcell.element();
-        var htmlClass, targetContainer;
+        var targetContainer;
         var targets = [ ".row-cell-diff-left", ".row-cell-diff-right"];
 
         if (nbcell.state() === cellState[0]) {
@@ -530,53 +499,9 @@ NBDiffCell.prototype = {
     }
 };
 
-function loadNextPage() {
-    var pageInfo = getPageInfo();
-    if (pageInfo.current < pageInfo.total-1) {
-        var next = pageInfo.current + 1;
-        location.href = 'http://127.0.0.1:5000/' + next;        
-    }
-    else {
-        alert("There is no notebook after this one!");
-    }
-}
-
-function loadPreviousPage() {
-    var pageInfo = getPageInfo();
-    if (pageInfo.current > 0) {
-        var prev_id = pageInfo.current - 1;
-        location.href = '/' + prev_id;
-    }
-    else {
-        alert("There is no notebook before this one!");
-    }
-}
-
-function shutdownServer() {
-    location.href = '/shutdown';
-}
-
 //there's probably a better way to get the rows
 function MergeRows() {
     this.rows = null;
-}
-
-// If we are merging/diffing multiple notebooks, these are shown
-// on separate pages. This information is passed to the Javascript
-// through HTML attributes:
-// * The current notebook index is attached to the notebook id, e.g.,
-//      <body data-notebook-id='notebook1'>
-// * The total number of notebooks (i.e., the number of pages to show to
-//   the user) is in an attribute of a hidden div with id
-//   `num-notebooks`.
-function getPageInfo() {
-    var num_nbks = parseInt(document.getElementById('num-notebooks').getAttribute('data-num-notebooks'), 10);
-    var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
-    var current_id = parseInt(current_nbid.replace(/[^\d.,]+/,''), 10);
-    return {
-        total: num_nbks,
-        current: current_id
-    };
 }
 
 function init() {
