@@ -120,9 +120,7 @@ NBDiff.prototype = {
         }
     },
     save: function () {
-        var mergedCellElements,
-            nbcell,
-            i;
+        var mergedCellElements;
 
         if (this._isDiff() === true) {
             // Not sure how this would have been called since the button is hidden.
@@ -357,7 +355,6 @@ MergeRow.prototype = {
         return $(html);
     },
     _generateMergeControlColumn: function(side) {
-        var mergeArrowClass = 'merge-arrow-left';
         if (side === cellSide[0]) {
             return "<input value='->' data-cell-idx='0' class='merge-arrow-right' type='button'>";
         } else {
@@ -416,7 +413,7 @@ DiffRow.prototype = {
     },
     _fillColumn: function (lastRow, nbcell) {
         var cellHTML = nbcell.element();
-        var htmlClass, targetContainer;
+        var targetContainer;
         var targets = [ ".row-cell-diff-left", ".row-cell-diff-right"];
 
         if (nbcell.state() === cellState[0]) {
