@@ -54,6 +54,17 @@
 	  border: 3px solid #006400;
 	}
 
+    .added-word {
+      background-color: #ADFF2F;
+    }
+
+    .deleted-word {
+      background-color: #E9967A;
+    }
+
+    .diffed-header{
+    text-align: center;
+    }
 	.bottom-spacer {
 	  height: 100px;
 	  margin: 100px;

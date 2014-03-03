@@ -82,16 +82,37 @@ NBDiff.prototype = {
                     Invoker.redo();
                 });
             }
+            
+            var num_nbks = parseInt(document.getElementById('num-notebooks').getAttribute('data-num-notebooks'), 10);
+            var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
+            var current_nbk = parseInt(current_nbid.replace(/[^\d.,]+/,''), 10);
+
+            if (current_nbk === 0) {
+                $('#nbdiff-previous').hide();
+            }
+            
+            if (current_nbk === num_nbks-1) {
+                $('#nbdiff-next').hide();
+            }
+            
+            $('#nbdiff-previous').click(function () {
+                loadPreviousPage();
+            });
+            $('#nbdiff-next').click(function () {
+                loadNextPage();
+            });
+            $('#nbdiff-shutdown').click(function () {
+                shutdownServer();
+            });
 
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
             this.controller.render(nbcontainer);
-            if(this._isMerge() === true)
-            {
+            if(this._isMerge() === true) {
                 var dd = new DragDrop();
                 dd.enable();
+                this.controller.addButtonListeners();
             }
-            this.controller.add_button_listeners();
 
         } else {
             this.log('No nbdiff metadata in the notebook.');
@@ -197,7 +218,7 @@ Merge.prototype = {
         });
         return rows;
     },
-    add_button_listeners: function() {
+    addButtonListeners: function() {
         var $buttons = $("input.merge-arrow-right");
         var rows = this.rows;
         var click_action_right = function(row) {
@@ -252,7 +273,11 @@ Diff.prototype = {
             rows = [];
         this._nbcells.forEach(function (nbcell) {
             if (nbcell.state() === 'modified') {
-                rows.push(new LineDiff(self._nb, nbcell));
+                if (nbcell.type() === 'heading') { 
+                    rows.push(new HeaderDiff(nbcell));
+                } else if (nbcell.type() === 'code') {
+                    rows.push(new LineDiff(self._nb, nbcell));
+                }
             } else {
                 rows.push(new DiffRow(nbcell));
             }
@@ -261,6 +286,27 @@ Diff.prototype = {
     }
 };
 
+/**
+ * Class for the word Markdown.
+ */
+function HeaderDiff(nbcell) {
+    this._nbcell = nbcell;
+}
+
+HeaderDiff.prototype = {
+    render: function () {
+        var diffData, htmlObject;
+        diffData = this._nbcell.headerDiffData();
+        htmlObject = $('<h2 class = "diffed-header"></h2>');
+        diffData.forEach(function (word) {
+            var span = $('<span></span>');
+            span.addClass(word.state + '-word');
+            span.append(' ' + word.value);
+            htmlObject.append(span);
+        });
+        return htmlObject;
+    }
+};
 
 /**
  * Class for rendering rows of the merge UI.
@@ -466,6 +512,9 @@ NBDiffCell.prototype = {
     set_state: function (state) {
         this.cell.metadata.state = state;
     },
+    type: function () {
+        return this.cell.cell_type;
+    },
     removeMetadata: function () {
         delete this.cell.metadata.state;
         delete this.cell.metadata.side;
@@ -474,9 +523,69 @@ NBDiffCell.prototype = {
         return this.cell.element;
     },
     lineDiffData: function () {
-        return this.cell.metadata['line-diff'];
+        return this.cell.metadata['extra-diff-data'];    
+    },
+    headerDiffData: function () {
+        return this.cell.metadata['extra-diff-data'];
     }
 };
+
+function loadNextPage() {
+    var pageInfo = getPageInfo();
+    if (pageInfo.current < pageInfo.total-1) {
+        var next = pageInfo.current + 1;
+        location.href = 'http://127.0.0.1:5000/' + next;        
+    }
+    else {
+        alert("There is no notebook after this one!");
+    }
+}
+
+function loadPreviousPage() {
+    var pageInfo = getPageInfo();
+    if (pageInfo.current > 0) {
+        var prev_id = pageInfo.current - 1;
+        location.href = '/' + prev_id;
+    }
+    else {
+        alert("There is no notebook before this one!");
+    }
+}
+
+function shutdownServer() {
+    location.href = '/shutdown';
+}
+
+//there's probably a better way to get the rows
+function MergeRows() {
+    this.rows = null;
+}
+
+// If we are merging/diffing multiple notebooks, these are shown
+// on separate pages. This information is passed to the Javascript
+// through HTML attributes:
+// * The current notebook index is attached to the notebook id, e.g.,
+//      <body data-notebook-id='notebook1'>
+// * The total number of notebooks (i.e., the number of pages to show to
+//   the user) is in an attribute of a hidden div with id
+//   `num-notebooks`.
+function getPageInfo() {
+    var num_nbks = parseInt(document.getElementById('num-notebooks').getAttribute('data-num-notebooks'), 10);
+    var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
+    var current_id = parseInt(current_nbid.replace(/[^\d.,]+/,''), 10);
+    return {
+        total: num_nbks,
+        current: current_id
+    };
+}
+
+function init() {
+    var main = new NBDiff(IPython.notebook, true);
+    main.init();
+    MergeRows.rows = main.getMergeRows();
+}
+
+window.MergeRows = MergeRows;
 
 return {
     NBDiff: NBDiff,
@@ -485,18 +594,10 @@ return {
     DiffRow: DiffRow,
     MergeRow: MergeRow,
     NBDiffCell: NBDiffCell,
-    LineDiff: LineDiff
+    LineDiff: LineDiff,
+    MergeRows: MergeRows,
+    init: init
 };
 
 }(jQuery));
 
-function nbdiff_init() {
-    var main = new NBDiff.NBDiff(IPython.notebook, true);
-    main.init();
-    MergeRows.rows = main.getMergeRows();
-}
-
-//there's probably a better way to get the rows
-var MergeRows = function() {
-    this.rows = null;
-};
