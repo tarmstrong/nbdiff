@@ -92,7 +92,7 @@ NBDiff.prototype = {
             }
             
             if (current_nbk === num_nbks-1) {
-                $('#nbdiff-previous').hide();
+                $('#nbdiff-next').hide();
             }
             
             $('#nbdiff-previous').click(function () {
