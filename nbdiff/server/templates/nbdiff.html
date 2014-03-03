@@ -7,7 +7,13 @@
 {% endblock %}
 
 {% block header %}
-<img src="/nbdiff/logo.png" id="nbdiff-logo" alt="NBDiff" />
+
+{% if remote %}
+  <a href="/"><img src="/nbdiff/logo.png" id="nbdiff-logo" alt="NBDiff" /></a>
+{% else %}
+  <img src="/nbdiff/logo.png" id="nbdiff-logo" alt="NBDiff" />
+{% endif %}
+
 <div id="nbdiff-controls">
     <button id='nbdiff-undo'>Undo</button>
     <button id='nbdiff-redo'>Redo</button>
