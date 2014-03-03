@@ -67,7 +67,7 @@ def diff():
 
                 result = notebook_diff(head_version, current_notebook)
                 app.add_notebook(result, 'no_filename')
-    
+
             open_browser(args.browser)
             app.run(debug=False)
         else:
