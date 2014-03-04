@@ -19,7 +19,7 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="tabs-1">
-        <form action="/Merge" method="POST" enctype="multipart/form-data" onsubmit="return validateMergeForm()">
+        <form action="/Merge" method="POST" enctype="multipart/form-data" id="mergeForm">
             <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />  
             <table align="center">
             <tr>
@@ -92,7 +92,7 @@
         </form>
     </div>
     <div class="tab-pane" id="tabs-3">
-        <form action="/Diff" method="POST" enctype="multipart/form-data" onsubmit="return validateDiffForm()">
+        <form action="/Diff" method="POST" enctype="multipart/form-data" id="diffForm">
             <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />  
             <table align="center">
             <tr>

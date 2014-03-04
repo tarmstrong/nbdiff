@@ -37,7 +37,7 @@ class MergeURLCommand(BaseCommand):
 
     nb_id = ntpath.basename(temp.name)
 
-    return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id, remote=True)
+    return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id, local=False)
     
 def newInstance():
   return MergeURLCommand()

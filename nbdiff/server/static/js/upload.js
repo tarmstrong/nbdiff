@@ -24,11 +24,7 @@ $(document).ready(function(){
             beforeJSON = $id("beforeJSON"),
             afterFile = $id("afterFile"),
             afterFileDrag = $id("afterFileDrag"),
-            afterJSON = $id("afterJSON"),
-            mergeSubmitBtn = $id("submitBtn"),
-            mergeErrorDiv = $id("mergeErrorMsg"),
-            diffSubmitBtn = $id("submitBtn3"),
-            diffErrorDiv = $id("diffErrorMsg");
+            afterJSON = $id("afterJSON");
         
         //make a dictionary for to reference dom variables.
         dict = {
@@ -89,16 +85,16 @@ $(document).ready(function(){
         if(files.length > 1){
             //uploads more than one file per side.
             if(targetType == "base" || targetType == "local" || targetType == "remote"){
-                displayError(0, mergeErrorDiv, mergeSubmitBtn);
+                displayError(0, $id("mergeErrorMsg"), $id("submitBtn"));
             } else {
-                displayError(0, diffErrorDiv, diffSubmitBtn);
+                displayError(0, $id("diffErrorMsg"), $id("submitBtn3"));
             }
         } else if(files[0].name.substring(files[0].name.indexOf(".")) != ".ipynb"){
             //invalid file type upload.
             if(targetType == "base" || targetType == "local" || targetType == "remote"){
-                displayError(1, mergeErrorDiv, mergeSubmitBtn);
+                displayError(1, $id("mergeErrorMsg"), $id("submitBtn"));
             } else {
-                displayError(1, diffErrorDiv, diffSubmitBtn);
+                displayError(1, $id("diffErrorMsg"), $id("submitBtn3"));
             }
         } else {  
             //valid file specified
@@ -111,9 +107,9 @@ $(document).ready(function(){
             handleFileRead(files[0], dict[targetType][2]);
             
             if(targetType == "base" || targetType == "local" || targetType == "remote"){
-                mergeErrorDiv.style.display = "none";
+                $id("mergeErrorMsg").style.display = "none";
             } else {
-                diffErrorDiv.style.display = "none";
+                $id("diffErrorMsg").style.display = "none";
             }
         }
     }
@@ -138,10 +134,10 @@ $(document).ready(function(){
         reader.onload = (function(file) {
             side.value = reader.result;
             if(localJSON.value.length != 0 && remoteJSON.value.length != 0 && baseJSON.value.length != 0){
-                mergeSubmitBtn.className = "enableBtn";
+                $id("submitBtn").className = "enableBtn";
             }
             if(beforeJSON.value.length != 0 && afterJSON.value.length != 0){
-                diffSubmitBtn.className = "enableBtn";
+                $id("submitBtn3").className = "enableBtn";
             }
         });
         reader.readAsText(file);
@@ -173,22 +169,23 @@ $(document).ready(function(){
         submitButton.className = "disableBtn";
     }
     
-    //validate form that three files are specified. 
-    function validateMergeForm(){
-        if(localJSON.value.length == 0 || remoteJSON.value.length == 0 || baseJSON.value.length == 0){
-            displayError(2, mergeErrorBtn, mergeSubmitBtn); 
+    //validate form that three files are specified.
+    $("#mergeForm").submit(function( event ) {
+      if(localJSON.value.length == 0 || remoteJSON.value.length == 0 || baseJSON.value.length == 0){
+          displayError(2, $id("mergeErrorMsg"), $id("submitBtn"));  
+          return false;
+      } else {
+          return true;
+      }
+    });
+   
+    //validate form that two files are specified. 
+    $("#diffForm").submit(function( event ) {
+       if(beforeJSON.value.length == 0 || afterJSON.value.length == 0 ){
+            displayError(2, $id("diffErrorMsg"), $id("submitBtn3"));  
             return false;
         } else {
             return true;
         }
-    }
-     //validate form that two files are specified. 
-    function validateDiffForm(){
-        if(beforeJSON.value.length == 0 || afterJSON.value.length == 0 ){
-            displayError(2, diffErrorBtn, diffSubmitBtn);  
-            return false;
-        } else {
-            return true;
-        }
-    }
+    });
 });

@@ -33,7 +33,7 @@ class DiffURLCommand(BaseCommand):
     print "a"
     nb_id = ntpath.basename(temp.name)
     print "a"
-    return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id, remote=True)
+    return render_template('nbdiff.html', project='/', base_project_url='/', base_kernel_url='/', notebook_id=nb_id, local=False)
     
 def newInstance():
   return DiffURLCommand()
