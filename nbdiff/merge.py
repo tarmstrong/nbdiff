@@ -5,8 +5,25 @@ import copy
 
 
 def notebook_merge(local, base, remote):
-    '''Accept three parsed notebooks and create a new notebook
-    with metadata added to say which branch it belongs to.'''
+    """Unify three notebooks into a single notebook with merge metadata.
+
+    The result of this function is a valid notebook that can be loaded
+    by the IPython Notebook front-end. This function adds additional
+    cell metadata that the front-end Javascript uses to render the merge.
+
+    Parameters
+    ----------
+    local : dict
+        The local branch's version of the notebook.
+    base : dict
+        The last common ancestor of local and remote.
+    remote : dict
+        The remote branch's version of the notebook.
+
+    Returns
+    -------
+    nb : A valid notebook containing merge metadata.
+    """
     local_cells = local['worksheets'][0]['cells']
     base_cells = base['worksheets'][0]['cells']
     remote_cells = remote['worksheets'][0]['cells']
