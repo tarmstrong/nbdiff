@@ -1,0 +1,26 @@
+/* BUTTONS */
+
+  button#nbdiff-undo {
+    display: none;
+  }
+  
+  button#nbdiff-redo {
+    display: none;
+  }
+
+  button#nbdiff-save {
+    display: none;
+  }
+
+  button#nbdiff-previous {
+    display: none;
+  }
+  
+  button#nbdiff-next {
+    display: none;
+  }
+
+  button#nbdiff-shutdown {
+    display: none;
+  }
+

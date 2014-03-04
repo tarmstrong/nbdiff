@@ -4,9 +4,7 @@ function initToolbar(info) {
     var pageInfo = getPageInfo();
     
     if (mode === 'diff') {
-        $('#nbdiff-save').hide();
-        $('#nbdiff-undo').hide();
-        $('#nbdiff-redo').hide();
+        $('button#nbdiff-shutdown').show();
     } else if (mode === 'merge') {
         $('#nbdiff-save').click(function (event) {
             event.preventDefault();
@@ -19,14 +17,22 @@ function initToolbar(info) {
             Invoker.redo();
         });
     }
+    
+    $('button#nbdiff-undo').show();
+    
+    $('button#nbdiff-redo').show();
+    
+    $('button#nbdiff-save').show();
 
-    if (pageInfo.current === 0) {
-        $('#nbdiff-previous').hide();
+    if (pageInfo.current !== 0) {
+        $('button#nbdiff-previous').show();
     }
     
-    if (pageInfo.current === pageInfo.total-1) {
-        $('#nbdiff-next').hide();
+    if (pageInfo.current !== pageInfo.total-1) {
+        $('button#nbdiff-next').show();
     }
+    
+    $('button#nbdiff-shutdown').show();
     
     $('#nbdiff-previous').click(function () {
         loadPreviousPage();
@@ -75,8 +81,7 @@ function shutdownServer() {
 //   `num-notebooks`.
 function getPageInfo() {
     var num_nbks = parseInt(document.getElementById('num-notebooks').getAttribute('data-num-notebooks'), 10);
-    var current_nbid = document.getElementsByTagName("body")[0].getAttribute('data-notebook-id');
-    var current_id = parseInt(current_nbid.replace(/[^\d.,]+/,''), 10);
+    var current_id = parseInt(document.getElementById('current-notebook').getAttribute('data-current-notebook'), 10);
     return {
         total: num_nbks,
         current: current_id
