@@ -37,6 +37,7 @@ def home(notebookid):
         base_kernel_url='/',
         notebook_id='test_notebook' + str(notebookid),
         num_nbks=str(len(app.notebooks)),
+        cur_nbk=str(notebookid),
         local=True,
     )
 
