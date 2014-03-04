@@ -1,5 +1,10 @@
 from nbdiff.comparable import CellComparator
-from nbdiff.notebook_diff import cells_diff, words_diff, lines_diff, diff_modified_items
+from nbdiff.notebook_diff import (
+    cells_diff,
+    words_diff,
+    lines_diff,
+    diff_modified_items,
+)
 
 
 def test_diff():
