@@ -66,8 +66,13 @@ def diff():
 
         if not len(modified_notebooks) == 0:
             for nbook in modified_notebooks:
-                current_notebook = parser.parse(nbook[0])
-                head_version = parser.parse(nbook[1])
+                try:
+                    current_notebook = parser.parse(nbook[0])
+                    head_version = parser.parse(nbook[1])
+                except nbformat.NotJSONError:
+                    print("One or more of the files are not valid .ipynb files.")
+                    if (len(modified_notebooks) == 1):
+                        return -1
 
                 result = notebook_diff(head_version, current_notebook)
                 app.add_notebook(result, 'no_filename')
@@ -152,7 +157,8 @@ def merge():
                 nb_remote = parser.parse(nbook[2])
             except nbformat.NotJSONError:
                 print("One or more of the files are not valid .ipynb files.")
-                return -1
+                if (len(unmerged_notebooks) == 1):
+                    return -1
 
             pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
 
