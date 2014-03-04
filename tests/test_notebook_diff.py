@@ -1,4 +1,5 @@
-from nbdiff.notebook_diff import cells_diff, words_diff, lines_diff
+from nbdiff.comparable import CellComparator
+from nbdiff.notebook_diff import cells_diff, words_diff, lines_diff, diff_modified_items
 
 
 def test_diff():
@@ -458,3 +459,37 @@ def test_diff_modified2():
 
     assert result[0]['state'] == 'modified'
     assert result[1]['state'] == 'deleted'
+
+
+def test_diff_modified_items():
+    header_item = {
+        'state': 'modified',
+        'originalvalue': CellComparator({
+            'cell_type': 'heading',
+            'source': 'This is a header',
+        }),
+        'modifiedvalue': CellComparator({
+            'cell_type': 'heading',
+            'source': 'This is a different header',
+        }),
+    }
+    code_item = {
+        'state': 'modified',
+        'originalvalue': CellComparator({
+            'cell_type': 'code',
+            'input': 'x = 10\ny = 10\n',
+        }),
+        'modifiedvalue': CellComparator({
+            'cell_type': 'code',
+            'input': 'x = 11\ny = 10\n',
+        }),
+    }
+    cellslist = [
+        {'state': 'added', 'value': 'foo'},
+        header_item,
+        code_item,
+    ]
+    result = diff_modified_items(cellslist)
+    assert 0 not in result
+    assert len(result[1]) == 5
+    assert len(result[2]) == 3
