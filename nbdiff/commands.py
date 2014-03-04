@@ -146,7 +146,7 @@ def merge():
 
     if not len(unmerged_notebooks) == 0:
         for nbook in unmerged_notebooks:
-            try:        
+            try:
                 nb_local = parser.parse(nbook[0])
                 nb_base = parser.parse(nbook[1])
                 nb_remote = parser.parse(nbook[2])
