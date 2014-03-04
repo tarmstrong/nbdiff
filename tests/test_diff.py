@@ -1,6 +1,7 @@
 from nose.tools import eq_
 import itertools as it
-from nbdiff.merge import cells_diff, words_diff, lines_diff
+from nbdiff.notebook_diff import cells_diff, words_diff, lines_diff
+
 from nbdiff.diff import (
     add_results,
     find_candidates,
