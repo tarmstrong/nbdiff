@@ -1,0 +1,116 @@
+/*
+    Written By: Richard Tang.
+    Source Modified from http://www.sitepoint.com/html5-file-drag-and-drop/.
+*/
+
+
+#localFileDrag, #remoteFileDrag, #baseFileDrag
+{
+	display: none;
+	font-weight: bold;
+	text-align: center;
+	padding: 1em 0;
+	margin: 1em 0;
+	color: #555;
+	border: 2px dashed #555;
+	border-radius: 7px; 
+	cursor: default;
+    width: 200px;
+    height:150px;
+}
+
+#beforeFileDrag, #afterFileDrag
+{
+	display: none;
+	font-weight: bold;
+	text-align: center;
+	padding: 1em 0;
+	margin: 1em 0;
+	color: #555;
+	border: 2px dashed #555;
+	border-radius: 7px; 
+	cursor: default;
+    width: 300px;
+    height:150px;
+}
+
+#mergeErrorMsg, #diffErrorMsg
+{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+
+#localFileDrag.hover, #remoteFileDrag.hover, #baseFileDrag.hover, #beforeFileDrag.hover, #afterFileDrag.hover
+{
+	color: #f00;
+	border-color: #f00;
+	border-style: solid;
+	box-shadow: inset 0 3px 4px #888;
+}
+
+.disableBtn{
+   border-top: 1px solid #732121;
+   background: #a1460d;
+   background: -webkit-gradient(linear, left top, left bottom, from(#820202), to(#a1460d));
+   background: -webkit-linear-gradient(top, #820202, #a1460d);
+   background: -moz-linear-gradient(top, #820202, #a1460d);
+   background: -ms-linear-gradient(top, #820202, #a1460d);
+   background: -o-linear-gradient(top, #820202, #a1460d);
+   padding: 10px 20px;
+   -webkit-border-radius: 24px;
+   -moz-border-radius: 24px;
+   border-radius: 24px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: #fffade;
+   font-size: 20px;
+   font-family: 'Lucida Grande', Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   box-shadow: 5px 5px 2px #888888;
+}
+.disableBtn:hover {
+   border-top-color: #851111;
+   background: #851111;
+   color: #ecedb9;
+   }
+.disableBtn:active {
+   border-top-color: #910a0a;
+   background: #910a0a;
+   }
+   
+.enableBtn {
+   border-top: 1px solid #00f241;
+   background: #5bd959;
+   background: -webkit-gradient(linear, left top, left bottom, from(#28b00c), to(#5bd959));
+   background: -webkit-linear-gradient(top, #28b00c, #5bd959);
+   background: -moz-linear-gradient(top, #28b00c, #5bd959);
+   background: -ms-linear-gradient(top, #28b00c, #5bd959);
+   background: -o-linear-gradient(top, #28b00c, #5bd959);
+   padding: 10px 20px;
+   -webkit-border-radius: 24px;
+   -moz-border-radius: 24px;
+   border-radius: 24px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: #ffffff;
+   font-size: 20px;
+   font-family: Georgia, serif;
+   text-decoration: none;
+   vertical-align: middle;
+   box-shadow: 5px 5px 2px #888888;
+   }
+.enableBtn:hover {
+   border-top-color: #39822d;
+   background: #39822d;
+   color: #effa9e;
+   }
+.enableBtn:active {
+   border-top-color: #08c92b;
+   background: #08c92b;
+   }

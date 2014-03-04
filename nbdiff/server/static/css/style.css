@@ -1,0 +1,54 @@
+td {
+	vertical-align: top;
+	width='33%';
+}
+
+.local, .base, .remote {
+	min-height: 25px;
+    border-color: #C0C0C0;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.input, .output {
+	padding: 10px;
+	margin: 10px;
+}
+
+pre.empty, pre.modified {
+	border-color: red !important;
+	border-style: solid;
+	border-width: 1px;
+	cursor: move;
+}
+
+pre.added {
+	border-color: green !important;
+	border-style: solid;
+	border-width: 1px;
+	cursor: move;
+}
+
+[draggable] {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	/* Required to make elements draggable in old WebKit */
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+}
+
+.container img {
+	pointer-events: none;
+	width: 100%;
+    height: auto;
+}
+
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
