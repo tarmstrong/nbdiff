@@ -2,6 +2,7 @@
 
 {% block stylesheet %}
 <link rel="stylesheet" href="/nbdiff/nbdiff.css">
+<link rel="stylesheet" href="/nbdiff/local.css">
 
 {{super()}}
 {% endblock %}
@@ -16,6 +17,7 @@
     <button id='nbdiff-next'>Next Notebook</button>
     <button id='nbdiff-shutdown'>Finished</button>
 </div>
+<div id='current-notebook' style='display: hidden' data-current-notebook={{cur_nbk}}></div>
 <div id='num-notebooks' style='display: hidden' data-num-notebooks={{num_nbks}}></div>
 {% endblock %}
 
@@ -23,6 +25,11 @@
 {{super()}}
 <script type="text/javascript" src="/nbdiff/drag_drop.js"></script>
 <script type="text/javascript" src="/nbdiff/command.js"></script>
+{% if local %}
+<script type="text/javascript" src="/nbdiff/local.js"></script>
+{% else %}
+<script type="text/javascript" src="/nbdiff/remote.js"></script>
+{% endif %}
 <script type="text/javascript" src="/nbdiff/nbdiff.js"></script>
 <script type="text/javascript" src="/nbdiff/main.js"></script>
 {% endblock %}

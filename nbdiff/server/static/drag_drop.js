@@ -2,10 +2,6 @@
 function DragDrop() {}
 
 DragDrop.prototype = (function() {
-    //private functions
-    var that = function() {
-            return this;
-        };
     var drag_start = function(ev) {
             //TODO: create command containing drag source
             var rowID = $(ev.target).closest(".row").attr("id");
