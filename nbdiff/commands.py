@@ -45,8 +45,12 @@ def diff():
     parser = NotebookParser()
 
     if args.before and args.after:
-        notebook1 = parser.parse(open(args.before))
-        notebook2 = parser.parse(open(args.after))
+        try:
+            notebook1 = parser.parse(open(args.before))
+            notebook2 = parser.parse(open(args.after))
+        except nbformat.NotJSONError:
+            print("The notebooks are not a valid ipynb format.")
+            return -1
 
         result = notebook_diff(notebook1, notebook2)
 
@@ -142,9 +146,13 @@ def merge():
 
     if not len(unmerged_notebooks) == 0:
         for nbook in unmerged_notebooks:
-            nb_local = parser.parse(nbook[0])
-            nb_base = parser.parse(nbook[1])
-            nb_remote = parser.parse(nbook[2])
+            try:        
+                nb_local = parser.parse(nbook[0])
+                nb_base = parser.parse(nbook[1])
+                nb_remote = parser.parse(nbook[2])
+            except nbformat.NotJSONError:
+                print("The notebooks are not a valid ipynb format.")
+                return -1
 
             pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
 
