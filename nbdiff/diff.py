@@ -1,8 +1,37 @@
 import itertools as it
 import collections
 
+__all__ = ['diff']
+
 
 def diff(before, after, check_modified=False):
+    """Diff two sequences of comparable objects.
+
+    The result of this function is a list of dictionaries containing
+    values in ``before`` or ``after`` with a ``state`` of either
+    'unchanged', 'added', 'deleted', or 'modified'.
+
+    >>> import pprint
+    >>> result = diff(['a', 'b', 'c'], ['b', 'c', 'd'])
+    >>> pprint.pprint(result)
+    [{'state': 'deleted', 'value': 'a'},
+     {'state': 'unchanged', 'value': 'b'},
+     {'state': 'unchanged', 'value': 'c'},
+     {'state': 'added', 'value': 'd'}]
+
+    Parameters
+    ----------
+    before : iterable
+        An iterable containing values to be used as the baseline version.
+    after : iterable
+        An iterable containing values to be compared against the baseline.
+    check_modified : bool
+        Whether or not to check for modifiedness.
+
+    Returns
+    -------
+    diff_items : A list of dictionaries containing diff information.
+    """
     grid = create_grid(before, after)
     nrows = len(grid[0])
     ncols = len(grid)
@@ -46,23 +75,6 @@ def diff(before, after, check_modified=False):
             })
         else:
             raise Exception('We should not be here.')
-    return result
-
-
-def diff_modified_items(cellslist):
-    result = {}
-    for i in range(len(cellslist)):
-        if cellslist[i]['state'] == 'modified':
-            if cellslist[i]['originalvalue'].data['cell_type'] == 'heading':
-                result[i] = diff(
-                    cellslist[i]['originalvalue'].data["source"].split(),
-                    cellslist[i]['modifiedvalue'].data["source"].split(),
-                )
-            else:
-                result[i] = diff(
-                    cellslist[i]['originalvalue'].data["input"].splitlines(),
-                    cellslist[i]['modifiedvalue'].data["input"].splitlines(),
-                )
     return result
 
 
