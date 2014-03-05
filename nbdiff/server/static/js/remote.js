@@ -1,12 +1,13 @@
 function initToolbar(info) {
     var mode = info.mode;
     var save = info.save;
+    var self = info.self;
     
     if (mode === 'diff') {
     } else if (mode === 'merge') {
         $('#nbdiff-save').click(function (event) {
             event.preventDefault();
-            remoteSave();
+            remoteSave(self);
         });
         $('#nbdiff-undo').click(function () {
             Invoker.undo();
@@ -19,13 +20,19 @@ function initToolbar(info) {
         $('button#nbdiff-redo').show();
         
         $('button#nbdiff-save').show();
+
     }
 }
-function remoteSave(){
+
+//append a form that allows saving.
+$('body').append("<form action=\"/SaveNotebook\" method=\"POST\" enctype=\"multipart/form-data\" id=\"download\" style=\"display:none\">"+
+                  "<input type=\"hidden\" id=\"download_data\" name=\"download_data\"/></form>");
+                  
+function remoteSave(self){
 
     var mergedCellElements;
 
-    if (this._isDiff() === true) {
+    if (self._isDiff() === true) {
         // Not sure how this would have been called since the button is hidden.
         // But if it is, we want to play it safe.
         return;
@@ -35,15 +42,12 @@ function remoteSave(){
 
     // Clear the original notebook div.
     $('#notebook-container').empty();
-
     $('#notebook-container').append(mergedCellElements);
-
     $('#notebook-container .cell.nbdiff-deleted').remove();
     $('#notebook-container .cell.nbdiff-empty').remove();
 
-
-    this._init_cells();
-    this._nbcells.forEach(function (nbcell) {
+    self._init_cells();
+    self._nbcells.forEach(function (nbcell) {
         if (nbcell.state() === 'added' || nbcell.state() === 'unchanged') {
             nbcell.removeMetadata();
         }
@@ -53,4 +57,17 @@ function remoteSave(){
 
     //TODO:replace with server request to save to .ipynb
     //IPython.notebook.save_notebook();
+    remoteSaveNotebook(IPython.notebook)
+}
+
+//Modified code of IPython.notebook.save_notebook() in order to save notebook. 
+function remoteSaveNotebook(notebook){
+
+    var data = notebook.toJSON();
+    data.metadata.name = notebook.notebook_name;
+    data.nbformat = notebook.nbformat;
+    data.nbformat_minor = notebook.nbformat_minor;
+
+    $("#download_data").val(JSON.stringify(data));
+    $("#download").submit();
 }

@@ -49,7 +49,7 @@ def notebookRequest(filename):
     return ""
   else:
     return run_command("NotebookRequest", request, filename)
-
+    
 #used to get specific resources in the html pages. 
 @app.route('/nbdiff/<path:filename>')
 def nbdiff_static(filename):

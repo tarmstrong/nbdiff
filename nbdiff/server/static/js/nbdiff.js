@@ -74,7 +74,8 @@ NBDiff.prototype = {
                 mode: this._isDiff() === true ? 'diff' : 'merge',
                 save: function () {
                     self.save();
-                }
+                },
+                self: self
             });
             
             var nbcontainer = this._generateNotebookContainer();
