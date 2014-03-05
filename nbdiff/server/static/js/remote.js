@@ -25,7 +25,7 @@ function initToolbar(info) {
 }
 
 //append a form that allows saving.
-$('body').append("<form action=\"/SaveNotebook\" method=\"POST\" enctype=\"multipart/form-data\" id=\"download\" style=\"display:none\">"+
+$('body').append("<form action=\"/SaveNotebook\" method=\"POST\" enctype=\"multipart/form-data\" id=\"download\" style=\"display:none\" target=\"_blank\">"+
                   "<input type=\"hidden\" id=\"download_data\" name=\"download_data\"/></form>");
                   
 function remoteSave(self){
