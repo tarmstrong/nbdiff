@@ -65,17 +65,24 @@ def diff():
         modified_notebooks = git.get_modified_notebooks()
 
         if not len(modified_notebooks) == 0:
+            invalid_notebooks = 0
             for nbook in modified_notebooks:
                 try:
                     current_notebook = parser.parse(nbook[0])
                     head_version = parser.parse(nbook[1])
-                except nbformat.NotJSONError:
-                    print("One or more of the files are not valid .ipynb files.")
-                    if (len(modified_notebooks) == 1):
-                        return -1
 
-                result = notebook_diff(head_version, current_notebook)
-                app.add_notebook(result, 'no_filename')
+                    result = notebook_diff(head_version, current_notebook)
+                    app.add_notebook(result, 'no_filename')
+
+                except nbformat.NotJSONError:
+                    invalid_notebooks += 1
+
+            if (invalid_notebooks > 0):
+                print("One or more of the files are not valid .ipynb files.")
+
+            if (len(modified_notebooks) == invalid_notebooks):
+                print("There are no valid notebooks to diff.")
+                return -1
 
             open_browser(args.browser)
             app.run(debug=False)
@@ -150,21 +157,26 @@ def merge():
         sys.exit(-1)
 
     if not len(unmerged_notebooks) == 0:
+        invalid_notebooks = 0
         for nbook in unmerged_notebooks:
             try:
                 nb_local = parser.parse(nbook[0])
                 nb_base = parser.parse(nbook[1])
                 nb_remote = parser.parse(nbook[2])
+
+                pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
+                filename = nbook[3]
+                app.add_notebook(pre_merged_notebook, filename)
+
             except nbformat.NotJSONError:
+                invalid_notebooks += 1
+
+            if (invalid_notebooks > 0):
                 print("One or more of the files are not valid .ipynb files.")
-                if (len(unmerged_notebooks) == 1):
-                    return -1
 
-            pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
-
-            filename = nbook[3]
-
-            app.add_notebook(pre_merged_notebook, filename)
+            if (len(unmerged_notebooks) == invalid_notebooks):
+                print("There are no valid notebooks to merge.")
+                return -1
 
         def save_notebook(notebook_result, filename):
             parsed = nbformat.reads(notebook_result, 'json')
