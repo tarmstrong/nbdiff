@@ -20,6 +20,8 @@ install:
 script:
   - python setup.py nosetests
   - python setup.py install
+  - git config --global user.name Enbee Diff
+  - git config --global user.email example@example.com
   - make test-diff
   - make test-merge
   - flake8 nbdiff
