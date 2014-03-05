@@ -24,7 +24,7 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [--browser=<browser] [before after]'
+    usage = 'nbdiff [-h] [--check] [--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
@@ -35,6 +35,13 @@ def diff():
         '-b',
         default=None,
         help='Browser to launch nbdiff/nbmerge in',
+    )
+    parser.add_argument(
+        '--check',
+        '-c',
+        action='store_true',
+        default=False,
+        help='Run nbdiff but do not display the result.',
     )
     parser.add_argument('before', nargs='?',
                         help='The notebook to diff against.')
@@ -68,8 +75,9 @@ def diff():
                 result = notebook_diff(head_version, current_notebook)
                 app.add_notebook(result, 'no_filename')
 
-            open_browser(args.browser)
-            app.run(debug=False)
+            if not args.check:
+                open_browser(args.browser)
+                app.run(debug=False)
         else:
             print("No modified files to diff.")
             return 0
