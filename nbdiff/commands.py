@@ -48,15 +48,16 @@ def diff():
         try:
             notebook1 = parser.parse(open(args.before))
             notebook2 = parser.parse(open(args.after))
+
+            result = notebook_diff(notebook1, notebook2)
+
+            app.add_notebook(result, 'no_filename')
+            open_browser(args.browser)
+            app.run(debug=False)
+        
         except nbformat.NotJSONError:
             print("One or more of the files are not valid .ipynb files.")
             return -1
-
-        result = notebook_diff(notebook1, notebook2)
-
-        app.add_notebook(result, 'no_filename')
-        open_browser(args.browser)
-        app.run(debug=False)
 
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
