@@ -24,7 +24,7 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [--browser=<browser] [before after]'
+    usage = 'nbdiff [-h] [--check] [--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
@@ -35,6 +35,13 @@ def diff():
         '-b',
         default=None,
         help='Browser to launch nbdiff/nbmerge in',
+    )
+    parser.add_argument(
+        '--check',
+        '-c',
+        action='store_true',
+        default=False,
+        help='Run nbdiff algorithm but do not display the result.',
     )
     parser.add_argument('before', nargs='?',
                         help='The notebook to diff against.')
@@ -68,8 +75,9 @@ def diff():
                 result = notebook_diff(head_version, current_notebook)
                 app.add_notebook(result, 'no_filename')
 
-            open_browser(args.browser)
-            app.run(debug=False)
+            if not args.check:
+                open_browser(args.browser)
+                app.run(debug=False)
         else:
             print("No modified files to diff.")
             return 0
@@ -89,13 +97,23 @@ def merge():
     Positional arguments are available for integration with version
     control systems such as Git and Mercurial.
     '''
-    usage = 'nbmerge [-h] [--browser=<browser>] [local base remote [result]]'
+    usage = (
+        'nbmerge [-h] [--check] [--browser=<browser>]'
+        '[local base remote [result]]'
+    )
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
     )
     parser.add_argument('notebook', nargs='*')
     # TODO share this code with diff()
+    parser.add_argument(
+        '--check',
+        '-c',
+        action='store_true',
+        default=False,
+        help='Run nbmerge algorithm but do not display the result.',
+    )
     parser.add_argument(
         '--browser',
         '-b',
@@ -157,9 +175,10 @@ def merge():
             with open(filename, 'w') as targetfile:
                 nbformat.write(parsed, targetfile, 'ipynb')
 
-        app.shutdown_callback(save_notebook)
-        open_browser(args.browser)
-        app.run(debug=False)
+        if not args.check:
+            app.shutdown_callback(save_notebook)
+            open_browser(args.browser)
+            app.run(debug=False)
     else:
         print("No unmerged files to diff.")
         return 0
