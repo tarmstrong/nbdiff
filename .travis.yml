@@ -19,6 +19,9 @@ install:
 # command to run tests, e.g. python setup.py test
 script:
   - python setup.py nosetests
+  - python setup.py install
+  - make test-diff
+  - make test-merge
   - flake8 nbdiff
   - flake8 tests
   - grunt
