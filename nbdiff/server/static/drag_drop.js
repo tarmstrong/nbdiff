@@ -32,19 +32,19 @@ DragDrop.prototype = (function() {
 
             var $target = $(ev.target).closest("div.row");
             var sameRow = $target.attr("id") === data.id;
-				var $button = null;
+            var $button = null;
             if(sameRow) {
                 var command = null;
 
                 if(data.isLeft) {
-						command = new MoveRightCommand(MergeRows.rows[data.id]);
-						$button = $(ev.target).closest(".row").find('.row-cell-merge-controls-local > input');
-						$button.val("<-");
-                  $button.addClass("undo-button-local");
+                    command = new MoveRightCommand(MergeRows.rows[data.id]);
+                    $button = $(ev.target).closest(".row").find('.row-cell-merge-controls-local > input');
+                    $button.val("<-");
+                    $button.addClass("undo-button-local");
                 } else {
                     command = new MoveLeftCommand(MergeRows.rows[data.id]);
-							$button = $(ev.target).closest(".row").find('.row-cell-merge-controls-remote > input');
-							$button.val("->");
+                    $button = $(ev.target).closest(".row").find('.row-cell-merge-controls-remote > input');
+                    $button.val("->");
                     $button.addClass("undo-button-remote");
                 }
                 Invoker.storeAndExecute(command);
