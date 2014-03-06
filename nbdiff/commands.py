@@ -54,7 +54,7 @@ def diff():
             app.add_notebook(result, 'no_filename')
             open_browser(args.browser)
             app.run(debug=False)
-        
+
         except nbformat.NotJSONError:
             print("One or more of the files are not valid .ipynb files.")
             return -1
@@ -165,7 +165,8 @@ def merge():
                 nb_base = parser.parse(nbook[1])
                 nb_remote = parser.parse(nbook[2])
 
-                pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
+                pre_merged_notebook = notebook_merge(nb_local,
+                                                     nb_base, nb_remote)
                 filename = nbook[3]
                 app.add_notebook(pre_merged_notebook, filename)
 
