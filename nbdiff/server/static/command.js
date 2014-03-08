@@ -2,36 +2,36 @@
 
 var Invoker = (function () {
     var _undo_commands = [];
-    var _redo_commands = [];
     var storeAndExecute = function(command){
-        _undo_commands.push(command);
-        command.execute();
-        console.log("Undo list items: "+_undo_commands.length);
-        console.log("Redo list items: "+_redo_commands.length);
-    };
-    var undo = function() {
-        if(_undo_commands.length > 0) {
-            var command = _undo_commands.pop();
-            command.undo();
-            _redo_commands.push(command);
-            console.log("Undo list items: "+_undo_commands.length);
-            console.log("Redo list items: "+_redo_commands.length);
+	for(var i = 0;i < _undo_commands.length; i++)
+	{
+		if(command.id === _undo_commands[i].id)
+		{
+			_undo_commands.splice(i, 1);
+		}
+	}
+		_undo_commands.push(command);
+		command.execute();
+	};
+	var undo = function(id) {
+			if(_undo_commands.length > 0) {
+				for(var i = 0;i < _undo_commands.length; i++)
+            {
+                if(_undo_commands[i].id === id)
+                {
+                    var command = _undo_commands[i];
+                    _undo_commands.splice(i, 1);
+                    command.undo();
+                }
+            }
         }
         else {
             throw "Nothing to undo.";
         }
     };
-    var redo = function() {
-        if(_redo_commands.length > 0) {
-            storeAndExecute(_redo_commands.pop());
-        } else {
-            throw "Nothing to redo.";
-        }
-    };
     return {
         storeAndExecute: storeAndExecute,
-        undo: undo,
-        redo: redo
+        undo: undo
     };
 })();
 
@@ -41,6 +41,7 @@ function MoveLeftCommand(merge_row) {
     this.old_classes = merge_row._cells.base.element().attr("class");
     this.output = merge_row._cells.base.element().find("div.output_wrapper").clone(true);
     this.old_state = merge_row._cells.base.state();
+    this.id = merge_row.rowID;
 }
 
 /* The Command for turning on the light - ConcreteCommand #1 */
@@ -59,6 +60,7 @@ function MoveRightCommand(merge_row) {
     this.old_classes = merge_row._cells.base.element().attr("class");
     this.output = merge_row._cells.base.element().find("div.output_wrapper").clone(true);
     this.old_state = merge_row._cells.base.state();
+    this.id = merge_row.rowID;
 }
 
 /* The Command for turning off the light - ConcreteCommand #2 */

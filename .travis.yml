@@ -8,7 +8,6 @@ node_js:
 
 python:
   - "2.7"
-  - "2.6"
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
@@ -19,6 +18,11 @@ install:
 # command to run tests, e.g. python setup.py test
 script:
   - python setup.py nosetests
+  - python setup.py install
+  - git config --global user.name Enbee Diff
+  - git config --global user.email example@example.com
+  - make test-diff
+  - make test-merge
   - flake8 nbdiff
   - flake8 tests
   - grunt
