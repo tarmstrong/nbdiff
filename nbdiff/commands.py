@@ -45,18 +45,29 @@ def diff():
     parser = NotebookParser()
 
     if args.before and args.after:
+        invalid_notebooks = []
+
         try:
             notebook1 = parser.parse(open(args.before))
-            notebook2 = parser.parse(open(args.after))
+        except nbformat.NotJSONError:
+            invalid_notebooks.append(args.before)
 
+        try:
+            notebook2 = parser.parse(open(args.after))
+        except nbformat.NotJSONError:
+            invalid_notebooks.append(args.after)
+
+        if (len(invalid_notebooks) == 0):
             result = notebook_diff(notebook1, notebook2)
 
             app.add_notebook(result, 'no_filename')
             open_browser(args.browser)
             app.run(debug=False)
-
-        except nbformat.NotJSONError:
-            print("One or more of the files are not valid .ipynb files.")
+            
+        else:
+            print('The notebooks could not be diffed.')
+            print('There was a problem parsing the following notebook '
+                  + 'files:\n' + '\n'.join(invalid_notebooks))
             return -1
 
     elif not (args.before or args.after):
@@ -81,7 +92,7 @@ def diff():
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
-                print ('There was a problem parsing the following notebook '
+                print('There was a problem parsing the following notebook '
                        + 'files:\n' + '\n'.join(invalid_notebooks))
 
             if (len(modified_notebooks) == len(invalid_notebooks)):
@@ -179,7 +190,7 @@ def merge():
                 invalid_notebooks.append(filename)
 
         if (len(invalid_notebooks) > 0):
-            print ('There was a problem parsing the following notebook '
+            print('There was a problem parsing the following notebook '
                    + 'files:\n' + '\n'.join(invalid_notebooks))
 
         if (len(unmerged_notebooks) == len(invalid_notebooks)):
