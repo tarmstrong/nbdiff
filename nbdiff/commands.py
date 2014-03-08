@@ -70,7 +70,7 @@ def diff():
             app.add_notebook(result, 'no_filename')
             open_browser(args.browser)
             app.run(debug=False)
-            
+
         else:
             print('The notebooks could not be diffed.')
             print('There was a problem parsing the following notebook '
@@ -100,7 +100,7 @@ def diff():
 
             if (len(invalid_notebooks) > 0):
                 print('There was a problem parsing the following notebook '
-                       + 'files:\n' + '\n'.join(invalid_notebooks))
+                      + 'files:\n' + '\n'.join(invalid_notebooks))
 
             if (len(modified_notebooks) == len(invalid_notebooks)):
                 print("There are no valid notebooks to diff.")
@@ -209,7 +209,7 @@ def merge():
 
         if (len(invalid_notebooks) > 0):
             print('There was a problem parsing the following notebook '
-                   + 'files:\n' + '\n'.join(invalid_notebooks))
+                  + 'files:\n' + '\n'.join(invalid_notebooks))
 
         if (len(unmerged_notebooks) == len(invalid_notebooks)):
             print("There are no valid notebooks to merge.")
