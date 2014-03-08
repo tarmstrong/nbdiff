@@ -70,7 +70,7 @@ def diff():
             for nbook in modified_notebooks:
                 try:
                     filename = nbook[2]
-                    
+
                     current_notebook = parser.parse(nbook[0])
                     head_version = parser.parse(nbook[1])
 
@@ -81,7 +81,8 @@ def diff():
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
-                print ('There was a problem parsing the following notebook files:\n' + '\n'.join(invalid_notebooks))
+                print ('There was a problem parsing the following notebook '
+                       + 'files:\n' + '\n'.join(invalid_notebooks))
 
             if (len(modified_notebooks) == len(invalid_notebooks)):
                 print("There are no valid notebooks to diff.")
@@ -164,7 +165,7 @@ def merge():
         for nbook in unmerged_notebooks:
             try:
                 filename = nbook[3]
-                
+
                 nb_local = parser.parse(nbook[0])
                 nb_base = parser.parse(nbook[1])
                 nb_remote = parser.parse(nbook[2])
@@ -178,7 +179,8 @@ def merge():
                 invalid_notebooks.append(filename)
 
         if (len(invalid_notebooks) > 0):
-            print ('There was a problem parsing the following notebook files:\n' + '\n'.join(invalid_notebooks))
+            print ('There was a problem parsing the following notebook '
+                   + 'files:\n' + '\n'.join(invalid_notebooks))
 
         if (len(unmerged_notebooks) == len(invalid_notebooks)):
             print("There are no valid notebooks to merge.")
