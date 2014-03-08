@@ -56,3 +56,9 @@ release: clean
 sdist: clean
 	python setup.py sdist
 	ls -l dist
+
+test-diff:
+	bash scripts/make_diff.sh
+
+test-merge:
+	bash scripts/make_merge_conflict.sh

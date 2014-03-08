@@ -66,7 +66,7 @@ else:
 
 
 try:
-    print 'Attempting merge in {}'.format(folder_name)
+    print 'Attempting merge in:\n{}'.format(folder_name)
     if MERCURIAL:
         subprocess.check_output('hg merge friend -t nbmerge'.split())
     else:

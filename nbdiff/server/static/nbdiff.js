@@ -191,28 +191,51 @@ Merge.prototype = {
     addButtonListeners: function() {
         var $buttons = $("input.merge-arrow-right");
         var rows = this.rows;
-        var click_action_right = function(row) {
-            var moveRight = new MoveRightCommand(row);
-            Invoker.storeAndExecute(moveRight);
+        var click_action_right = function(button, row) {
+            if(!$(button).hasClass("undo-button-local"))
+            {
+                var moveRight = new MoveRightCommand(row);
+                Invoker.storeAndExecute(moveRight);
+                $(button).addClass("undo-button-local");
+                $(button).val("<-");
+            }
+            else
+            {
+                Invoker.undo(row.rowID);
+                $(button).removeClass("undo-button-local");
+                $(button).val("->");
+            }
         };
         $buttons.each(function(key, value)
         {
             var id = $(value).closest('.row').attr('id');
             var row = rows[id];
-            $(value).click(function() {click_action_right(row); });
+            $(value).click(function() {click_action_right(value, row); });
         });
 
         $buttons = $("input.merge-arrow-left");
         rows = this.rows;
-        var click_action_left = function(row) {
-            var moveLeft = new MoveLeftCommand(row);
-            Invoker.storeAndExecute(moveLeft);
+        var click_action_left = function(button, row) {
+            if(!$(button).hasClass("undo-button-remote"))
+            {
+                var moveLeft = new MoveLeftCommand(row);
+                Invoker.storeAndExecute(moveLeft);
+                $(button).addClass("undo-button-remote");
+                $(button).val("->");
+            }
+            else
+            {
+                Invoker.undo(row.rowID);
+                $(button).removeClass("undo-button-remote");
+                $(button).val("<-");
+            }
+
         };
         $buttons.each(function(key, value)
         {
             var id = $(value).closest('.row').attr('id');
             var row = rows[id];
-            $(value).click(function() {click_action_left(row); });
+            $(value).click(function() {click_action_left(value, row); });
         });
     },
 
