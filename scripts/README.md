@@ -51,7 +51,9 @@ test-3.ipynb
  * Running on http://127.0.0.1:5000/
 Created new window in existing browser session.
 ```
+
 `test-0.ipynb` and `test-1.ipynb` are valid notebook files and will open in your browser.
+
 `test-2.ipynb` and `test-3.ipynb` are not valid notebook files and will print an error message to your console. 
 
 `make_merge_conflict_hg.py` does the same thing but with a mercurial repository.
@@ -93,7 +95,7 @@ Created new window in existing browser session.
 
 #For manual testing of example notebooks 
 
-## Diff notebook examples - 'example-notebooks/diff/'
+## Diff notebook examples - `example-notebooks/diff/`
 
 ```
 $ cd example-notebooks/diff/
@@ -120,16 +122,22 @@ $ nbdiff before.ipynb after.ipynb
 Created new window in existing browser session.
 ```
 
-##Expected Results for all example diff notebooks:
+####Expected Results for all example diff notebooks:
 
 **0:** `before.ipynb` and `after.ipynb` are both valid notebooks
+
 **1:** `before.ipynb` and `after.ipynb` are both valid notebooks
+
 **2:** `before.ipynb` and `after.ipynb` are both valid notebooks
+
 **3:** `before.ipynb` is a valid notebook and `after.ipynb` is an invalid notebook
+
 **4:** `before.ipynb` is an invalid notebook and `after.ipynb` is a valid notebook
+
 **5:** `before.ipynb` and `after.ipynb` are both invalid notebooks
 
-## Merge notebook examples - 'example-notebooks/merge/'
+
+## Merge notebook examples - `example-notebooks/merge/`
 
 ```
 $ cd example-notebooks/merge/
@@ -157,11 +165,15 @@ $ nbmerge local.ipynb base.ipynb remote.ipynb
  * Running on http://127.0.0.1:5000/
 Created new window in existing browser session.
 ```
-##Expected Results for all example merge notebooks:
+
+####Expected Results for all example merge notebooks:
 
 **0:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
+
 **1:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
+
 **2:** `local.ipynb` `base.ipynb` are valid notebooks and `remote.ipynb` is an invalid notebook
+
 **3:** `local.ipynb` `base.ipynb` `remote.ipynb` are all invalid notebooks
 
 
