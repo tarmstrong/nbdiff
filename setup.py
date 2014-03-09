@@ -31,7 +31,13 @@ setup(
         'nbdiff.adapter',
     ],
     package_data={
-        'nbdiff.server': ['templates/*', 'static/*'],
+        'nbdiff.server': [
+            'templates/*',
+            'static/libraries/*',
+            'static/image/*',
+            'static/js/*',
+            'static/css/*',
+        ],
     },
     package_dir={'nbdiff': 'nbdiff'},
     entry_points={'console_scripts': [
