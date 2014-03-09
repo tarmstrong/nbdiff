@@ -9,7 +9,8 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'jstests/*.js',
-        'nbdiff/server/static/*.js'
+        'nbdiff/server/static/*.js',
+        'nbdiff/server/static/js/*.js'
       ],
       options: {
         jshintrc: '.jshintrc'
