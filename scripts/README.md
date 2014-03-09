@@ -91,6 +91,7 @@ Created new window in existing browser session.
 ```
 
 `test-0.ipynb` `test-1.ipynb` and `test-2.ipynb` are valid notebook files and will open in your browser.
+
 `test-3.ipynb` `test-4.ipynb` and `test-5.ipynb` are not valid notebook files and will print an error message to your console. 
 
 #For manual testing of example notebooks 
