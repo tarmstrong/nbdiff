@@ -6,6 +6,10 @@ function initToolbar(info) {
     if (mode === 'diff') {
         $('button#nbdiff-shutdown').show();
     } else if (mode === 'merge') {
+        $('button#nbdiff-save').show();
+        $('button#nbdiff-undo').show();
+        $('button#nbdiff-redo').show();
+
         $('#nbdiff-save').click(function (event) {
             event.preventDefault();
             save();
@@ -18,12 +22,6 @@ function initToolbar(info) {
         });
     }
     
-    $('button#nbdiff-undo').show();
-    
-    $('button#nbdiff-redo').show();
-    
-    $('button#nbdiff-save').show();
-
     if (pageInfo.current !== 0) {
         $('button#nbdiff-previous').show();
     }
