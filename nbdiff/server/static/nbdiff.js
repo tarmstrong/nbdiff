@@ -58,11 +58,11 @@ NBDiff.prototype = {
         this._init_cells();
         this.log('Initializing nbdiff.');
         if (this._hasNBDiffMetadata() === true) {
-            $('#notebook-container').css("visibility", "hidden");
             this.log('Found nbdiff metadata in the notebook.');
+
             this.log('Hiding the normal notebook container.');
+            $('#notebook-container').css("visibility", "hidden");
             $('#notebook-container').hide();
-            this.log('Creating a new notebook container.');
 
             if (this._isDiff() === true) {
                 this.controller = new Diff(this.notebook, this._nbcells);
@@ -70,22 +70,17 @@ NBDiff.prototype = {
                 this.controller = new Merge(this.notebook, this._nbcells);
             }
 
-            initToolbar({
-                mode: this._isDiff() === true ? 'diff' : 'merge',
-                save: function () {
-                    self.save();
-                }
-            });
+            this.log('Calling preRender.');
+            this.controller.preRender(self);
             
+            this.log('Creating a new notebook container.');
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
-            this.controller.render(nbcontainer);
-            if(this._isMerge() === true) {
-                var dd = new DragDrop();
-                dd.enable();
-                this.controller.addButtonListeners();
-            }
 
+            this.controller.render(nbcontainer);
+
+            this.log('Calling postRender.');
+            this.controller.postRender();
         } else {
             this.log('No nbdiff metadata in the notebook.');
             this.log('Showing the normal notebook container.');
@@ -169,6 +164,19 @@ Merge.prototype = {
         });
         this.rows = rows;
     },
+    preRender: function (mainController) {
+        initToolbar({
+            mode: 'merge',
+            save: function () {
+                mainController.save();
+            }
+        });
+    },
+    postRender: function () {
+        var dd = new DragDrop();
+        dd.enable();
+        this._addButtonListeners();
+    },
     _generateRows: function () {
         var rows = [];
         this._nbcells.forEach(function (nbcell) {
@@ -188,7 +196,7 @@ Merge.prototype = {
         });
         return rows;
     },
-    addButtonListeners: function() {
+    _addButtonListeners: function() {
         var $buttons = $("input.merge-arrow-right");
         var rows = this.rows;
         var click_action_right = function(button, row) {
@@ -260,6 +268,16 @@ Diff.prototype = {
             self._container.append(dr.render());
         });
         return this._container;
+    },
+    preRender: function (mainController) {
+        initToolbar({
+            mode: 'diff',
+            save: function () {
+                mainController.save();
+            }
+        });
+    },
+    postRender: function () {
     },
     _generateRows: function () {
         var self = this,
