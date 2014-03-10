@@ -6,7 +6,7 @@ from unicodedata import normalize
 
 class SaveNotebookCommand(BaseCommand):
 
-    def process(self, request, filename):
+    def process(self, request, filename, db_session):
         #format for notebook.
         format = u'json'
         data = request.form['download_data']

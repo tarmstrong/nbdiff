@@ -44,3 +44,4 @@ nosetests.xml
 # node
 node_packages
 *~
+nbdiff/server/database/nbdiffResult

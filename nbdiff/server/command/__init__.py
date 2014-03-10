@@ -6,5 +6,5 @@ class BaseCommand(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def process(self, request, filename):
+    def process(self, request, filename, db_session):
         pass

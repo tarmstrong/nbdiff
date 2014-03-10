@@ -1,16 +1,16 @@
 from . import BaseCommand
-from flask import render_template
+from flask import redirect
 from ...notebook_parser import NotebookParser
 from ...merge import notebook_merge
-import ntpath
-import tempfile
+from nbdiff.server.database.nbdiffModel import nbdiffModel
 import urllib2
 import json
+import bitarray
 
 
 class MergeURLCommand(BaseCommand):
 
-    def process(self, request, filename):
+    def process(self, request, filename, db_session):
         parser = NotebookParser()
 
         localURL = request.form['localURL']
@@ -30,20 +30,22 @@ class MergeURLCommand(BaseCommand):
 
         mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
 
-        temp = tempfile.NamedTemporaryFile(delete=False)
-        temp.write(json.dumps(mergedNotebook, indent=2))
-        temp.close()
-
-        nb_id = ntpath.basename(temp.name)
-
-        return render_template(
-            'nbdiff.html',
-            project='/',
-            base_project_url='/',
-            base_kernel_url='/',
-            notebook_id=nb_id,
-            local=False
-        )
+        #bitarray used to convert notebook to binary for BLOB
+        ba = bitarray.bitarray()
+        ba.fromstring(json.dumps(mergedNotebook, indent=2))
+        
+        #object to be saved to database
+        obj = nbdiffModel(ba.to01())
+        
+        #add to database and commit it.
+        db_session.add(obj)
+        db_session.commit()
+        
+        #return the id of the object.
+        nb_id = obj.id 
+        
+        #redirect is used because we want user to have a easier url to return to.
+        return redirect("/Comparison/"+str(nb_id), code=302)
 
 
 def newInstance():

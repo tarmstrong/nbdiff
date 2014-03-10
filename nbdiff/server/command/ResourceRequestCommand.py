@@ -5,7 +5,7 @@ import os
 
 class ResourceRequestCommand(BaseCommand):
 
-    def process(self, request, filename):
+    def process(self, request, filename, db_session):
         return send_from_directory(
             os.path.abspath(
                 os.path.join(os.path.dirname(__file__), "..")
