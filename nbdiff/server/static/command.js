@@ -37,9 +37,7 @@ var Invoker = (function () {
 
 function MoveLeftCommand(merge_row) {
     this.merge_row = merge_row;
-    this.text = merge_row._cells.base.cell.get_text();
     this.old_classes = merge_row._cells.base.element().attr("class");
-    this.cell = merge_row._cells.base.element().find("div.output_wrapper").clone(true);
     this.old_state = merge_row._cells.base.state();
     this.id = merge_row.rowID;
     this.cell_JSON = merge_row._cells.base.cell.toJSON();
@@ -57,9 +55,7 @@ MoveLeftCommand.prototype = {
 
 function MoveRightCommand(merge_row) {
     this.merge_row = merge_row;
-    this.text = merge_row._cells.base.cell.get_text();
     this.old_classes = merge_row._cells.base.element().attr("class");
-    this.output = merge_row._cells.base.element().find("div.output_wrapper").clone(true);
     this.old_state = merge_row._cells.base.state();
     this.id = merge_row.rowID;
     this.cell_JSON = merge_row._cells.base.cell.toJSON();
