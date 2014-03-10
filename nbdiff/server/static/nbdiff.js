@@ -376,7 +376,7 @@ MergeRow.prototype = {
     },
     moveRight: function () {
         console.log("move right");
-        var cell = IPython.notebook.insert_cell_at_index(this._cells.local.cell.cell_type, 0)
+        var cell = IPython.notebook.insert_cell_at_index(this._cells.local.cell.cell_type, 0);
     	cell.fromJSON(this._cells.local.cell.toJSON());
     	this._cells.base.cell.element.replaceWith(cell.element);
     	this._cells.base.cell = cell;
@@ -386,7 +386,7 @@ MergeRow.prototype = {
         this._cells.base.set_state(this._cells.local.state());
     },
     undo: function(cell_json, cell_class, old_state) {
-    	var cell = IPython.notebook.insert_cell_at_index(cell_json.cell_type, 0)
+    	var cell = IPython.notebook.insert_cell_at_index(cell_json.cell_type, 0);
     	cell.fromJSON(cell_json);
     	this._cells.base.cell.element.replaceWith(cell.element);
     	this._cells.base.cell = cell;
