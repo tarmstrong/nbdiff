@@ -385,11 +385,13 @@ MergeRow.prototype = {
     },
     moveLeft: function () {
         console.log("move left");
-        this._cells.base.cell.set_text(this._cells.remote.cell.get_text());
+        var cell = IPython.notebook.insert_cell_at_index(this._cells.remote.cell.cell_type, 0);
+        cell.fromJSON(this._cells.remote.cell.toJSON());
+        this._cells.base.cell.element.replaceWith(cell.element);
+        this._cells.base.cell = cell;
+        this._cells.base.cell.select();
         this._cells.base.cell.element.removeClass();
         this._cells.base.cell.element.addClass(this._cells.remote.cell.element.attr("class"));
-        var output = this._cells.remote.element().find("div.output_wrapper").clone(true);
-        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
         this._cells.base.set_state(this._cells.remote.state());
     },
     moveRight: function () {
