@@ -3,6 +3,7 @@ from .diff import (
     create_grid,
     find_matches,
 )
+import Levenshtein
 
 
 class BooleanPlus(object):
@@ -118,21 +119,6 @@ class CellComparator():
                 return False
         return True
 
-    def count_similar_lines(self, cell1, cell2):
-        grid = create_grid(cell1['input'], cell2['input'])
-        matches = []
-        for colnum in range(len(grid)):
-            new_matches = find_matches(grid[colnum], colnum)
-            matches = matches + new_matches
-
-        matched_cols = [r[0] for r in matches]
-        matched_rows = [r[1] for r in matches]
-
-        unique_cols = set(matched_cols)
-        unique_rows = set(matched_rows)
-
-        return min(len(unique_cols), len(unique_rows))
-
     def compare_cells(self, cell1, cell2):
         '''
         return true if exactly equal or if equal but modified,
@@ -148,11 +134,9 @@ class CellComparator():
         elif not self.check_modified:
             return BooleanPlus(False, False)
 
-        unchanged_count = self.count_similar_lines(cell1, cell2)
-        similarity_percent = (
-            (2.0 * unchanged_count)
-            / (len(cell1['input']) + len(cell2['input']))
-        )
+        input1 = u"".join(cell1['input'])
+        input2 = u"".join(cell2['input'])
+        similarity_percent = Levenshtein.ratio(input1, input2)
         if similarity_percent >= 0.65:
             return BooleanPlus(True, True)
         return BooleanPlus(False, False)

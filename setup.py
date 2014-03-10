@@ -43,6 +43,7 @@ setup(
         'flask',
         'jinja2',
         'ipython',
+        'python-Levenshtein',
     ],
     license="MIT",
     zip_safe=False,
