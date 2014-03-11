@@ -48,7 +48,6 @@ DragDrop.prototype = (function() {
                     $button.addClass("undo-button-remote");
                 }
                 Invoker.storeAndExecute(command);
-                //the codemirror textbox is conflicting with the allow_drop/on_drop functions
             }
      };
     var on_drag_enter = function(ev) {
@@ -62,7 +61,7 @@ DragDrop.prototype = (function() {
                 cell.draggable = true;
                 cell.addEventListener('dragstart', drag_start, false);
             });
-            cells = $(".row-cell-merge-base > div");
+            cells = $(".row-cell-merge-base");
             cells.each( function ( index, cell ) {
                 cell.addEventListener('dragover', allow_drop, false);
                 cell.addEventListener('drop', on_drop, false);
@@ -76,7 +75,7 @@ DragDrop.prototype = (function() {
                 cell.draggable = false;
                 cell.removeEventListener('dragstart', drag_start);
             });
-            cells = $(".row-cell-merge-base > div");
+            cells = $(".row-cell-merge-base");
             cells.each( function ( index, cell ) {
                 cell.removeEventListener('dragover', allow_drop);
                 cell.removeEventListener('drop', on_drop);

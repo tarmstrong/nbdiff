@@ -549,7 +549,7 @@ NBDiffCell.prototype = {
 
 //there's probably a better way to get the rows
 function MergeRows() {
-    this.rows = null;
+    this.rows = [];
 }
 
 function init() {
