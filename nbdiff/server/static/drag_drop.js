@@ -37,17 +37,18 @@ DragDrop.prototype = (function() {
                 var command = null;
 
                 if(data.isLeft) {
-                    command = new MoveRightCommand(MergeRows.rows[data.id]);
-                    $button = $(ev.target).closest(".row").find('.row-cell-merge-controls-local > input');
-                    $button.val("<-");
-                    $button.addClass("undo-button-local");
+                    if(MergeRows.rows[data.id].allowsMoveRight()) {
+                        command = new MoveRightCommand(MergeRows.rows[data.id]);
+                        MergeRows.rows[data.id].toggleLeftButton();
+                        Invoker.storeAndExecute(command);
+                    }
                 } else {
-                    command = new MoveLeftCommand(MergeRows.rows[data.id]);
-                    $button = $(ev.target).closest(".row").find('.row-cell-merge-controls-remote > input');
-                    $button.val("->");
-                    $button.addClass("undo-button-remote");
+                    if(MergeRows.rows[data.id].allowsMoveLeft()) {
+                        command = new MoveLeftCommand(MergeRows.rows[data.id]);
+                        MergeRows.rows[data.id].toggleRightButton();
+                        Invoker.storeAndExecute(command);
+                    }
                 }
-                Invoker.storeAndExecute(command);
             }
      };
     var on_drag_enter = function(ev) {
