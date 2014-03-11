@@ -195,6 +195,11 @@
       min-width: 100%;
   }
 
+  .line-diff-line {
+      font-family: monospace;
+      white-space: pre;
+  }
+
   .line-diff-right, .line-diff-left {
   }
 
@@ -211,5 +216,5 @@
   }
 
   .line-diff-unchanged {
-      background-color: rgb(230, 230, 230);
+      background-color: rgb(245, 245, 245);
   }

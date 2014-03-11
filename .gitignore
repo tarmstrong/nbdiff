@@ -3,6 +3,8 @@
 *merge-conflict-testfolder*
 *merge-diff-testfolder*
 
+*Thumbs.db
+
 *.idea*
 
 node_modules

@@ -22,12 +22,12 @@ function initToolbar(info) {
         $('button#nbdiff-save').show();
 
     }
+
+    //append a form that allows saving.
+    $('body').append("<form action=\"/SaveNotebook\" method=\"POST\" enctype=\"multipart/form-data\" id=\"download\" style=\"display:none\" target=\"_blank\">"+
+                    "<input type=\"hidden\" id=\"download_data\" name=\"download_data\"/></form>");
 }
 
-//append a form that allows saving.
-$('body').append("<form action=\"/SaveNotebook\" method=\"POST\" enctype=\"multipart/form-data\" id=\"download\" style=\"display:none\" target=\"_blank\">"+
-                  "<input type=\"hidden\" id=\"download_data\" name=\"download_data\"/></form>");
-                  
 function remoteSave(self){
 
     var mergedCellElements;
@@ -57,7 +57,7 @@ function remoteSave(self){
 
     //TODO:replace with server request to save to .ipynb
     //IPython.notebook.save_notebook();
-    remoteSaveNotebook(IPython.notebook)
+    remoteSaveNotebook(IPython.notebook);
 }
 
 //Modified code of IPython.notebook.save_notebook() in order to save notebook. 
