@@ -89,6 +89,8 @@ $(document).ready(function(){
             } else {
                 displayError(0, $id("diffErrorMsg"), $id("submitBtn3"));
             }
+            dict[targetType][1].innerHTML = "Invalid File."
+            dict[targetType][2].value = ""
         } else if(files[0].name.substring(files[0].name.indexOf(".")) !== ".ipynb"){
             //invalid file type upload.
             if(targetType === "base" || targetType === "local" || targetType === "remote"){
@@ -96,6 +98,8 @@ $(document).ready(function(){
             } else {
                 displayError(1, $id("diffErrorMsg"), $id("submitBtn3"));
             }
+            dict[targetType][1].innerHTML = "Invalid File."
+            dict[targetType][2].value = ""
         } else {  
             //valid file specified
             

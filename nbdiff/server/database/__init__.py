@@ -2,8 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+
 #database connection using sqlAlchemy
-engine = create_engine('sqlite:///nbdiff/server/database/nbdiffResult', convert_unicode=True)
+engine = create_engine(
+    'sqlite:///nbdiff/server/database/nbdiffResult',
+    convert_unicode=True
+)
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
@@ -11,6 +15,7 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 #decalarative base used to init database.
 Base = declarative_base()
 Base.query = db_session.query_property()
+
 
 def init_db():
     # import all modules here that might define models so that

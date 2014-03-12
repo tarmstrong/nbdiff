@@ -1,5 +1,6 @@
-from sqlalchemy import *
+from sqlalchemy import Integer, Binary, Column
 from nbdiff.server.database import Base
+
 
 class nbdiffModel(Base):
     __tablename__ = 'nbdiffResult'
