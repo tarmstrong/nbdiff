@@ -31,7 +31,8 @@ class SaveNotebookCommand(BaseCommand):
 
         #make a file download response
         response = make_response(notebook_formatted)
-        header = "attachment; filename="+name+".ipynb"
+        header = "attachment; filename=mergedNotebook.ipynb"
+        response.headers["Content-Type"] = "text/plain"
         response.headers["Content-Disposition"] = header
 
         return response

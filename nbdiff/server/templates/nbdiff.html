@@ -8,7 +8,11 @@
 {% endblock %}
 
 {% block header %}
+{% if local %}
 <img src="/nbdiff/image/logo.png" id="nbdiff-logo" alt="NBDiff" />
+{% else %}
+<a href="/"><img src="/nbdiff/image/logo.png" id="nbdiff-logo" alt="NBDiff" /></a>
+{% endif %}
 <div id="nbdiff-controls">
     <button id='nbdiff-undo'>Undo</button>
     <button id='nbdiff-redo'>Redo</button>
