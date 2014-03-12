@@ -13,14 +13,12 @@ class ComparisonCommand(BaseCommand):
                 nbdiffModel.id == filename
             ).first()
         except OperationalError:
-            db_session.rollback()
             print """The database is not initialized.
                 Please restart server with argument init_db"""
             errMsg = """There was an error with the database. <br/>
                Please contact administrator to resolve this issue."""
             return render_template('Error.html', err=errMsg)
         except:
-            db_session.rollback()
             errMsg = """There was an unexpected error with the database. <br/>
                 Please try again later. <br/>
                 If this problem persists please contact administrator."""
