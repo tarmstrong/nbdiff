@@ -12,6 +12,8 @@ NBDiff
         :target: https://crate.io/packages/nbdiff?version=latest
 
 
+**Warning: Under heavy development.**
+
 A tool for diffing and merging IPython Notebook files.
 
 This project is currently under heavy development by a team of

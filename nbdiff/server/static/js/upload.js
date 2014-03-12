@@ -4,10 +4,10 @@ $(document).ready(function(){
         return document.getElementById(id);
     }
     
-    Init();
+    init();
 
     // initialize
-    function Init() {
+    function init() {
 
         //define dom variables
         var localFile = $id("localFile"),
@@ -36,11 +36,11 @@ $(document).ready(function(){
         };
 
         // file select listeners
-        localFile.addEventListener("change", FileSelectHandler, false);
-        baseFile.addEventListener("change", FileSelectHandler, false);
-        remoteFile.addEventListener("change", FileSelectHandler, false);
-        beforeFile.addEventListener("change", FileSelectHandler, false);
-        afterFile.addEventListener("change", FileSelectHandler, false);
+        localFile.addEventListener("change", fileSelectHandler, false);
+        baseFile.addEventListener("change", fileSelectHandler, false);
+        remoteFile.addEventListener("change", fileSelectHandler, false);
+        beforeFile.addEventListener("change", fileSelectHandler, false);
+        afterFile.addEventListener("change", fileSelectHandler, false);
 
         // is XHR2 available
         var xhr = new XMLHttpRequest();
@@ -54,15 +54,15 @@ $(document).ready(function(){
         }
     }
     // file drag hover
-    function FileDragHover(e) {
+    function fileDragHover(e) {
         e.stopPropagation();
         e.preventDefault();
-        e.target.className = (e.type == "dragover" ? "hover" : "");
+        e.target.className = (e.type === "dragover" ? "hover" : "");
     }
     // file selection
-    function FileSelectHandler(e) {
+    function fileSelectHandler(e) {
         // cancel event and hover styling
-        FileDragHover(e);
+        fileDragHover(e);
 
         // fetch FileList object
         var files = e.target.files || e.dataTransfer.files;
@@ -70,28 +70,28 @@ $(document).ready(function(){
         // get target details
         var targetID = e.target.id;
         var targetType;
-        if(targetID.indexOf("local") != -1){
+        if(targetID.indexOf("local") !== -1){
           targetType="local";
-        } else if (targetID.indexOf("base") != -1){
+        } else if (targetID.indexOf("base") !== -1){
           targetType="base";
-        } else if (targetID.indexOf("remote") != -1){
+        } else if (targetID.indexOf("remote") !== -1){
           targetType="remote"; 
-        } else if (targetID.indexOf("before") != -1){
+        } else if (targetID.indexOf("before") !== -1){
           targetType="before"; 
-        } else if (targetID.indexOf("after") != -1){
+        } else if (targetID.indexOf("after") !== -1){
           targetType="after"; 
         }
         
         if(files.length > 1){
             //uploads more than one file per side.
-            if(targetType == "base" || targetType == "local" || targetType == "remote"){
+            if(targetType === "base" || targetType === "local" || targetType === "remote"){
                 displayError(0, $id("mergeErrorMsg"), $id("submitBtn"));
             } else {
                 displayError(0, $id("diffErrorMsg"), $id("submitBtn3"));
             }
-        } else if(files[0].name.substring(files[0].name.indexOf(".")) != ".ipynb"){
+        } else if(files[0].name.substring(files[0].name.indexOf(".")) !== ".ipynb"){
             //invalid file type upload.
-            if(targetType == "base" || targetType == "local" || targetType == "remote"){
+            if(targetType === "base" || targetType === "local" || targetType === "remote"){
                 displayError(1, $id("mergeErrorMsg"), $id("submitBtn"));
             } else {
                 displayError(1, $id("diffErrorMsg"), $id("submitBtn3"));
@@ -106,7 +106,7 @@ $(document).ready(function(){
             //read file and put JSON content into hidden input
             handleFileRead(files[0], dict[targetType][2]);
             
-            if(targetType == "base" || targetType == "local" || targetType == "remote"){
+            if(targetType === "base" || targetType === "local" || targetType === "remote"){
                 $id("mergeErrorMsg").style.display = "none";
             } else {
                 $id("diffErrorMsg").style.display = "none";
@@ -116,9 +116,9 @@ $(document).ready(function(){
     
     //adds listeners for drag and drop feature to a object.
     function setupDragDropListener(obj){
-        obj.addEventListener("dragover", FileDragHover, false);
-        obj.addEventListener("dragleave", FileDragHover, false);
-        obj.addEventListener("drop", FileSelectHandler, false);
+        obj.addEventListener("dragover", fileDragHover, false);
+        obj.addEventListener("dragleave", fileDragHover, false);
+        obj.addEventListener("drop", fileSelectHandler, false);
         obj.style.display = "block";
     }
     
@@ -133,10 +133,10 @@ $(document).ready(function(){
         var reader = new FileReader();
         reader.onload = (function(file) {
             side.value = reader.result;
-            if(localJSON.value.length != 0 && remoteJSON.value.length != 0 && baseJSON.value.length != 0){
+            if(localJSON.value.length !== 0 && remoteJSON.value.length !== 0 && baseJSON.value.length !== 0){
                 $id("submitBtn").className = "enableBtn";
             }
-            if(beforeJSON.value.length != 0 && afterJSON.value.length != 0){
+            if(beforeJSON.value.length !== 0 && afterJSON.value.length !== 0){
                 $id("submitBtn3").className = "enableBtn";
             }
         });
@@ -145,24 +145,24 @@ $(document).ready(function(){
     
     //display error message to user. 
     function displayError(type, errorDiv, submitButton){
-        if(type == 0){
-            if(errorDiv.id.indexOf("merge") != -1){
+        if(type === 0){
+            if(errorDiv.id.indexOf("merge") !== -1){
                 errorDiv.innerHTML = " <p> Multiple files uploaded are not acceptable. <br/> Please select only one local, one base, and one remote file. </p>";
             } else {
                 errorDiv.innerHTML = " <p> Multiple files uploaded are not acceptable. <br/> Please select only one previous, and one afterwards versions of a file. </p>";
             }
-        } else if (type == 1){
+        } else if (type === 1){
             errorDiv.innerHTML = " <p> Only valid .ipynb files are acceptable. </p>";
-        } else if (type == 2){
-            if(errorDiv.id.indexOf("merge") != -1){
+        } else if (type === 2){
+            if(errorDiv.id.indexOf("merge") !== -1){
                 errorDiv.innerHTML = " <p> You must specify: <br/> "+
-                                 (localJSON.value.length == 0 ? "- one local iPython notebook <br/>" : "") +
-                                 (baseJSON.value.length == 0 ? "- one local iPython notebook <br/>" : "") +
-                                 (remoteJSON.value.length == 0 ? "- one remote iPython notebook." : "") + "</p>";
+                                 (localJSON.value.length === 0 ? "- one local iPython notebook <br/>" : "") +
+                                 (baseJSON.value.length === 0 ? "- one local iPython notebook <br/>" : "") +
+                                 (remoteJSON.value.length === 0 ? "- one remote iPython notebook." : "") + "</p>";
             } else {
                 errorDiv.innerHTML = " <p> You must specify: <br/> "+
-                                 (beforeJSON.value.length == 0 ? "- one previous version of the iPython notebook <br/>" : "") +
-                                 (afterJSON.value.length == 0 ? "- one afterwards version of the iPython notebook <br/>" : "") + "</p>";
+                                 (beforeJSON.value.length === 0 ? "- one previous version of the iPython notebook <br/>" : "") +
+                                 (afterJSON.value.length === 0 ? "- one afterwards version of the iPython notebook <br/>" : "") + "</p>";
             }
         } 
         errorDiv.style.display = "block";
@@ -171,7 +171,7 @@ $(document).ready(function(){
     
     //validate form that three files are specified.
     $("#mergeForm").submit(function( event ) {
-      if(localJSON.value.length == 0 || remoteJSON.value.length == 0 || baseJSON.value.length == 0){
+      if(localJSON.value.length === 0 || remoteJSON.value.length === 0 || baseJSON.value.length === 0){
           displayError(2, $id("mergeErrorMsg"), $id("submitBtn"));  
           return false;
       } else {
@@ -181,7 +181,7 @@ $(document).ready(function(){
    
     //validate form that two files are specified. 
     $("#diffForm").submit(function( event ) {
-       if(beforeJSON.value.length == 0 || afterJSON.value.length == 0 ){
+       if(beforeJSON.value.length === 0 || afterJSON.value.length === 0 ){
             displayError(2, $id("diffErrorMsg"), $id("submitBtn3"));  
             return false;
         } else {
