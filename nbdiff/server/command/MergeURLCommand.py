@@ -35,10 +35,6 @@ class MergeURLCommand(BaseCommand):
                 errMsg = errMsg + """The Local notebook
                     exceeds 20MB. Only notebooks below
                     20MB are accepted.<br/>"""
-            if not ".ipynb" in localFile.info()['Content-Disposition']:
-                errMsg = errMsg + """The Local notebook
-                    is not a .ipynb file. Only .ipynb
-                    files are accepted.<br/>"""
         except:
             errMsg = errMsg + """We are unable to access
                 the Local notebook file from the
@@ -50,10 +46,6 @@ class MergeURLCommand(BaseCommand):
                 errMsg = errMsg + """The Base notebook
                     exceeds 20MB. Only notebooks below
                     20MB are accepted.<br/>"""
-            if not ".ipynb" in baseFile.info()['Content-Disposition']:
-                errMsg = errMsg + """The Base notebook is
-                    not a .ipynb file. Only .ipynb
-                    files are accepted.<br/>"""
         except:
             errMsg = errMsg + """We are unable to access
                 the Base notebook file from the given
@@ -65,10 +57,6 @@ class MergeURLCommand(BaseCommand):
                 errMsg = errMsg + """The Remote notebook
                     exceeds 20MB. Only notebooks below
                     20MB are accepted.<br/>"""
-            if not ".ipynb" in remoteFile.info()['Content-Disposition']:
-                errMsg = errMsg + """The Remote notebook
-                    is not a .ipynb file. Only .ipynb
-                    files are accepted.<br/>"""
         except:
             errMsg = errMsg + """We are unable to access
                 the Remote notebook file from

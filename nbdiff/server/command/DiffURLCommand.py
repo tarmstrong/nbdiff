@@ -32,9 +32,6 @@ class DiffURLCommand(BaseCommand):
             if int(beforeFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The Before notebook exceeds 20MB.
                     Only notebooks below 20MB are accepted.<br/>"""
-            if not ".ipynb" in beforeFile.info()['Content-Disposition']:
-                errMsg = errMsg + """The Before notebook is not a .ipynb
-                    file. Only .ipynb files are accepted.<br/>"""
         except:
             errMsg = errMsg + """We are unable to access the Before
                 notebook file from the given URL.<br/>"""
@@ -44,9 +41,6 @@ class DiffURLCommand(BaseCommand):
             if int(afterFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The After notebook exceeds 20MB.
                     Only notebooks below 20MB are accepted.<br/>"""
-            if not ".ipynb" in afterFile.info()['Content-Disposition']:
-                errMsg = errMsg + """The After notebook is not a .ipynb
-                    file. Only .ipynb files are accepted.<br/>"""
         except:
             errMsg = errMsg + """We are unable to access the After
                 notebook file from the given URL.<br/>"""
