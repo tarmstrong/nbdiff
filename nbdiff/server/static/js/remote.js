@@ -1,13 +1,13 @@
 function initToolbar(info) {
     var mode = info.mode;
     var save = info.save;
-    var self = info.self;
+    var controller = info.controller;
     
     if (mode === 'diff') {
     } else if (mode === 'merge') {
         $('#nbdiff-save').click(function (event) {
             event.preventDefault();
-            remoteSave(self);
+            remoteSave(controller);
         });
         $('#nbdiff-undo').click(function () {
             Invoker.undo();
@@ -28,11 +28,11 @@ function initToolbar(info) {
                     "<input type=\"hidden\" id=\"download_data\" name=\"download_data\"/></form>");
 }
 
-function remoteSave(self){
+function remoteSave(controller) {
 
     var mergedCellElements;
 
-    if (self._isDiff() === true) {
+    if (controller._isDiff() === true) {
         // Not sure how this would have been called since the button is hidden.
         // But if it is, we want to play it safe.
         return;
@@ -46,8 +46,8 @@ function remoteSave(self){
     $('#notebook-container .cell.nbdiff-deleted').remove();
     $('#notebook-container .cell.nbdiff-empty').remove();
 
-    self._init_cells();
-    self._nbcells.forEach(function (nbcell) {
+    controller._init_cells();
+    controller._nbcells.forEach(function (nbcell) {
         if (nbcell.state() === 'added' || nbcell.state() === 'unchanged') {
             nbcell.removeMetadata();
         }

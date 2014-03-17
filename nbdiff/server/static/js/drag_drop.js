@@ -37,18 +37,18 @@ DragDrop.prototype = (function() {
                 var command = null;
 
                 if(data.isLeft) {
-                    command = new MoveRightCommand(MergeRows.rows[data.id]);
-                    $button = $(ev.target).closest(".row").find('.row-cell-merge-controls-local > input');
-                    $button.val("<-");
-                    $button.addClass("undo-button-local");
+                    if(MergeRows.rows[data.id].allowsMoveRight()) {
+                        command = new MoveRightCommand(MergeRows.rows[data.id]);
+                        MergeRows.rows[data.id].toggleLeftButton();
+                        Invoker.storeAndExecute(command);
+                    }
                 } else {
-                    command = new MoveLeftCommand(MergeRows.rows[data.id]);
-                    $button = $(ev.target).closest(".row").find('.row-cell-merge-controls-remote > input');
-                    $button.val("->");
-                    $button.addClass("undo-button-remote");
+                    if(MergeRows.rows[data.id].allowsMoveLeft()) {
+                        command = new MoveLeftCommand(MergeRows.rows[data.id]);
+                        MergeRows.rows[data.id].toggleRightButton();
+                        Invoker.storeAndExecute(command);
+                    }
                 }
-                Invoker.storeAndExecute(command);
-                //the codemirror textbox is conflicting with the allow_drop/on_drop functions
             }
      };
     var on_drag_enter = function(ev) {
@@ -62,7 +62,7 @@ DragDrop.prototype = (function() {
                 cell.draggable = true;
                 cell.addEventListener('dragstart', drag_start, false);
             });
-            cells = $(".row-cell-merge-base > div");
+            cells = $(".row-cell-merge-base");
             cells.each( function ( index, cell ) {
                 cell.addEventListener('dragover', allow_drop, false);
                 cell.addEventListener('drop', on_drop, false);
@@ -76,7 +76,7 @@ DragDrop.prototype = (function() {
                 cell.draggable = false;
                 cell.removeEventListener('dragstart', drag_start);
             });
-            cells = $(".row-cell-merge-base > div");
+            cells = $(".row-cell-merge-base");
             cells.each( function ( index, cell ) {
                 cell.removeEventListener('dragover', allow_drop);
                 cell.removeEventListener('drop', on_drop);

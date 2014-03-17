@@ -58,11 +58,11 @@ NBDiff.prototype = {
         this._init_cells();
         this.log('Initializing nbdiff.');
         if (this._hasNBDiffMetadata() === true) {
-            $('#notebook-container').css("visibility", "hidden");
             this.log('Found nbdiff metadata in the notebook.');
+
             this.log('Hiding the normal notebook container.');
+            $('#notebook-container').css("visibility", "hidden");
             $('#notebook-container').hide();
-            this.log('Creating a new notebook container.');
 
             if (this._isDiff() === true) {
                 this.controller = new Diff(this.notebook, this._nbcells);
@@ -70,23 +70,17 @@ NBDiff.prototype = {
                 this.controller = new Merge(this.notebook, this._nbcells);
             }
 
-            initToolbar({
-                mode: this._isDiff() === true ? 'diff' : 'merge',
-                save: function () {
-                    self.save();
-                },
-                self: self
-            });
+            this.log('Calling preRender.');
+            this.controller.preRender(self);
             
+            this.log('Creating a new notebook container.');
             var nbcontainer = this._generateNotebookContainer();
             $('#notebook').append(nbcontainer);
-            this.controller.render(nbcontainer);
-            if(this._isMerge() === true) {
-                var dd = new DragDrop();
-                dd.enable();
-                this.controller.addButtonListeners();
-            }
 
+            this.controller.render(nbcontainer);
+
+            this.log('Calling postRender.');
+            this.controller.postRender();
         } else {
             this.log('No nbdiff metadata in the notebook.');
             this.log('Showing the normal notebook container.');
@@ -170,6 +164,20 @@ Merge.prototype = {
         });
         this.rows = rows;
     },
+    preRender: function (mainController) {
+        initToolbar({
+            mode: 'merge',
+            save: function () {
+                mainController.save();
+            },
+            controller: mainController
+        });
+    },
+    postRender: function () {
+        var dd = new DragDrop();
+        dd.enable();
+        this._addButtonListeners();
+    },
     _generateRows: function () {
         var rows = [];
         this._nbcells.forEach(function (nbcell) {
@@ -189,22 +197,19 @@ Merge.prototype = {
         });
         return rows;
     },
-    addButtonListeners: function() {
+    _addButtonListeners: function() {
         var $buttons = $("input.merge-arrow-right");
         var rows = this.rows;
         var click_action_right = function(button, row) {
-            if(!$(button).hasClass("undo-button-local"))
+            if(row.allowsMoveRight())
             {
                 var moveRight = new MoveRightCommand(row);
                 Invoker.storeAndExecute(moveRight);
-                $(button).addClass("undo-button-local");
-                $(button).val("<-");
+                row.toggleLeftButton();
             }
             else
             {
                 Invoker.undo(row.rowID);
-                $(button).removeClass("undo-button-local");
-                $(button).val("->");
             }
         };
         $buttons.each(function(key, value)
@@ -217,18 +222,15 @@ Merge.prototype = {
         $buttons = $("input.merge-arrow-left");
         rows = this.rows;
         var click_action_left = function(button, row) {
-            if(!$(button).hasClass("undo-button-remote"))
+            if(row.allowsMoveLeft())
             {
                 var moveLeft = new MoveLeftCommand(row);
                 Invoker.storeAndExecute(moveLeft);
-                $(button).addClass("undo-button-remote");
-                $(button).val("->");
+                row.toggleRightButton();
             }
             else
             {
                 Invoker.undo(row.rowID);
-                $(button).removeClass("undo-button-remote");
-                $(button).val("<-");
             }
 
         };
@@ -261,6 +263,16 @@ Diff.prototype = {
             self._container.append(dr.render());
         });
         return this._container;
+    },
+    preRender: function (mainController) {
+        initToolbar({
+            mode: 'diff',
+            save: function () {
+                mainController.save();
+            }
+        });
+    },
+    postRender: function () {
     },
     _generateRows: function () {
         var self = this,
@@ -368,28 +380,75 @@ MergeRow.prototype = {
     },
     moveLeft: function () {
         console.log("move left");
-        this._cells.base.cell.set_text(this._cells.remote.cell.get_text());
+        var cell = IPython.notebook.insert_cell_at_index(this._cells.remote.cell.cell_type, 0);
+        cell.fromJSON(this._cells.remote.cell.toJSON());
+        this._cells.base.cell.element.replaceWith(cell.element);
+        this._cells.base.cell = cell;
+        this._cells.base.cell.select();
         this._cells.base.cell.element.removeClass();
         this._cells.base.cell.element.addClass(this._cells.remote.cell.element.attr("class"));
-        var output = this._cells.remote.element().find("div.output_wrapper").clone(true);
-        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
         this._cells.base.set_state(this._cells.remote.state());
     },
     moveRight: function () {
         console.log("move right");
-        this._cells.base.cell.set_text(this._cells.local.cell.get_text());
+        var cell = IPython.notebook.insert_cell_at_index(this._cells.local.cell.cell_type, 0);
+        cell.fromJSON(this._cells.local.cell.toJSON());
+        this._cells.base.cell.element.replaceWith(cell.element);
+        this._cells.base.cell = cell;
+        this._cells.base.cell.select();
         this._cells.base.cell.element.removeClass();
         this._cells.base.cell.element.addClass(this._cells.local.cell.element.attr("class"));
-        var output = this._cells.local.element().find("div.output_wrapper").clone(true);
-        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
         this._cells.base.set_state(this._cells.local.state());
     },
-    undo: function(base, cell_class, output, old_state) {
-        this._cells.base.cell.set_text(base);
+    undo: function(cell_json, cell_class, old_state) {
+        var cell = IPython.notebook.insert_cell_at_index(cell_json.cell_type, 0);
+        cell.fromJSON(cell_json);
+        this._cells.base.cell.element.replaceWith(cell.element);
+        this._cells.base.cell = cell;
+        this._cells.base.cell.select();
         this._cells.base.cell.element.removeClass();
         this._cells.base.cell.element.addClass(cell_class);
-        this._cells.base.cell.element.find('.output_wrapper').replaceWith(output);
         this._cells.base.set_state(old_state);
+    },
+    toggleLeftButton: function() {
+        var $leftButton = $(this.getLeftButton());
+        if(!$leftButton.hasClass("undo-button-local"))
+        {
+            $leftButton.addClass("undo-button-local");
+            $leftButton.val("<-");
+        }
+        else
+        {
+            $leftButton.removeClass("undo-button-local");
+            $leftButton.val("->");
+        }
+    },
+    toggleRightButton: function() {
+        var $rightButton = $(this.getRightButton());
+        if(!$rightButton.hasClass("undo-button-remote"))
+        {
+            $rightButton.addClass("undo-button-remote");
+            $rightButton.val("->");
+        }
+        else
+        {
+            $rightButton.removeClass("undo-button-remote");
+            $rightButton.val("<-");
+        }
+    },
+    getLeftButton: function() {
+        return $("div#"+this.rowID+".row").find(".row-cell-merge-controls-local > input")[0];
+    },
+    getRightButton: function() {
+        return $("div#"+this.rowID+".row").find(".row-cell-merge-controls-remote > input")[0];
+    },
+    allowsMoveLeft: function() {
+        var rightButton = this.getRightButton();
+        return !$(rightButton).hasClass("undo-button-remote");
+    },
+    allowsMoveRight: function() {
+        var leftButton = this.getLeftButton();
+        return !$(leftButton).hasClass("undo-button-local");
     }
 };
 
@@ -525,7 +584,7 @@ NBDiffCell.prototype = {
 
 //there's probably a better way to get the rows
 function MergeRows() {
-    this.rows = null;
+    this.rows = [];
 }
 
 function init() {
