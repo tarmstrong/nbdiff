@@ -13,6 +13,7 @@ python:
 install:
   - npm install
   - pip install -r requirements.txt --use-mirrors
+  - pip install -r requirements-remote.txt --use-mirrors
   - pip install flake8 --use-mirrors
 
 # command to run tests, e.g. python setup.py test
