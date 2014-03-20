@@ -24,6 +24,7 @@ script:
   - git config --global user.email example@example.com
   - make test-diff
   - make test-merge
+  - make test-spec
   - flake8 nbdiff
   - flake8 tests
   - grunt

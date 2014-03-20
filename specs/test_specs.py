@@ -22,10 +22,10 @@ def test_diffs():
 
 def test_diffs_cells():
     test_cases = json.load(open('test_cases_cells.json'))
-    for i, test_case in enumerate(test_cases):
+    for test_case in test_cases:
         result = diff(test_case['before'], test_case['after'])
         def gentest():
             result = diff(test_case['before'], test_case['after'])
             for (expected, actual) in zip(test_case['diff'], result):
-                eq_(expected, actual, i)
+                eq_(expected, actual)
         yield gentest

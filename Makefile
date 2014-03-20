@@ -60,5 +60,9 @@ sdist: clean
 test-diff:
 	bash scripts/make_diff.sh
 
+test-specs:
+	cd specs
+	nosetests
+
 test-merge:
 	bash scripts/make_merge_conflict.sh
