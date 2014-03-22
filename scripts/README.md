@@ -183,6 +183,8 @@ Created new window in existing browser session.
 ####Expected Results for all example merge notebooks:
 
 **0:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
+   * `local.ipynb` has an added cell
+   * `remote.ipynb` has an added cell and a deleted cell
 
 **1:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
 
