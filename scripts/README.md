@@ -184,9 +184,17 @@ Created new window in existing browser session.
 
 **0:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
    * `local.ipynb` has an added cell
-   * `remote.ipynb` has an added cell and a deleted cell
+   * `remote.ipynb` has an added cell 
+   * `remote.ipynb` has a deleted cell
 
 **1:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
+   * `local.ipynb` has some deleted headers
+   * `local.ipynb` has some added headers
+   * `local.ipynb` has some deleted cells
+   * `local.ipynb` has some added cells
+   * `remote.ipynb` has some deleted headers
+   * `remote.ipynb` has some deleted cells
+   * `remote.ipynb` has some added cells
 
 **2:** `local.ipynb` `base.ipynb` are valid notebooks and `remote.ipynb` is an invalid notebook
 
