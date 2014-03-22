@@ -204,6 +204,8 @@ Created new window in existing browser session.
 
 **5:** `local.ipynb` `base.ipynb` `remote.ipynb` are all invalid notebooks
 
+**6:** `local.ipynb` `base.ipynb` `remote.ipynb` are all the same notebook
+
 
 
 
