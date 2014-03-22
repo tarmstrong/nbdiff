@@ -198,7 +198,11 @@ Created new window in existing browser session.
 
 **2:** `local.ipynb` `base.ipynb` are valid notebooks and `remote.ipynb` is an invalid notebook
 
-**3:** `local.ipynb` `base.ipynb` `remote.ipynb` are all invalid notebooks
+**3:** `remote.ipynb` `base.ipynb` are valid notebooks and `local.ipynb` is an invalid notebook
+
+**4:** `local.ipynb` `remote.ipynb` are valid notebooks and `base.ipynb` is an invalid notebook
+
+**5:** `local.ipynb` `base.ipynb` `remote.ipynb` are all invalid notebooks
 
 
 
