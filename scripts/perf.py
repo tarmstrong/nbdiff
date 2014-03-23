@@ -9,6 +9,6 @@ def run_diff_once():
 
 
 if __name__ == '__main__':
-    t = timeit.Timer('run_diff_once()', setup='from __main__ import *')
-    print t.repeat(repeat=100, number=1)
+    t = timeit.Timer('run_diff_once()', setup='from __main__ import run_diff_once')
+    print t.repeat(repeat=40, number=1)
 
