@@ -71,7 +71,15 @@ test("test_nbmerge", function() {
    });
 	var mergeController = new NBDiff.Merge(IPython.notebook, _nbcells);
 	mergeController.render(nb_container);
-	equal(true,true, 'Placeholder assertion');
+	equal(mergeController.rows.length,1, 'One merge row was created');
 });
 
-
+test("test_MergeRow_moveLeft", function() {
+	var mr = new NBDiff.MergeRow(1);
+	mr.addLocal(new NBDiff.NBDiffCell(cell1));
+	mr.addBase(new NBDiff.NBDiffCell(cell2));
+	mr.addRemote(new NBDiff.NBDiffCell(cell3));
+	//mr.moveLeft();
+	//deepEqual(mr._cells.base.cell, mr._cells.remote.cell, "Compare base cell to remote");
+	equal(true,true, 'Placeholder assertion');
+});
