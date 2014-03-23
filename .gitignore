@@ -3,6 +3,8 @@
 *merge-conflict-testfolder*
 *merge-diff-testfolder*
 
+*Thumbs.db
+
 *.idea*
 
 node_modules
@@ -44,3 +46,4 @@ nosetests.xml
 # node
 node_packages
 *~
+nbdiff/server/database/nbdiffResult

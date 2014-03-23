@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NbDiff</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/nbdiff/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="/nbdiff/css/bootstrap.min.css" />
+    <script src="/nbdiff/libraries/jquery-1.10.2.js"></script>
+    <script src="/nbdiff/libraries/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/nbdiff/css/parent.css">
+    {% block head %}
+    {% endblock %}
+<meta charset=utf-8 />
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+       <ul class="nav">
+            <li><a href="/" accesskey="1" id="home" title="Home Page">Home Page</a></li>
+            <li><a href="http://www.ipython.org" accesskey="2" id="IPython" title="IPython Homepage">IPython</a>
+            <li><a href="AboutUs" accesskey="3" id="about" title="About NbDiff">About Us</a></li>
+            <li><a href="Faq" accesskey="4" id="faq" title="Frequently Asked Questions">FAQ</a></li>
+            <li><a href="ContactUs" accesskey="5" id="contact" title="Contact Us">Contact Us</a></li>
+            <li><a href="https://github.com/tarmstrong/nbdiff" accesskey="6" id="github" title="GitHub">GitHub</a></li>
+        </ul> 
+      </div>
+    </div>
+      
+    <div class="container">
+      <div>
+        <h1>NbDiff</h1>
+        <h2>A diffing and merging tool for the IPython Notebook</h2>
+        <h3>Diff two IPython notebooks</h3>
+      </div>
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div class="footer">
+          <p>Service is available under the MIT License. <br/>
+             This project is currently under heavy development by a team of university students. See <a href="/AboutUs">About Us</a> for more information.<br/>
+             Documentation: <a href="http://nbdiff-docs.readthedocs.org/en/latest/">http://nbdiff-docs.readthedocs.org/en/latest/</a> <br/>
+          </p>
+    </div>
+  </body>
+</html>

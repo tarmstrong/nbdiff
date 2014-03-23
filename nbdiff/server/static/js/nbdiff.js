@@ -169,7 +169,8 @@ Merge.prototype = {
             mode: 'merge',
             save: function () {
                 mainController.save();
-            }
+            },
+            controller: mainController
         });
     },
     postRender: function () {

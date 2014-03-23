@@ -1,14 +1,18 @@
 {% extends "notebook.html" %}
 
 {% block stylesheet %}
-<link rel="stylesheet" href="/nbdiff/nbdiff.css">
-<link rel="stylesheet" href="/nbdiff/local.css">
+<link rel="stylesheet" href="/nbdiff/css/nbdiff.css">
+<link rel="stylesheet" href="/nbdiff/css/local.css">
 
 {{super()}}
 {% endblock %}
 
 {% block header %}
-<img src="/nbdiff/logo.png" id="nbdiff-logo" alt="NBDiff" />
+{% if local %}
+<img src="/nbdiff/image/logo.png" id="nbdiff-logo" alt="NBDiff" />
+{% else %}
+<a href="/"><img src="/nbdiff/image/logo.png" id="nbdiff-logo" alt="NBDiff" /></a>
+{% endif %}
 <div id="nbdiff-controls">
 	<button id='nbdiff-undo'>Undo</button>
     <button id='nbdiff-save'>Save</button>
@@ -22,13 +26,13 @@
 
 {% block script %}
 {{super()}}
-<script type="text/javascript" src="/nbdiff/drag_drop.js"></script>
-<script type="text/javascript" src="/nbdiff/command.js"></script>
+<script type="text/javascript" src="/nbdiff/js/drag_drop.js"></script>
+<script type="text/javascript" src="/nbdiff/js/command.js"></script>
 {% if local %}
-<script type="text/javascript" src="/nbdiff/local.js"></script>
+<script type="text/javascript" src="/nbdiff/js/local.js"></script>
 {% else %}
-<script type="text/javascript" src="/nbdiff/remote.js"></script>
+<script type="text/javascript" src="/nbdiff/js/remote.js"></script>
 {% endif %}
-<script type="text/javascript" src="/nbdiff/nbdiff.js"></script>
-<script type="text/javascript" src="/nbdiff/main.js"></script>
+<script type="text/javascript" src="/nbdiff/js/nbdiff.js"></script>
+<script type="text/javascript" src="/nbdiff/js/main.js"></script>
 {% endblock %}

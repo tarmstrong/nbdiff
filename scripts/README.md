@@ -126,10 +126,23 @@ Created new window in existing browser session.
 ####Expected Results for all example diff notebooks:
 
 **0:** `before.ipynb` and `after.ipynb` are both valid notebooks
+   * `before.ipynb` has some deleted cells
+   * `after.ipynb` has an added cell
+   *  There are unchanged cells
+   *  There are modified headers
 
 **1:** `before.ipynb` and `after.ipynb` are both valid notebooks
+   * `before.ipynb` has some deleted cells
+   * `before.ipynb` has a deleted graph
+   * `after.ipynb` has an added header 
+   *  There are unchanged cells
+   *  There are unchanged graphs
 
 **2:** `before.ipynb` and `after.ipynb` are both valid notebooks
+   * `before.ipynb` has some deleted cells
+   * `before.ipynb` has some deleted lines 
+   * `after.ipynb` has some added cells
+   * `after.ipynb` has some added lines 
 
 **3:** `before.ipynb` is a valid notebook and `after.ipynb` is an invalid notebook
 
@@ -170,12 +183,28 @@ Created new window in existing browser session.
 ####Expected Results for all example merge notebooks:
 
 **0:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
+   * `local.ipynb` has an added cell
+   * `remote.ipynb` has an added cell 
+   * `remote.ipynb` has a deleted cell
 
 **1:** `local.ipynb` `base.ipynb` `remote.ipynb` are all valid notebooks
+   * `local.ipynb` has some deleted headers
+   * `local.ipynb` has some added headers
+   * `local.ipynb` has some deleted cells
+   * `local.ipynb` has some added cells
+   * `remote.ipynb` has some deleted headers
+   * `remote.ipynb` has some deleted cells
+   * `remote.ipynb` has some added cells
 
 **2:** `local.ipynb` `base.ipynb` are valid notebooks and `remote.ipynb` is an invalid notebook
 
-**3:** `local.ipynb` `base.ipynb` `remote.ipynb` are all invalid notebooks
+**3:** `remote.ipynb` `base.ipynb` are valid notebooks and `local.ipynb` is an invalid notebook
+
+**4:** `local.ipynb` `remote.ipynb` are valid notebooks and `base.ipynb` is an invalid notebook
+
+**5:** `local.ipynb` `base.ipynb` `remote.ipynb` are all invalid notebooks
+
+**6:** `local.ipynb` `base.ipynb` `remote.ipynb` are all the same notebook
 
 
 

@@ -68,8 +68,9 @@ def diff():
             result = notebook_diff(notebook1, notebook2)
 
             app.add_notebook(result, 'no_filename')
-            open_browser(args.browser)
-            app.run(debug=False)
+            if not args.check:
+                open_browser(args.browser)
+                app.run(debug=False)
 
         else:
             print('The notebooks could not be diffed.')
