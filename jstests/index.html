@@ -4,13 +4,26 @@
   <meta charset="utf-8">
   <title></title>
   <script src="../lib/jquery-2.1.0.js"></script>
-  <link rel="stylesheet" href="../../lib/qunit/qunit-1.12.0.css">
+  <link rel="stylesheet" href="../lib/qunit/qunit-1.12.0.css">
   <script src="../lib/qunit/qunit-1.12.0.js"></script>
   <script>
+    nb_container = $("<div class='container' id='notebook-container-new' style='display:inline'></div>");
+    var cell1Data = {'metadata':{'state':'added','side':'local'},'input':'z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
+    var cell1 = cell1Data;
+    cell1.element = $(cell1Data);
+    var cell2Data = {'metadata':{'state':'empty','side':'base'},'input':'','cell_type':'code','prompt_number':1,'outputs':[],'language':'python','collapsed':false};
+    var cell2 = cell2Data;
+    cell2.element = $(cell2Data);
+    var cell3Data = {'metadata':{'state':'empty','side':'remote'},'input':'','cell_type':'code','prompt_number':1,'outputs':[],'language':'python','collapsed':false};
+    var cell3 = cell3Data;
+    cell3.element = $(cell3Data);
     IPython = {
       notebook: {
+        metadata: {'nbdiff-type':'merge','name':'Untitled1'},
         get_cells: function () {
-          return [];
+          return [cell1,
+          cell2,
+          cell3];
         }
       }
     };

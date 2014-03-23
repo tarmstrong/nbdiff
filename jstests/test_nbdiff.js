@@ -48,3 +48,30 @@ test("test_diff_linebased_empty", function () {
     var result = linediff.render();
     equal(result.find('.line-diff-line').length, 0, 'Empty line-based diff was created.');
 });
+
+test("test_invoker_empty", function() {
+	throws(
+		function() {
+			Invoker.undo();
+		},
+		"Throws message for empty undo stack"
+	);
+	throws(
+		function() {
+			Invoker.undo(0);
+		},
+		"Throws message for empty undo stack"
+	);
+});
+
+test("test_nbmerge", function() {
+	var _nbcells = [];
+	IPython.notebook.get_cells().forEach(function (cell) {
+       _nbcells.push(new NBDiff.NBDiffCell(cell));
+   });
+	var mergeController = new NBDiff.Merge(IPython.notebook, _nbcells);
+	mergeController.render(nb_container);
+	equal(true,true, 'Placeholder assertion');
+});
+
+
