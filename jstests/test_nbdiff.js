@@ -74,12 +74,19 @@ test("test_nbmerge", function() {
 	equal(mergeController.rows.length,1, 'One merge row was created');
 });
 
-test("test_MergeRow_moveLeft", function() {
+test("test_MergeRow", function() {
 	var mr = new NBDiff.MergeRow(1);
-	mr.addLocal(new NBDiff.NBDiffCell(cell1));
-	mr.addBase(new NBDiff.NBDiffCell(cell2));
-	mr.addRemote(new NBDiff.NBDiffCell(cell3));
+	equal(mr.rowID, 1, "Check row id");
+	ok(mr._cells);
+	var local = new NBDiff.NBDiffCell(cell1);
+	var base = new NBDiff.NBDiffCell(cell2);
+	var remote = new NBDiff.NBDiffCell(cell3);
+	mr.addLocal(local);
+	mr.addBase(base);
+	mr.addRemote(remote);
+	deepEqual(local, mr._cells.local, "local equal");
+	deepEqual(base, mr._cells.base, "base equal");
+	deepEqual(remote, mr._cells.remote, "remote equal");
 	//mr.moveLeft();
 	//deepEqual(mr._cells.base.cell, mr._cells.remote.cell, "Compare base cell to remote");
-	equal(true,true, 'Placeholder assertion');
 });

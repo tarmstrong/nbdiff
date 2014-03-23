@@ -139,7 +139,7 @@ NBDiff.prototype = {
         return $("<div class='container' id='notebook-container-new' style='display:inline'></div>");
     },
     getMergeRows: function() {
-        return this.controller.rows;
+        window.MergeRows = this.controller.rows;
     }
 };
 
@@ -330,22 +330,14 @@ MergeRow.prototype = {
         this._fillColumn(row, this._cells.base);
         this._fillColumn(row, this._cells.remote);
 
-        if (this._cells.local.state() !== 'unchanged' &&
-                 this._cells.local.state() !== 'empty' ) {
-
-        } else {
+        if (!(this._cells.local.state() !== 'unchanged' &&
+                 this._cells.local.state() !== 'empty' )) {
             row.find("input.merge-arrow-right").hide();
         }
 
-        if (this._cells.remote.state() !== 'unchanged' &&
-               this._cells.remote.state() !== 'empty' ) {
-            row.find("input.merge-arrow-left").click(function(state) {
-                return function() {
-
-                };
-            }(this._cells.remote.state()));
-        } else {
-            row.find("input.merge-arrow-left").hide();
+        if (!(this._cells.remote.state() !== 'unchanged' &&
+               this._cells.remote.state() !== 'empty' )) {
+               	row.find("input.merge-arrow-left").hide();
         }
         return row;
     },
@@ -359,7 +351,9 @@ MergeRow.prototype = {
     },
     _emptyRow: function (rowID) {
         var html;
-        html = "<div id="+rowID+" class='row'>" + "<div class='row-cell-merge-local'></div>" + "<div class='row-cell-merge-controls-local'>" + this._generateMergeControlColumn("local") + "</div>" + "<div class='row-cell-merge-remote'></div>" + "<div class='row-cell-merge-controls-remote'>" + this._generateMergeControlColumn("remote") + "</div>" + "<div class='row-cell-merge-base'></div>" + "</div>";
+        html = "<div id="+rowID+" class='row'>" + "<div class='row-cell-merge-local'></div>" + "<div class='row-cell-merge-controls-local'>" 
+        + this._generateMergeControlColumn("local") + "</div>" + "<div class='row-cell-merge-remote'></div>" + "<div class='row-cell-merge-controls-remote'>" 
+        + this._generateMergeControlColumn("remote") + "</div>" + "<div class='row-cell-merge-base'></div>" + "</div>";
         return $(html);
     },
     _generateMergeControlColumn: function(side) {
@@ -378,29 +372,22 @@ MergeRow.prototype = {
     addRemote: function (nbcell) {
         this._cells.remote = nbcell;
     },
-    moveLeft: function () {
-        console.log("move left");
-        var cell = IPython.notebook.insert_cell_at_index(this._cells.remote.cell.cell_type, 0);
-        cell.fromJSON(this._cells.remote.cell.toJSON());
-        this._cells.base.cell.element.replaceWith(cell.element);
-        this._cells.base.cell = cell;
-        this._cells.base.cell.select();
-        this._cells.base.cell.element.removeClass();
-        this._cells.base.cell.element.addClass(this._cells.remote.cell.element.attr("class"));
-        this._cells.base.set_state(this._cells.remote.state());
+    moveLeft: function () {        
+        var cell_json = this._cells.remote.cell.toJSON();
+        var cell_class = this._cells.remote.cell.element.attr("class");
+        var old_state = this._cells.remote.state();
+        this._createNewBase(cell_json, cell_class, old_state);
     },
-    moveRight: function () {
-        console.log("move right");
-        var cell = IPython.notebook.insert_cell_at_index(this._cells.local.cell.cell_type, 0);
-        cell.fromJSON(this._cells.local.cell.toJSON());
-        this._cells.base.cell.element.replaceWith(cell.element);
-        this._cells.base.cell = cell;
-        this._cells.base.cell.select();
-        this._cells.base.cell.element.removeClass();
-        this._cells.base.cell.element.addClass(this._cells.local.cell.element.attr("class"));
-        this._cells.base.set_state(this._cells.local.state());
+    moveRight: function () {        
+        var cell_json = this._cells.local.cell.toJSON();
+        var cell_class = this._cells.local.cell.element.attr("class");
+        var old_state = this._cells.local.state();
+        this._createNewBase(cell_json, cell_class, old_state);
     },
     undo: function(cell_json, cell_class, old_state) {
+        this._createNewBase(cell_json, cell_class, old_state);
+    },
+    _createNewBase: function(cell_json, cell_class, old_state) {
         var cell = IPython.notebook.insert_cell_at_index(cell_json.cell_type, 0);
         cell.fromJSON(cell_json);
         this._cells.base.cell.element.replaceWith(cell.element);
@@ -411,7 +398,7 @@ MergeRow.prototype = {
         this._cells.base.set_state(old_state);
     },
     toggleLeftButton: function() {
-        var $leftButton = $(this.getLeftButton());
+        var $leftButton = this.getLeftButton();
         if(!$leftButton.hasClass("undo-button-local"))
         {
             $leftButton.addClass("undo-button-local");
@@ -424,7 +411,7 @@ MergeRow.prototype = {
         }
     },
     toggleRightButton: function() {
-        var $rightButton = $(this.getRightButton());
+        var $rightButton = this.getRightButton();
         if(!$rightButton.hasClass("undo-button-remote"))
         {
             $rightButton.addClass("undo-button-remote");
@@ -437,18 +424,18 @@ MergeRow.prototype = {
         }
     },
     getLeftButton: function() {
-        return $("div#"+this.rowID+".row").find(".row-cell-merge-controls-local > input")[0];
+        return $("div#"+this.rowID+".row").find(".row-cell-merge-controls-local > input");
     },
     getRightButton: function() {
-        return $("div#"+this.rowID+".row").find(".row-cell-merge-controls-remote > input")[0];
+        return $("div#"+this.rowID+".row").find(".row-cell-merge-controls-remote > input");
     },
     allowsMoveLeft: function() {
         var rightButton = this.getRightButton();
-        return !$(rightButton).hasClass("undo-button-remote");
+        return !rightButton.hasClass("undo-button-remote");
     },
     allowsMoveRight: function() {
         var leftButton = this.getLeftButton();
-        return !$(leftButton).hasClass("undo-button-local");
+        return !leftButton.hasClass("undo-button-local");
     }
 };
 
@@ -582,18 +569,11 @@ NBDiffCell.prototype = {
     }
 };
 
-//there's probably a better way to get the rows
-function MergeRows() {
-    this.rows = [];
-}
-
 function init() {
     var main = new NBDiff(IPython.notebook, true);
     main.init();
-    MergeRows.rows = main.getMergeRows();
+    main.getMergeRows();
 }
-
-window.MergeRows = MergeRows;
 
 return {
     NBDiff: NBDiff,
@@ -603,7 +583,6 @@ return {
     MergeRow: MergeRow,
     NBDiffCell: NBDiffCell,
     LineDiff: LineDiff,
-    MergeRows: MergeRows,
     init: init
 };
 
