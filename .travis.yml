@@ -16,6 +16,7 @@ install:
   - pip install -r requirements-remote.txt --use-mirrors
   - pip install flake8 --use-mirrors
   - pip install python-coveralls --use-mirrors
+  - pip install nose-cov --use-mirrors
 
 # command to run tests, e.g. python setup.py test
 script:
