@@ -1,0 +1,22 @@
+[run]
+omit =
+    test*
+    *virtualenv*
+    *IPython*
+    *site-packages*
+    *xml*
+    *json*
+    *sqlite3*
+    *shlex*
+include =
+    *nbdiff*
+
+[paths]
+source = nbdiff
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
