@@ -71,36 +71,6 @@ test("test_nbcell", function () {
     deepEqual(nbcell.lineDiffData(), [], 'lineDiffData() returns []');
 });
 
-test("test_diff_linebased_basic", function () {
-    var cell = {
-        lineDiffData: function () {
-            return [
-                {state: 'added', value: 'a'},
-                {state: 'deleted', value: 'b'},
-                {state: 'unchanged', value: 'c'}
-            ];
-        }
-    };
-    var nb = {};
-    var linediff = new NBDiff.LineDiff(nb, cell);
-    var result = linediff.render();
-    equal(result.find('.line-diff-line').length, 3, 'Three rows of output were created.');
-});
-
-// LineDiff shouldn't choke on an empty diff.
-test("test_diff_linebased_empty", function () {
-    var cell = {
-        lineDiffData: function () {
-            return [
-            ];
-        }
-    };
-    var nb = {};
-    var linediff = new NBDiff.LineDiff(nb, cell);
-    var result = linediff.render();
-    equal(result.find('.line-diff-line').length, 0, 'Empty line-based diff was created.');
-});
-
 test("test_invoker_empty", function() {
 	throws(
 		function() {
@@ -220,38 +190,50 @@ module( "diff", {
         var cell1Data = {'metadata':{'state':'added','side':'local'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
         var cell1 = JSON.parse(JSON.stringify(cell1Data));
         cell1.element = $("#cell1 > div");
-        cell1.toJSON = function() {
-            return cell1Data;
-        }    
-        cell1.fromJSON = function(cell_json) {
-        
-        }
         var cell2Data = {'metadata':{'state':'deleted','side':'base'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false};
         var cell2 = JSON.parse(JSON.stringify(cell2Data));
         cell2.element = $("#cell2 > div");
-        cell2.toJSON = function() {
-            return cell2Data;
-        }
-        cell2.fromJSON = function(cell_json) {
-        
-        }
         IPython = {
           notebook: {
             metadata: {'nbdiff-type':'diff','name':'Untitled1'},
             get_cells: function () {
               return [cell1,
               cell2];
-            },
-            insert_cell_at_index: function (cell_type, index) {
-               
             }
           }
         };
         window.initToolbar = function (){};
-        var DragDrop = function() {};
-        DragDrop.enable = function() {};
-        window.DragDrop = DragDrop;
     }, teardown: function() {}
+});
+
+test("test_diff_linebased_basic", function () {
+    var cell = {
+        lineDiffData: function () {
+            return [
+                {state: 'added', value: 'a'},
+                {state: 'deleted', value: 'b'},
+                {state: 'unchanged', value: 'c'}
+            ];
+        }
+    };
+    var nb = {};
+    var linediff = new NBDiff.LineDiff(nb, cell);
+    var result = linediff.render();
+    equal(result.find('.line-diff-line').length, 3, 'Three rows of output were created.');
+});
+
+// LineDiff shouldn't choke on an empty diff.
+test("test_diff_linebased_empty", function () {
+    var cell = {
+        lineDiffData: function () {
+            return [
+            ];
+        }
+    };
+    var nb = {};
+    var linediff = new NBDiff.LineDiff(nb, cell);
+    var result = linediff.render();
+    equal(result.find('.line-diff-line').length, 0, 'Empty line-based diff was created.');
 });
 
 test("test_Diff", function() {
@@ -264,7 +246,6 @@ test("test_Diff", function() {
     ok(diffController._nbcells);
     diffController.render(nb_container);
     ok(diffController._container);
-    equal(nb_container.children().length, 2, "Two diff rows");
     equal(nb_container.children().length, 2, "Two diff rows");
     var cell1 = IPython.notebook.get_cells()[0];
     var cell2 = IPython.notebook.get_cells()[1];
