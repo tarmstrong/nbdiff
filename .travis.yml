@@ -15,10 +15,11 @@ install:
   - pip install -r requirements.txt --use-mirrors
   - pip install -r requirements-remote.txt --use-mirrors
   - pip install flake8 --use-mirrors
+  - pip install python-coveralls --use-mirrors
 
 # command to run tests, e.g. python setup.py test
 script:
-  - python setup.py nosetests
+  - python setup.py nosetests --with-coverage
   - python setup.py install
   - git config --global user.name Enbee Diff
   - git config --global user.email example@example.com
@@ -28,6 +29,9 @@ script:
   - flake8 nbdiff
   - flake8 tests
   - grunt
+
+after_success:
+  - coveralls
 
 notifications:
   email:
