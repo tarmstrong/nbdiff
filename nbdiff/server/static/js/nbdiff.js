@@ -336,8 +336,8 @@ MergeRow.prototype = {
         }
 
         if (!(this._cells.remote.state() !== 'unchanged' &&
-               this._cells.remote.state() !== 'empty' )) {
-               	row.find("input.merge-arrow-left").hide();
+            this._cells.remote.state() !== 'empty' )) {
+                row.find("input.merge-arrow-left").hide();
         }
         return row;
     },

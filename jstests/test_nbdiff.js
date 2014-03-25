@@ -21,7 +21,9 @@ module( "merge", {
         };
         var newCell = {};
         newCell.fromJSON = function(cell_json) {
-            for(var k in cell_json) this[k]=cell_json[k];
+            for(var k in cell_json) {
+                this[k]=cell_json[k];
+            }
             this.select = function() {};
         };
         IPython = {
