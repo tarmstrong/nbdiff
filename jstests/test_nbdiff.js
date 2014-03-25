@@ -1,33 +1,29 @@
 module( "merge", {
     setup: function() {
         window.nb_container = $("div.container");
-        var cell1Data = {'metadata':{'state':'unchanged','side':'local'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
+        var cell1Data = {'metadata':{'state':'modified','side':'local'},'input':'y = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
         var cell1 = JSON.parse(JSON.stringify(cell1Data));
-        cell1.element = $("#cell1 > div");
+        cell1.element = $(".row-cell-merge-local > div");
         cell1.toJSON = function() {
-            return cell1Data;
-        }    
-        cell1.fromJSON = function(cell_json) {
-        
-        }
+            return cell1;
+        };   
         var cell2Data = {'metadata':{'state':'unchanged','side':'base'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false};
         var cell2 = JSON.parse(JSON.stringify(cell2Data));
-        cell2.element = $("#cell2 > div");
+        cell2.element = $(".row-cell-merge-base > div");
         cell2.toJSON = function() {
-            return cell2Data;
-        }
-        cell2.fromJSON = function(cell_json) {
-        
-        }
+            return cell2;
+        };
         var cell3Data = {'metadata':{'state':'deleted','side':'remote'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false};
         var cell3 = JSON.parse(JSON.stringify(cell3Data));
-        cell3.element = $("#cell3 > div");
+        cell3.element = $(".row-cell-merge-remote > div");
         cell3.toJSON = function() {
-            return cell3Data;
-        }    
-        cell3.fromJSON = function(cell_json) {
-        
-        }
+            return cell3;
+        };
+        var newCell = {};
+        newCell.fromJSON = function(cell_json) {
+            for(var k in cell_json) this[k]=cell_json[k];
+            this.select = function() {};
+        };
         IPython = {
           notebook: {
             metadata: {'nbdiff-type':'merge','name':'Untitled1'},
@@ -37,14 +33,11 @@ module( "merge", {
               cell3];
             },
             insert_cell_at_index: function (cell_type, index) {
-               
+               return newCell;
             }
           }
         };
         window.initToolbar = function (){};
-        var DragDrop = function() {};
-        DragDrop.enable = function() {};
-        window.DragDrop = DragDrop;
     }, teardown: function() {
     
     }
@@ -71,21 +64,6 @@ test("test_nbcell", function () {
     deepEqual(nbcell.lineDiffData(), [], 'lineDiffData() returns []');
 });
 
-test("test_invoker_empty", function() {
-	throws(
-		function() {
-			Invoker.undo();
-		},
-		"Throws message for empty undo stack"
-	);
-	throws(
-		function() {
-			Invoker.undo(0);
-		},
-		"Throws message for empty undo stack"
-	);
-});
-
 test("test_merge", function() {
 	var _nbcells = [];
 	IPython.notebook.get_cells().forEach(function (cell) {
@@ -98,6 +76,9 @@ test("test_merge", function() {
 	ok(mergeController._container);
 	equal(nb_container.children().children().length, 5, "three notebook cells and two buttons");
 	equal(mergeController.rows.length,1, 'One merge row was created');
+	deepEqual(IPython.notebook.get_cells()[0].element[0], nb_container.find(".row-cell-merge-local > div")[0], "Check local cell.");
+	deepEqual(IPython.notebook.get_cells()[1].element[0], nb_container.find(".row-cell-merge-base > div")[0], "Check base cell.");
+	deepEqual(IPython.notebook.get_cells()[2].element[0], nb_container.find(".row-cell-merge-remote > div")[0], "Check remote cell.");
 });
 
 test("test_MergeRow", function() {
@@ -118,7 +99,7 @@ test("test_MergeRow", function() {
 	deepEqual(cell3, mr._cells.remote.cell, "remote equal");
 });
 
-/*test("test_MergeRow_moveLeft", function() {
+test("test_MergeRow_moveLeft", function() {
 	var mr = new NBDiff.MergeRow(1);
 	var local = new NBDiff.NBDiffCell(IPython.notebook.get_cells()[0]);
 	var base = new NBDiff.NBDiffCell(IPython.notebook.get_cells()[1]);
@@ -127,8 +108,20 @@ test("test_MergeRow", function() {
 	mr.addBase(base);
 	mr.addRemote(remote);
 	mr.moveLeft();
-	deepEqual(mr._cells.base.cell, mr._cells.remote.cell, "Compare base cell to remote");
-});*/
+	deepEqual(mr._cells.base.cell.element[0], mr._cells.remote.cell.element[0], "Compare base cell to remote");
+});
+
+test("test_MergeRow_moveRight", function() {
+    var mr = new NBDiff.MergeRow(1);
+    var local = new NBDiff.NBDiffCell(IPython.notebook.get_cells()[0]);
+    var base = new NBDiff.NBDiffCell(IPython.notebook.get_cells()[1]);
+    var remote = new NBDiff.NBDiffCell(IPython.notebook.get_cells()[2]);
+    mr.addLocal(local);
+    mr.addBase(base);
+    mr.addRemote(remote);
+    mr.moveRight();
+    deepEqual(mr._cells.base.cell.element[0], mr._cells.local.cell.element[0], "Compare base cell to local");
+});
 
 test("test_MergeRow_getRightButton", function() {
     var mr = new NBDiff.MergeRow(1);
@@ -189,10 +182,10 @@ module( "diff", {
         window.nb_container = $("div.container");
         var cell1Data = {'metadata':{'state':'added','side':'local'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
         var cell1 = JSON.parse(JSON.stringify(cell1Data));
-        cell1.element = $("#cell1 > div");
+        cell1.element = $(".row-cell-merge-local > div");
         var cell2Data = {'metadata':{'state':'deleted','side':'base'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false};
         var cell2 = JSON.parse(JSON.stringify(cell2Data));
-        cell2.element = $("#cell2 > div");
+        cell2.element = $(".row-cell-merge-remote > div");
         IPython = {
           notebook: {
             metadata: {'nbdiff-type':'diff','name':'Untitled1'},
@@ -247,8 +240,19 @@ test("test_Diff", function() {
     diffController.render(nb_container);
     ok(diffController._container);
     equal(nb_container.children().length, 2, "Two diff rows");
+    equal($(nb_container.children()[0]).find(".row-cell-diff-right").children().length, 1, "First cell is on the right side");
+    equal($(nb_container.children()[1]).find(".row-cell-diff-left").children().length, 1, "Second cell is on the left side");
     var cell1 = IPython.notebook.get_cells()[0];
     var cell2 = IPython.notebook.get_cells()[1];
-    deepEqual(cell1, diffController._nbcells[0].cell, "local equal");
-    deepEqual(cell2, diffController._nbcells[1].cell, "remote equal");
+    deepEqual(cell1.element[0], $(nb_container.children()[0]).find(".row-cell-diff-right > div")[0], "First cell HTML equal");
+    deepEqual(cell2.element[0], $(nb_container.children()[1]).find(".row-cell-diff-left > div")[0], "Second cell HTML equal");
+    deepEqual(cell1, diffController._nbcells[0].cell, "First cell Object equal");
+    deepEqual(cell2, diffController._nbcells[1].cell, "Second cell Object equal");
+});
+
+test("test_DiffRow", function () {
+    var cell1 = new NBDiff.NBDiffCell(IPython.notebook.get_cells()[0]);
+    var nbrow = new NBDiff.DiffRow(cell1);
+    var rendered_cell = nbrow.render();
+    deepEqual(nbrow._nbcell, cell1, "equal cell");
 });
