@@ -37,15 +37,15 @@ DragDrop.prototype = (function() {
                 var command = null;
 
                 if(data.isLeft) {
-                    if(MergeRows.rows[data.id].allowsMoveRight()) {
-                        command = new MoveRightCommand(MergeRows.rows[data.id]);
-                        MergeRows.rows[data.id].toggleLeftButton();
+                    if(MergeRows[data.id].allowsMoveRight()) {
+                        command = new MoveRightCommand(MergeRows[data.id]);
+                        MergeRows[data.id].toggleLeftButton();
                         Invoker.storeAndExecute(command);
                     }
                 } else {
-                    if(MergeRows.rows[data.id].allowsMoveLeft()) {
-                        command = new MoveLeftCommand(MergeRows.rows[data.id]);
-                        MergeRows.rows[data.id].toggleRightButton();
+                    if(MergeRows[data.id].allowsMoveLeft()) {
+                        command = new MoveLeftCommand(MergeRows[data.id]);
+                        MergeRows[data.id].toggleRightButton();
                         Invoker.storeAndExecute(command);
                     }
                 }

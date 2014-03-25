@@ -69,6 +69,11 @@ function shutdownServer() {
     location.href = '/shutdown';
 }
 
+$([IPython.events]).on('notebook_saved.Notebook', 
+    function () { 
+        alert("The notebook has been saved");
+ });
+
 // If we are merging/diffing multiple notebooks, these are shown
 // on separate pages. This information is passed to the Javascript
 // through HTML attributes:
