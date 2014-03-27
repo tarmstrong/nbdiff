@@ -217,7 +217,7 @@ def check_match(point, k):
         result.append(new_max_k)
     if len(result) > 0:
         actual_result = result[0]
-        #print result
+        # print result
         assert point[1] >= actual_result-1
         return (result)[0]
     else:

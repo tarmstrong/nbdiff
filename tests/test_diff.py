@@ -264,7 +264,7 @@ def test_check_match():
     result = check_match(point, k)
     eq_(result, expected)
 
-    #print 'boop boop'
+    # print 'boop boop'
     point = (2, 1)
     k = {1: [(0, 1)], 2: [(1, 2)]}
     expected = None

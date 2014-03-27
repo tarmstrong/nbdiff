@@ -19,7 +19,7 @@ class NotebookParser(object):
         json_data.close()
         return data
 
-    #param:
-    #json_data_string: raw unicode string
+    # param:
+    # json_data_string: raw unicode string
     def parseString(self, json_data_string):
         return current.reads(json_data_string, 'ipynb')

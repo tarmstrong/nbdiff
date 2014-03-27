@@ -390,7 +390,7 @@ def test_diff_cells6():
     assert result[1]['state'] == 'deleted'
 
 
-#different cell type -> different cells
+# different cell type -> different cells
 def test_diff_cells7():
     A = [
         {'cell_type': "raw",
@@ -430,7 +430,7 @@ def test_diff_cells7():
     assert result[1]['state'] == 'added'
 
 
-#different cell language -> modified
+# different cell language -> modified
 def test_diff_cells8():
     A = [
         {'cell_type': "code",

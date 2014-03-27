@@ -7,12 +7,12 @@ class NotebookRequestCommand(BaseCommand):
 
     def process(self, request, filename, db_session):
 
-        #query for the notebook in database.
+        # query for the notebook in database.
         nbdiffModelObj = nbdiffModel.query.filter(
             nbdiffModel.id == filename
         ).first()
 
-        #bitarray used to convert BlOB to notebook data.
+        # bitarray used to convert BlOB to notebook data.
         notebook = bitarray.bitarray(nbdiffModelObj.notebook).tostring()
         return notebook
 
