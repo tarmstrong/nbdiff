@@ -1,5 +1,4 @@
 import IPython.nbformat.current as nbformat
-from nose.tools import eq_
 
 from nbdiff.merge import (
     notebook_merge,

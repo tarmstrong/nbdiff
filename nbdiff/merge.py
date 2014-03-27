@@ -157,6 +157,8 @@ def notebook_merge(local, base, remote):
 def get_cells(notebook):
     try:
         cells = notebook['worksheets'][0]['cells']
-    except IndexError, KeyError:
+    except IndexError:
+        cells = []
+    except KeyError:
         cells = []
     return cells
