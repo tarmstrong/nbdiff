@@ -70,6 +70,10 @@ NBDiff.prototype = {
                 this.controller = new Merge(this.notebook, this._nbcells);
             }
 
+            if (typeof this.notebook.metadata.filename !== 'undefined') {
+                $('#nbdiff-filename').html(this.notebook.metadata.filename);
+            }
+
             this.log('Calling preRender.');
             this.controller.preRender(self);
             
@@ -115,6 +119,7 @@ NBDiff.prototype = {
         });
 
         delete IPython.notebook.metadata['nbdiff-type'];
+        delete IPython.notebook.metadata.filename;
 
         IPython.notebook.save_notebook();
     },

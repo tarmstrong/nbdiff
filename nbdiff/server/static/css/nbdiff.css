@@ -218,3 +218,7 @@
   .line-diff-unchanged {
       background-color: rgb(245, 245, 245);
   }
+
+  #nbdiff-filename {
+      font-family: monospace;
+  }
