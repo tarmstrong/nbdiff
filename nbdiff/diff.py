@@ -33,6 +33,8 @@ def diff(before, after, check_modified=False):
     diff_items : A list of dictionaries containing diff information.
     """
     grid = create_grid(before, after)
+    if len(grid) < 1:
+        return []
     nrows = len(grid[0])
     ncols = len(grid)
     dps = diff_points(grid)
