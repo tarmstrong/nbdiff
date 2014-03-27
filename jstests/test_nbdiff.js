@@ -39,7 +39,6 @@ module( "merge", {
             }
           }
         };
-        window.initToolbar = function (){};
     }, teardown: function() {
     
     }
@@ -172,17 +171,17 @@ test("test_MergeRow_allowsMoveRight", function() {
     equal(mr.allowsMoveRight(), false, "check if row does not allow to move right cell left after toggle");
 });
 
-/*test("test_NBDiff_init", function() {
+test("test_NBDiff_getMergeRows", function() {
     var main = new NBDiff.NBDiff(IPython.notebook, true);
     main.init();
     main.getMergeRows();
-    ok(true);
-});*/
+    equal(MergeRows.length, 1, "Check if there is one MergeRow");
+});
 
 module( "diff", {
     setup: function() {
         window.nb_container = $("div.container");
-        var cell1Data = {'metadata':{'state':'added','side':'local'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
+        var cell1Data = {'metadata':{'state':'added','side':'local'},'input':'y = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false}; 
         var cell1 = JSON.parse(JSON.stringify(cell1Data));
         cell1.element = $(".row-cell-merge-local > div");
         var cell2Data = {'metadata':{'state':'deleted','side':'base'},'input':'x = [1,2,3] # list!\ny = (1, 2) # tuple!\nz = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!\n\nz','cell_type':'code','prompt_number':3,'outputs':[{'output_type':'pyout','prompt_number':3,'text':'set([1, 2, 3, 4, 5])'}],'language':'python','collapsed':false};
@@ -197,7 +196,6 @@ module( "diff", {
             }
           }
         };
-        window.initToolbar = function (){};
     }, teardown: function() {}
 });
 
