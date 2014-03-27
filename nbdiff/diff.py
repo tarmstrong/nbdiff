@@ -32,9 +32,25 @@ def diff(before, after, check_modified=False):
     -------
     diff_items : A list of dictionaries containing diff information.
     """
+
+    # The grid will be empty if `before` or `after` are
+    # empty; this will violate the assumptions made in the rest
+    # of this function.
+    # If this is the case, we know what the result of the diff is
+    # anyways: the contents of the other, non-empty input.
+    if len(before) == 0:
+        return [
+            {'state': 'added', 'value': v}
+            for v in after
+        ]
+    elif len(after) == 0:
+        return [
+            {'state': 'deleted', 'value': v}
+            for v in before
+        ]
+
     grid = create_grid(before, after)
-    if len(grid) < 1:
-        return []
+
     nrows = len(grid[0])
     ncols = len(grid)
     dps = diff_points(grid)

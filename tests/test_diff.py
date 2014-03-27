@@ -41,6 +41,18 @@ def test_empty_diff():
     assert len(result) == 0
 
 
+# Regression test for bug #183
+def test_empty_diff1():
+    result = diff(['a'], [])
+    assert len(result) == 1
+
+
+# Regression test for bug #183
+def test_empty_diff2():
+    result = diff([], ['a'])
+    assert len(result) == 1
+
+
 def test_diff_points():
     A = [u'x = [1,3,3]\n', u'z = {1, 2, 3} \n', u'\n', u'z']
     B = [u'x = [1,3,4]\n', u'z = {1, 2, 3} \n', u'\n', u'm']
