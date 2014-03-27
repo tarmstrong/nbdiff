@@ -35,6 +35,7 @@ def test_create_grid():
     assert len([True for col in grid if len(col) == 0]) == 0
 
 
+# Regression test for bug #183
 def test_empty_diff():
     result = diff([], [])
     assert len(result) == 0
