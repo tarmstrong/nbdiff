@@ -119,7 +119,7 @@ NBDiff.prototype = {
         });
 
         delete IPython.notebook.metadata['nbdiff-type'];
-        delete IPython.notebook.metadata['filename'];
+        delete IPython.notebook.metadata.filename;
 
         IPython.notebook.save_notebook();
     },
