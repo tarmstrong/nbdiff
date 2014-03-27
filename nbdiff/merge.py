@@ -151,7 +151,7 @@ def notebook_merge(local, base, remote):
 
     result_notebook['metadata']['nbdiff-type'] = 'merge'
 
-    return base
+    return result_notebook
 
 
 def get_cells(notebook):
