@@ -8,7 +8,7 @@ import itertools as it
 import copy
 
 
-def merge(local, base, remote):
+def merge(local, base, remote, check_modified=False):
     """Generate unmerged series of changes (including conflicts).
 
     By diffing the two diffs, we find *changes* that are
@@ -37,13 +37,13 @@ def merge(local, base, remote):
     result : A diff result comparing the changes on the local and remote
              branches.
     """
-    base_local = diff.diff(base, local)
-    base_remote = diff.diff(base, remote)
+    base_local = diff.diff(base, local, check_modified=check_modified)
+    base_remote = diff.diff(base, remote, check_modified=check_modified)
     merge = diff.diff(base_local, base_remote)
     return merge
 
 
-def notebook_merge(local, base, remote):
+def notebook_merge(local, base, remote, check_modified=False):
     """Unify three notebooks into a single notebook with merge metadata.
 
     The result of this function is a valid notebook that can be loaded
@@ -177,10 +177,11 @@ def notebook_merge(local, base, remote):
     return result_notebook
 
 
-def get_cells(notebook):
+def get_cells(notebook, check_modified=False):
     try:
         cells = [
-            comparable.CellComparator(cell) for cell in
+            comparable.CellComparator(cell, check_modified=check_modified)
+            for cell in
             notebook['worksheets'][0]['cells']
         ]
     except IndexError:
