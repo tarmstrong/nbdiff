@@ -3,6 +3,7 @@ from .notebook_diff import (
     diff_result_to_cell,
     cells_diff,
 )
+import IPython.nbformat.current as nbformat
 import itertools as it
 import copy
 
@@ -27,9 +28,11 @@ def notebook_merge(local, base, remote):
     -------
     nb : A valid notebook containing merge metadata.
     """
-    local_cells = local['worksheets'][0]['cells']
-    base_cells = base['worksheets'][0]['cells']
-    remote_cells = remote['worksheets'][0]['cells']
+
+    local_cells = get_cells(local)
+    base_cells = get_cells(base)
+    remote_cells = get_cells(remote)
+
     local_diff = cells_diff(base_cells, local_cells)
     remote_diff = cells_diff(base_cells, remote_cells)
     rows = []
@@ -138,8 +141,22 @@ def notebook_merge(local, base, remote):
 
     # Chain all rows together; create a flat array from the nested array.
     # Use the base notebook's notebook-level metadata (title, version, etc.)
-    base['worksheets'][0]['cells'] = list(it.chain.from_iterable(rows))
 
-    base['metadata']['nbdiff-type'] = 'merge'
+    result_notebook = local
+    if len(result_notebook['worksheets']) == 0:
+        result_notebook['worksheets'] = [nbformat.new_worksheet()]
+
+    new_cell_array = list(it.chain.from_iterable(rows))
+    result_notebook['worksheets'][0]['cells'] = new_cell_array
+
+    result_notebook['metadata']['nbdiff-type'] = 'merge'
 
     return base
+
+
+def get_cells(notebook):
+    try:
+        cells = notebook['worksheets'][0]['cells']
+    except IndexError, KeyError:
+        cells = []
+    return cells
