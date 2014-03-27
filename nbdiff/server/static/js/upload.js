@@ -161,7 +161,7 @@ $(document).ready(function(){
             if(errorDiv.id.indexOf("merge") !== -1){
                 errorDiv.innerHTML = " <p> You must specify: <br/> "+
                                  (localJSON.value.length === 0 ? "- one local iPython notebook <br/>" : "") +
-                                 (baseJSON.value.length === 0 ? "- one local iPython notebook <br/>" : "") +
+                                 (baseJSON.value.length === 0 ? "- one base iPython notebook <br/>" : "") +
                                  (remoteJSON.value.length === 0 ? "- one remote iPython notebook." : "") + "</p>";
             } else {
                 errorDiv.innerHTML = " <p> You must specify: <br/> "+

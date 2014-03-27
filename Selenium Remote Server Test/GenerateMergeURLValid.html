@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://127.0.0.1:5000/" />
+<title>GenerateMergeURLValid</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">GenerateMergeURLValid</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Merge Notebooks Using URLs</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=localURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/merge/0/local.ipynb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=baseURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/merge/0/base.ipynb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=remoteURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/merge/0/remote.ipynb</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitBtn2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=pre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=pre</td>
+	<td>z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>css=div.output_subarea.output_text &gt; pre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='2']/div[3]/div/div[2]/div[2]/div/div[2]/pre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='2']/div[3]/div/div/div[2]/div[2]/div/div[6]/div/div/div/div/div[3]</td>
+	<td>x = [1,3,3] # list!z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set! z</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
