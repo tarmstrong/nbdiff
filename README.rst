@@ -138,6 +138,15 @@ against PEP-8, use ``flake8`` like so:
 
     $ flake8 tests nbdiff
 
+
+To check Python test coverage, install ``coverage`` and run the tests with the ``--with-coverage`` option.
+
+::
+
+    $ pip install coverage
+    $ python setup.py nosetests --with-coverage
+
+
 Run the JavaScript tests
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
