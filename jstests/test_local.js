@@ -19,7 +19,7 @@ test("test_initToolbar_diff", function () {
     equal($('button#nbdiff-previous').css("display"), "none", 'next page invisible');
     equal($('button#nbdiff-next').css("display"), "none", 'next page button invisible');
 });
-/*
+
 test("test_loadNextPage", function () {
     var alerted = false;
     window.alert = function() {alerted = true;};
@@ -32,7 +32,7 @@ test("test_loadPreviousPage", function () {
     window.alert = function() {alerted = true;};
     loadPreviousPage();
     ok(alerted, "alert shown");
-});*/
+});
 
 test("test_getPageInfo", function () {
     var pageInfo = getPageInfo();
