@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://127.0.0.1:5000/" />
+<title>MergeCellControls</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">MergeCellControls</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Merge Notebooks Using URLs</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=localURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/merge/0/local.ipynb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=baseURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/merge/0/base.ipynb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=remoteURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/merge/3/remote.ipynb</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitBtn2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='0']/div/div</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='0']/div/div</td>
+	<td>In [3]:<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!<br />z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!z<br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />Out[3]:<br />set([1, 2, 3, 4, 5])</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='0']/div[5]/div</td>
+	<td>In [1]:<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />​</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=input.merge-arrow-right</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='0']/div[5]/div</td>
+	<td>In [3]:<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!<br />z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!z<br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />Out[3]:<br />set([1, 2, 3, 4, 5])</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=nbdiff-undo</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='0']/div[5]/div</td>
+	<td>In [1]:<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />​</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=input.merge-arrow-left</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='0']/div[5]/div</td>
+	<td>In [3]:<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!<br />z = {1, 2, 3, 4, 5, 1, 2, 3, 2, 3} # set!z<br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />Out[3]:<br />set([1, 2, 3, 4, 5])</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=input.merge-arrow-left.undo-button-remote</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='0']/div[5]/div</td>
+	<td>In [1]:<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />​</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

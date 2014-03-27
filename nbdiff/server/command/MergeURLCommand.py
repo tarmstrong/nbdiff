@@ -16,7 +16,7 @@ class MergeURLCommand(BaseCommand):
     def process(self, request, filename, db_session):
         errMsg = ""
         parser = NotebookParser()
-        #Max Size of a notebook accepted is 20M.
+        # Max Size of a notebook accepted is 20M.
         max_size = 20*1024*1024
 
         try:
@@ -86,14 +86,14 @@ class MergeURLCommand(BaseCommand):
         if len(errMsg) == 0:
             mergedNotebook = notebook_merge(nb_local, nb_base, nb_remote)
 
-            #bitarray used to convert notebook to binary for BLOB
+            # bitarray used to convert notebook to binary for BLOB
             ba = bitarray.bitarray()
             ba.fromstring(json.dumps(mergedNotebook, indent=2))
 
-            #object to be saved to database
+            # object to be saved to database
             obj = nbdiffModel(ba.to01())
 
-            #add to database and commit it.
+            # add to database and commit it.
             try:
                 db_session.add(obj)
                 db_session.commit()
@@ -111,11 +111,11 @@ class MergeURLCommand(BaseCommand):
                     If this problem persists please contact administrator."""
                 return render_template('Error.html', err=errMsg)
 
-            #return the id of the object.
+            # return the id of the object.
             nb_id = obj.id
 
-            #redirect is used because we want users
-            #to have a easier url to return to.
+            # redirect is used because we want users
+            # to have a easier url to return to.
             return redirect("/Comparison/"+str(nb_id), code=302)
         else:
             return render_template('Error.html', err=errMsg)
