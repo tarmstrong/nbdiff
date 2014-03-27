@@ -196,7 +196,6 @@ module( "diff", {
             }
           }
         };
-        window.initToolbar = function (){};
     }, teardown: function() {}
 });
 
