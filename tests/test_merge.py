@@ -26,9 +26,7 @@ def test_basic_merge():
     notebook3['worksheets'] = [
         {'cells': [code_cell]}
     ]
-    print notebook, notebook2, notebook3
     result = notebook_merge(notebook, notebook2, notebook3)
     result_cells = result['worksheets'][0]['cells']
-    print result_cells
     state = result_cells[0]['metadata']['state']
     assert state == 'added'
