@@ -206,6 +206,6 @@ Created new window in existing browser session.
 
 **6:** `local.ipynb` `base.ipynb` `remote.ipynb` are all the same notebook
 
-
+**7:** `base.ipynb` `remote.ipynb` are the same notebook but `local.ipynb` is a completely different notebook
 
 
