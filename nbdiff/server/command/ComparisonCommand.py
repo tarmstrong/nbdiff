@@ -24,9 +24,9 @@ class ComparisonCommand(BaseCommand):
                 If this problem persists please contact administrator."""
             return render_template('Error.html', err=errMsg)
 
-        #check that nbdiffModelObj exists before redirecting to nbdiff.html.
-        #Either the Comparison does not exist or expired from server
-        #and was dropped from Database.
+        # check that nbdiffModelObj exists before redirecting to nbdiff.html.
+        # Either the Comparison does not exist or expired from server
+        # and was dropped from Database.
         if nbdiffModelObj is None:
             errMsg = """The Merge or Diff is not available. <br/>
                 Either the Merge or Diff expired or does not exist. <br/>

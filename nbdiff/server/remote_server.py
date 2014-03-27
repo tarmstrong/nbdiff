@@ -7,7 +7,7 @@ import IPython.html
 import os
 
 
-#initialize database if argument 'True' is passed
+# initialize database if argument 'True' is passed
 if len(sys.argv) > 1:
     if(sys.argv[1].lower() == "init_db"):
         init_db()
@@ -51,18 +51,18 @@ def run_command(cmdName, request, filename=None):
     return command.process(request, filename, db_session())
 
 
-#index
+# index
 @app.route("/")
 def upload():
     return run_command("Upload", request)
 
 
-#runs depending on different command URL
+# runs depending on different command URL
 @app.route("/<path:command>", methods=['GET', 'POST'])
 def redirectCommand(command):
-    #favicon.ico is a resource requested by Ipython notebook.
-    #Since it does not follow command pattern this will
-    #redirect to proper command
+    # favicon.ico is a resource requested by Ipython notebook.
+    # Since it does not follow command pattern this will
+    # redirect to proper command
     if command == "favicon.ico":
         url = "image/favicon.ico"
         return run_command("ResourceRequest", request, url)
@@ -70,20 +70,20 @@ def redirectCommand(command):
         return run_command(command, request)
 
 
-#notebook request handler
+# notebook request handler
 @app.route('/notebooks/<path:filename>', methods=['GET', 'PUT'])
 def notebookRequest(filename):
     return run_command("NotebookRequest", request, filename)
 
 
-#used to get specific resources in the html pages.
+# used to get specific resources in the html pages.
 @app.route('/nbdiff/<path:filename>')
 def nbdiff_static(filename):
     return run_command("ResourceRequest", request, filename)
 
 
-#Redirect from Merge, MergeURL, Diff, DiffURL commands.
-#Used to simplify URL for users who wish to go back to their comparison.
+# Redirect from Merge, MergeURL, Diff, DiffURL commands.
+# Used to simplify URL for users who wish to go back to their comparison.
 @app.route('/Comparison/<path:filename>')
 def comparisonURL(filename):
     return run_command("Comparison", request, filename)

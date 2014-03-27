@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://127.0.0.1:5000/" />
+<title>GenerateDiffURLValid</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">GenerateDiffURLValid</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Diff Notebooks Using URLs</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=afterURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/diff/0/after.ipynb</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=beforeURL</td>
+	<td>https://raw.githubusercontent.com/tarmstrong/nbdiff/master/scripts/example-notebooks/diff/0/before.ipynb</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitBtn4</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>//div[@id='notebook-container-new']/h2/span[4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
+	<td>id=Creating-Functions</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

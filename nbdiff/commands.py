@@ -157,7 +157,7 @@ def merge():
     parser = NotebookParser()
     valid_notebooks = False
 
-    #only 'nbmerge' - no files specified with command
+    # only 'nbmerge' - no files specified with command
     if length == 0:
         git = GitAdapter()
         unmerged_notebooks = git.get_unmerged_notebooks()
@@ -194,7 +194,7 @@ def merge():
             print('There are no files to be merged.')
             return -1
 
-    #files specified with nbmerge command
+    # files specified with nbmerge command
     elif length == 3 or length == 4:
         invalid_notebooks = []
 
@@ -237,7 +237,7 @@ def merge():
         except nbformat.NotJSONError:
             invalid_notebooks.append(args.notebook[2])
 
-        #local, base and remote are all valid notebooks
+        # local, base and remote are all valid notebooks
         if (len(invalid_notebooks) == 0):
             pre_merged_notebook = notebook_merge(nb_local, nb_base, nb_remote)
             app.add_notebook(pre_merged_notebook, filename)
