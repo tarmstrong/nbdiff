@@ -67,7 +67,8 @@ def diff():
         if (len(invalid_notebooks) == 0):
             result = notebook_diff(notebook1, notebook2)
 
-            app.add_notebook(result, 'no_filename')
+            filename_placeholder = "{} and {}".format(args.before, args.after)
+            app.add_notebook(result, filename_placeholder)
             if not args.check:
                 open_browser(args.browser)
                 app.run(debug=False)

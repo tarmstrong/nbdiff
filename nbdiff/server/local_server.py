@@ -48,7 +48,8 @@ def notebookjson(notebookid):
         app.shutdown(request.data, app.notebooks[notebookid][1])
         return ""
     else:
-        parsed = app.notebooks[notebookid][0]
+        parsed, filename = app.notebooks[notebookid]
+        parsed['metadata']['filename'] = filename
         return json.dumps(parsed)
 
 
