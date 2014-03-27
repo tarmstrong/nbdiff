@@ -37,7 +37,7 @@ class DiffCommand(BaseCommand):
 
         if len(errMsg) == 0:
 
-            diffNotebook = notebook_diff(nb_before, nb_after)in
+            diffNotebook = notebook_diff(nb_before, nb_after)
 
             # bitarray used to convert notebook to binary for BLOB
             ba = bitarray.bitarray()
