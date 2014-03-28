@@ -125,6 +125,13 @@ Developing
 Run the Python tests
 ~~~~~~~~~~~~~~~~~~~~
 
+To get all of the dependencies necessary to test nbdiff, run:
+
+::
+
+    $ pip install -r requirements-dev.txt
+
+
 To run the python tests, run the following command:
 
 ::
