@@ -187,6 +187,20 @@
     display: none;
   }
 
+  /* Header diff stuff */
+
+	.header-row-cell-diff-right {
+	  float:right;
+	  overflow-x: hidden;
+	  width: 47%;
+	}
+
+	.header-row-cell-diff-left {
+	  float: left;
+	  width: 47%;
+	  overflow-x: hidden;
+	}
+
 
   /* Line diff stuff */
 
