@@ -2,6 +2,7 @@ from nbdiff.server.local_server import (
     app,
 )
 
+
 def test_home():
     client = app.test_client()
     result = client.get('/1')
