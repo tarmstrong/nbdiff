@@ -29,7 +29,12 @@ parentPath = os.path.abspath(
 SCRIPTS_DIR = os.path.join(parentPath, "scripts")
 MERGE_NB_DIR = os.path.join(SCRIPTS_DIR, 'example-notebooks', 'merge', '0')
 DIFF_NB_DIR = os.path.join(SCRIPTS_DIR, 'example-notebooks', 'diff', '0')
-
+db.engine = create_engine(
+    'sqlite:///nbdiff/server/database/TestNbdiffResult',
+    convert_unicode=True
+)
+db.init_db()
+nbdiffModel.query.delete()
 
 def mock_redirect(path, **kwargs):
     assert "code" in kwargs
@@ -313,13 +318,3 @@ class UploadCommandTest(unittest.TestCase):
         ucmd.render_template = mock_render_template
         template = ucmd.UploadCommand().process(None, None, None)
         assert template == "upload.html"
-
-
-if __name__ == '__main__':
-    db.engine = create_engine(
-        'sqlite:///nbdiff/server/database/TestNbdiffResult',
-        convert_unicode=True
-    )
-    db.init_db()
-    nbdiffModel.query.delete()
-    unittest.main()
