@@ -64,9 +64,9 @@ def notebook_merge(local, base, remote, check_modified=False):
     nb : A valid notebook containing merge metadata.
     """
 
-    local_cells = get_cells(local)
-    base_cells = get_cells(base)
-    remote_cells = get_cells(remote)
+    local_cells = get_cells(local, check_modified=check_modified)
+    base_cells = get_cells(base, check_modified=check_modified)
+    remote_cells = get_cells(remote, check_modified=check_modified)
 
     rows = []
     current_row = []
@@ -79,7 +79,8 @@ def notebook_merge(local, base, remote, check_modified=False):
         'metadata': {'state': 'empty'}
     }
 
-    diff_of_diffs = merge(local_cells, base_cells, remote_cells)
+    diff_of_diffs = merge(local_cells, base_cells, remote_cells, check_modified=check_modified)
+    print diff_of_diffs
 
     # For each item in the higher-order diff, create a "row" that
     # corresponds to a row in the NBDiff interface. A row contains:
@@ -159,6 +160,10 @@ def notebook_merge(local, base, remote, check_modified=False):
                 cell2,
                 cell3,
             ]
+        elif state == 'modified':
+            cell['originalvalue']
+            cell['modifiedvalue']
+            current_row = []
 
         rows.append(current_row)
 
