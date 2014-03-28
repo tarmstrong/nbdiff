@@ -119,21 +119,23 @@
 
 	.row-cell-diff-left {
 	  float: left;
-	  width: 47%;
+	  width: 48.55%;
 	  overflow-x: hidden;
+	  border: 1px solid #D3D3D3;
 	}
 
 	.row-cell-diff-middle {
 	  padding-top: 10px;
 	  overflow-x: hidden;
-	  width: 6%;
+	  width: 3%;
 	  text-align: center;
 	}
 
 	.row-cell-diff-right {
 	  float:right;
 	  overflow-x: hidden;
-	  width: 47%;
+	  width: 46.55%;
+	  border: 1px solid #D3D3D3;
 	}
 
 	.diff-spacer {
@@ -216,7 +218,7 @@
       background-color: #E9967A;
   }
   .line-diff-right-filled {
-      background-color: ##90EE90;
+      background-color: #90EE90;
   }
 
   .line-diff-unchanged {
