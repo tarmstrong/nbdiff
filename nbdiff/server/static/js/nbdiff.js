@@ -123,6 +123,13 @@ NBDiff.prototype = {
         delete IPython.notebook.metadata.filename;
 
         IPython.notebook.save_notebook();
+
+        $('#notebook-container-new').hide();
+        $('#notebook-container').css("visibility", "visible");
+        $('#notebook-container').show();
+        $('#notebook-container .cell')
+            .removeClass('nbdiff-added')
+            .removeClass('added-cell');
     },
     _init_cells: function () {
         var self = this;
