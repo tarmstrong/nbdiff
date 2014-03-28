@@ -191,7 +191,7 @@
   /* Line diff stuff */
 
   .line-diff {
-      border: 1px solid black;
+      border: 1px solid #778899;
       min-width: 100%;
       margin: 0 auto;
       overflow-x: hidden;
