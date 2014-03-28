@@ -16,7 +16,6 @@ import nbdiff.server.remote_server as rs
 import nbdiff.server.database as db
 import bitarray
 from pretend import stub
-from sqlalchemy import create_engine
 from nbdiff.server.database.nbdiffModel import nbdiffModel
 
 app = rs.app.test_client()
@@ -30,6 +29,7 @@ SCRIPTS_DIR = os.path.join(parentPath, "scripts")
 MERGE_NB_DIR = os.path.join(SCRIPTS_DIR, 'example-notebooks', 'merge', '0')
 DIFF_NB_DIR = os.path.join(SCRIPTS_DIR, 'example-notebooks', 'diff', '0')
 rs.init_db()
+
 
 def mock_redirect(path, **kwargs):
     assert "code" in kwargs
