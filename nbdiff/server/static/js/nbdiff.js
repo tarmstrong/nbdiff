@@ -309,12 +309,34 @@ HeaderDiff.prototype = {
     render: function () {
         var diffData, htmlObject;
         diffData = this._nbcell.headerDiffData();
-        htmlObject = $('<h2 class = "diffed-header"></h2>');
+        htmlObject = $('<div class = "row"></div>');
+        //htmlLeft = $('<div class="header-row-cell-diff-left"></div>');
+        //htmlLeftObject = htmlLeft.append('<h2></h2>');
+        //htmlRight = $('<div class="header-row-cell-diff-right"></div>');
+        //htmlRightObject = htmlRight.append('<h2></h2>');
+        htmlLeftObject = $('<h2 class="header-row-cell-diff-left"></h2>');
+        htmlRightObject = $('<h2 class="header-row-cell-diff-right"></h2>');
         diffData.forEach(function (word) {
-            var span = $('<span></span>');
-            span.addClass(word.state + '-word');
-            span.append(' ' + word.value);
-            htmlObject.append(span);
+            var leftSpan = $('<span></span>');
+            var rightSpan = $('<span></span>');
+            if (word.state === 'deleted') {
+                leftSpan.addClass(word.state + '-word');
+                leftSpan.append(' ' + word.value);
+                htmlLeftObject.append(leftSpan);
+            } else if (word.state === 'added') {
+                rightSpan.addClass(word.state + '-word');
+                rightSpan.append(' ' + word.value);
+                htmlRightObject.append(rightSpan);
+            } else {
+                leftSpan.addClass(word.state + '-word');
+                leftSpan.append(' ' + word.value);
+                rightSpan.addClass(word.state + '-word');
+                rightSpan.append(' ' + word.value);
+                htmlLeftObject.append(leftSpan);
+                htmlRightObject.append(rightSpan);
+            }
+            htmlObject.append(htmlLeftObject);
+            htmlObject.append(htmlRightObject);
         });
         return htmlObject;
     }
