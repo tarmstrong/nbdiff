@@ -3,4 +3,4 @@
 
 __author__ = 'The NBDiff Team'
 __email__ = 'tavisharmstrong@gmail.com'
-__version__ = '0.0.0'
+__version__ = '1.0.0'
