@@ -17,8 +17,6 @@ import nbdiff.server.database as db
 import bitarray
 from pretend import stub
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 from nbdiff.server.database.nbdiffModel import nbdiffModel
 
 app = rs.app.test_client()
@@ -31,20 +29,7 @@ parentPath = os.path.abspath(
 SCRIPTS_DIR = os.path.join(parentPath, "scripts")
 MERGE_NB_DIR = os.path.join(SCRIPTS_DIR, 'example-notebooks', 'merge', '0')
 DIFF_NB_DIR = os.path.join(SCRIPTS_DIR, 'example-notebooks', 'diff', '0')
-db.engine = create_engine(
-    'sqlite:///nbdiff/server/database/TestNbdiffResult',
-    convert_unicode=True
-)
-db.db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=db.engine))
-
-#decalarative base used to init database.
-db.Base = declarative_base()
-db.Base.query = db.db_session.query_property()
-db.init_db()
-nbdiffModel.query.delete()
-
+rs.init_db()
 
 def mock_redirect(path, **kwargs):
     assert "code" in kwargs
