@@ -55,6 +55,7 @@ function NBDiff(notebook, log) {
 NBDiff.prototype = {
     init: function () {
         var self = this;
+        IPython.notebook.set_autosave_interval(false);
         this._init_cells();
         this.log('Initializing nbdiff.');
         if (this._hasNBDiffMetadata() === true) {
