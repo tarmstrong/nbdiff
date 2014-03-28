@@ -5,7 +5,7 @@ td {
 
 .local, .base, .remote {
 	min-height: 25px;
-    border-color: #C0C0C0;
+    border-color: #708090;
     border-style: solid;
     border-width: 1px;
 }
@@ -16,14 +16,14 @@ td {
 }
 
 pre.empty, pre.modified {
-	border-color: red !important;
+	border-color: #E9967A !important;
 	border-style: solid;
 	border-width: 1px;
 	cursor: move;
 }
 
 pre.added {
-	border-color: green !important;
+	border-color: #32CD32 !important;
 	border-style: solid;
 	border-width: 1px;
 	cursor: move;
