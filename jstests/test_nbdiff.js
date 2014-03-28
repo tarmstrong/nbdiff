@@ -39,6 +39,7 @@ module( "merge", {
             }
           }
         };
+        IPython.notebook.set_autosave_interval = function(value) {};
     }, teardown: function() {
     
     }
