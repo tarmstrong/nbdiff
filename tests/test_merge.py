@@ -61,7 +61,7 @@ def test_merge_check_modified():
     assert result[0]['value']['state'] == 'modified'
 
 
-def test_basic_notebook_merge():
+def test_basic_notebook_merge_modified():
     input = ['a', 'b', 'c', 'd', 'e', 'f']
     notebook = nbformat.new_notebook()
     code_cell = nbformat.new_code_cell(input=input)
@@ -79,7 +79,6 @@ def test_basic_notebook_merge():
         {'cells': [code_cell]}
     ]
     result = notebook_merge(notebook, notebook2, notebook3, check_modified=True)
-    print result
     result_cells = result['worksheets'][0]['cells']
     state = result_cells[0]['metadata']['state']
-    assert state == 'added'
+    assert state == 'modified'

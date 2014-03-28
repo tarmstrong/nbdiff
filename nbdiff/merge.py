@@ -80,7 +80,6 @@ def notebook_merge(local, base, remote, check_modified=False):
     }
 
     diff_of_diffs = merge(local_cells, base_cells, remote_cells, check_modified=check_modified)
-    print diff_of_diffs
 
     # For each item in the higher-order diff, create a "row" that
     # corresponds to a row in the NBDiff interface. A row contains:
