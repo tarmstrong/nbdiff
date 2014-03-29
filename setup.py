@@ -19,7 +19,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='nbdiff',
-    version='1.0.1',
+    version='1.0.2',
     description='A tool for diffing and merging IPython Notebook files',
     long_description=readme + '\n\n' + history,
     author='Tavish Armstrong',
