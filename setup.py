@@ -28,6 +28,8 @@ setup(
     packages=[
         'nbdiff',
         'nbdiff.server',
+        'nbdiff.server.command',
+        'nbdiff.server.database',
         'nbdiff.adapter',
     ],
     package_data={
