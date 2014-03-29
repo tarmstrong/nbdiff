@@ -3,3 +3,5 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
+include-recursive nbdiff/server/templates
+include-recursive nbdiff/server/static
