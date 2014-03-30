@@ -22,7 +22,7 @@ university students. See
 for more information.
 
 * Free software: MIT license
-* Documentation: http://nbdiff.rtfd.org.
+* Website: http://nbdiff.org.
 
 Installation
 ------------
