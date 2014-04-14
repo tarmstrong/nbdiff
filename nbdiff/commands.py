@@ -12,6 +12,11 @@ from .server.local_server import app
 import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
+import IPython.nbformat.reader
+try:
+    NotJSONError = IPython.nbformat.current.NotJSONError
+except AttributeError:
+    NotJSONError = IPython.nbformat.reader.NotJSONError
 
 
 def diff():
@@ -24,7 +29,8 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [--check] [--browser=<browser] [before after]'
+    usage = 'nbdiff [-h] [--check] [--debug] ' +\
+            '[--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
@@ -43,6 +49,13 @@ def diff():
         default=False,
         help='Run nbdiff algorithm but do not display the result.',
     )
+    parser.add_argument(
+        '--debug',
+        '-d',
+        action='store_true',
+        default=False,
+        help='Pass debug=True to the Flask server to ease debugging.',
+    )
     parser.add_argument('before', nargs='?',
                         help='The notebook to diff against.')
     parser.add_argument('after', nargs='?',
@@ -56,12 +69,12 @@ def diff():
 
         try:
             notebook1 = parser.parse(open(args.before))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.before)
 
         try:
             notebook2 = parser.parse(open(args.after))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.after)
 
         if (len(invalid_notebooks) == 0):
@@ -71,7 +84,7 @@ def diff():
             app.add_notebook(result, filename_placeholder)
             if not args.check:
                 open_browser(args.browser)
-                app.run(debug=False)
+                app.run(debug=args.debug)
 
         else:
             print('The notebooks could not be diffed.')
@@ -97,7 +110,7 @@ def diff():
                     result = notebook_diff(head_version, current_notebook)
                     app.add_notebook(result, filename)
 
-                except nbformat.NotJSONError:
+                except NotJSONError:
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
@@ -131,7 +144,7 @@ def merge():
     control systems such as Git and Mercurial.
     '''
     usage = (
-        'nbmerge [-h] [--check] [--browser=<browser>]'
+        'nbmerge [-h] [--check] [--debug] [--browser=<browser>]'
         '[local base remote [result]]'
     )
     parser = argparse.ArgumentParser(
@@ -146,6 +159,13 @@ def merge():
         action='store_true',
         default=False,
         help='Run nbmerge algorithm but do not display the result.',
+    )
+    parser.add_argument(
+        '--debug',
+        '-d',
+        action='store_true',
+        default=False,
+        help='Pass debug=True to the Flask server to ease debugging.',
     )
     parser.add_argument(
         '--browser',
@@ -178,7 +198,7 @@ def merge():
                                                          nb_base, nb_remote)
                     app.add_notebook(pre_merged_notebook, filename)
 
-                except nbformat.NotJSONError:
+                except NotJSONError:
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
@@ -225,17 +245,17 @@ def merge():
 
         try:
             nb_local = parser.parse(open(args.notebook[0]))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.notebook[0])
 
         try:
             nb_base = parser.parse(open(args.notebook[1]))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.notebook[1])
 
         try:
             nb_remote = parser.parse(open(args.notebook[2]))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.notebook[2])
 
         # local, base and remote are all valid notebooks
@@ -263,7 +283,7 @@ def merge():
         if not args.check:
             app.shutdown_callback(save_notebook)
             open_browser(args.browser)
-            app.run(debug=False)
+            app.run(debug=args.debug)
 
 
 def open_browser(browser_exe):

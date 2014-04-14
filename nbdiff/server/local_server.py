@@ -35,13 +35,17 @@ def home(notebookid):
         project='/',
         base_project_url='/',
         base_kernel_url='/',
+        static_url=static_url,
         notebook_id='test_notebook' + str(notebookid),
+        notebook_name='test_notebook' + str(notebookid),
+        notebook_path='./',
         num_nbks=str(len(app.notebooks)),
         cur_nbk=str(notebookid),
         local=True,
     )
 
 
+# IPython 1.1.0
 @app.route('/notebooks/test_notebook<int:notebookid>', methods=['GET', 'PUT'])
 def notebookjson(notebookid):
     if request.method == 'PUT':
@@ -53,10 +57,33 @@ def notebookjson(notebookid):
         return json.dumps(parsed)
 
 
+# IPython 2.0.0
+# TODO refactor to handle both URIs with same function.
+@app.route('/api/notebooks/test_notebook<int:notebookid>',
+           methods=['GET', 'PUT'])
+def notebook(notebookid):
+    if request.method == 'PUT':
+        app.shutdown(request.data, app.notebooks[notebookid][1])
+        return ""
+    else:
+        parsed, filename = app.notebooks[notebookid]
+        parsed['metadata']['filename'] = filename
+        return json.dumps({'content': parsed})
+
+
 @app.route('/shutdown')
 def shutdown():
     request.environ.get('werkzeug.server.shutdown')()
     return "The server was shutdown."
+
+
+def static_url(path, **kwargs):
+    # FIXME obvious kludge
+    if 'underscore' in path or 'backbone' in path:
+        return path[:-3]
+    else:
+        return 'static/' + path
+
 
 if __name__ == '__main__':
     app.run(debug=True)
