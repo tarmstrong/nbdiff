@@ -59,7 +59,8 @@ def notebookjson(notebookid):
 
 # IPython 2.0.0
 # TODO refactor to handle both URIs with same function.
-@app.route('/api/notebooks/test_notebook<int:notebookid>', methods=['GET', 'PUT'])
+@app.route('/api/notebooks/test_notebook<int:notebookid>',
+           methods=['GET', 'PUT'])
 def notebook(notebookid):
     if request.method == 'PUT':
         app.shutdown(request.data, app.notebooks[notebookid][1])

@@ -29,7 +29,8 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [--check] [--debug] [--browser=<browser] [before after]'
+    usage = 'nbdiff [-h] [--check] [--debug] ' +\
+            '[--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
