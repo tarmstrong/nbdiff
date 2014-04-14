@@ -13,6 +13,10 @@ import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
 import IPython.nbformat.reader
+try:
+    NotJSONError = IPython.nbformat.current.NotJSONError
+except AttributeError:
+    NotJSONError = IPython.nbformat.reader.NotJSONError
 
 
 def diff():
@@ -64,12 +68,12 @@ def diff():
 
         try:
             notebook1 = parser.parse(open(args.before))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.before)
 
         try:
             notebook2 = parser.parse(open(args.after))
-        except nbformat.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.after)
 
         if (len(invalid_notebooks) == 0):
@@ -105,7 +109,7 @@ def diff():
                     result = notebook_diff(head_version, current_notebook)
                     app.add_notebook(result, filename)
 
-                except nbformat.NotJSONError:
+                except NotJSONError:
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
@@ -193,7 +197,7 @@ def merge():
                                                          nb_base, nb_remote)
                     app.add_notebook(pre_merged_notebook, filename)
 
-                except IPython.nbformat.reader.NotJSONError:
+                except NotJSONError:
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
@@ -240,17 +244,17 @@ def merge():
 
         try:
             nb_local = parser.parse(open(args.notebook[0]))
-        except IPython.nbformat.reader.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.notebook[0])
 
         try:
             nb_base = parser.parse(open(args.notebook[1]))
-        except IPython.nbformat.reader.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.notebook[1])
 
         try:
             nb_remote = parser.parse(open(args.notebook[2]))
-        except IPython.nbformat.reader.NotJSONError:
+        except NotJSONError:
             invalid_notebooks.append(args.notebook[2])
 
         # local, base and remote are all valid notebooks
