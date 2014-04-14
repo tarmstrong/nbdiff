@@ -24,7 +24,7 @@ def diff():
     The resulting diff is presented to the user in the browser at
     http://localhost:5000.
     '''
-    usage = 'nbdiff [-h] [--check] [--browser=<browser] [before after]'
+    usage = 'nbdiff [-h] [--check] [--debug] [--browser=<browser] [before after]'
     parser = argparse.ArgumentParser(
         description=description,
         usage=usage,
@@ -42,6 +42,13 @@ def diff():
         action='store_true',
         default=False,
         help='Run nbdiff algorithm but do not display the result.',
+    )
+    parser.add_argument(
+        '--debug',
+        '-d',
+        action='store_true',
+        default=False,
+        help='Pass debug=True to the Flask server to ease debugging.',
     )
     parser.add_argument('before', nargs='?',
                         help='The notebook to diff against.')
@@ -71,7 +78,7 @@ def diff():
             app.add_notebook(result, filename_placeholder)
             if not args.check:
                 open_browser(args.browser)
-                app.run(debug=False)
+                app.run(debug=args.debug)
 
         else:
             print('The notebooks could not be diffed.')
@@ -131,7 +138,7 @@ def merge():
     control systems such as Git and Mercurial.
     '''
     usage = (
-        'nbmerge [-h] [--check] [--browser=<browser>]'
+        'nbmerge [-h] [--check] [--debug] [--browser=<browser>]'
         '[local base remote [result]]'
     )
     parser = argparse.ArgumentParser(
@@ -146,6 +153,13 @@ def merge():
         action='store_true',
         default=False,
         help='Run nbmerge algorithm but do not display the result.',
+    )
+    parser.add_argument(
+        '--debug',
+        '-d',
+        action='store_true',
+        default=False,
+        help='Pass debug=True to the Flask server to ease debugging.',
     )
     parser.add_argument(
         '--browser',
@@ -263,7 +277,7 @@ def merge():
         if not args.check:
             app.shutdown_callback(save_notebook)
             open_browser(args.browser)
-            app.run(debug=False)
+            app.run(debug=args.debug)
 
 
 def open_browser(browser_exe):
