@@ -12,6 +12,7 @@ from .server.local_server import app
 import threading
 import webbrowser
 import IPython.nbformat.current as nbformat
+import IPython.nbformat.reader
 
 
 def diff():
@@ -192,7 +193,7 @@ def merge():
                                                          nb_base, nb_remote)
                     app.add_notebook(pre_merged_notebook, filename)
 
-                except nbformat.NotJSONError:
+                except IPython.nbformat.reader.NotJSONError:
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
@@ -239,17 +240,17 @@ def merge():
 
         try:
             nb_local = parser.parse(open(args.notebook[0]))
-        except nbformat.NotJSONError:
+        except IPython.nbformat.reader.NotJSONError:
             invalid_notebooks.append(args.notebook[0])
 
         try:
             nb_base = parser.parse(open(args.notebook[1]))
-        except nbformat.NotJSONError:
+        except IPython.nbformat.reader.NotJSONError:
             invalid_notebooks.append(args.notebook[1])
 
         try:
             nb_remote = parser.parse(open(args.notebook[2]))
-        except nbformat.NotJSONError:
+        except IPython.nbformat.reader.NotJSONError:
             invalid_notebooks.append(args.notebook[2])
 
         # local, base and remote are all valid notebooks
