@@ -38,7 +38,9 @@ def home(notebookid):
         static_url=static_url,
         notebook_id='test_notebook' + str(notebookid),
         notebook_name='test_notebook' + str(notebookid),
+        notebookName='test_notebook' + str(notebookid),
         notebook_path='./',
+        notebookPath='./',
         num_nbks=str(len(app.notebooks)),
         cur_nbk=str(notebookid),
         local=True,
@@ -63,12 +65,18 @@ def notebookjson(notebookid):
            methods=['GET', 'PUT'])
 def notebook(notebookid):
     if request.method == 'PUT':
-        app.shutdown(request.data, app.notebooks[notebookid][1])
+        request_data = json.loads(request.data)
+        content = request_data['content']
+        app.shutdown(json.dumps(content), app.notebooks[notebookid][1])
         return ""
     else:
         parsed, filename = app.notebooks[notebookid]
         parsed['metadata']['filename'] = filename
-        return json.dumps({'content': parsed})
+        dump = {'content': parsed}
+        dump['name'] = 'test_notebook{:d}'.format(notebookid)
+        dump['path'] = './'
+        dump['type'] = 'notebook'
+        return json.dumps(dump)
 
 
 @app.route('/shutdown')
