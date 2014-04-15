@@ -65,13 +65,13 @@ def notebookjson(notebookid):
            methods=['GET', 'PUT'])
 def notebook(notebookid):
     if request.method == 'PUT':
-        request_data = json.loads(request.data)
+        request_data = json.loads(request.data.decode('utf-8'))
         content = request_data['content']
         app.shutdown(json.dumps(content), app.notebooks[notebookid][1])
         return ""
     else:
         parsed, filename = app.notebooks[notebookid]
-        parsed['metadata']['filename'] = filename
+        parsed['metadata']['filename'] = filename.decode('utf-8')
         dump = {'content': parsed}
         dump['name'] = 'test_notebook{:d}'.format(notebookid)
         dump['path'] = './'
