@@ -15,7 +15,7 @@ class NotebookParser(object):
         -------
         nb : An IPython Notebook data structure.
         """
-        data = current.read(json_data, 'ipynb')
+        data = current.reads(json_data.read().decode('utf-8'), u'ipynb')
         json_data.close()
         return data
 

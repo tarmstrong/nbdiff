@@ -55,7 +55,7 @@ def notebookjson(notebookid):
         return ""
     else:
         parsed, filename = app.notebooks[notebookid]
-        parsed['metadata']['filename'] = filename
+        parsed['metadata']['filename'] = filename.decode('utf-8')
         return json.dumps(parsed)
 
 

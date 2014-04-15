@@ -68,12 +68,12 @@ def diff():
         invalid_notebooks = []
 
         try:
-            notebook1 = parser.parse(open(args.before))
+            notebook1 = parser.parse(open(args.before, 'rb'))
         except NotJSONError:
             invalid_notebooks.append(args.before)
 
         try:
-            notebook2 = parser.parse(open(args.after))
+            notebook2 = parser.parse(open(args.after, 'rb'))
         except NotJSONError:
             invalid_notebooks.append(args.after)
 
@@ -81,7 +81,7 @@ def diff():
             result = notebook_diff(notebook1, notebook2)
 
             filename_placeholder = "{} and {}".format(args.before, args.after)
-            app.add_notebook(result, filename_placeholder)
+            app.add_notebook(result, filename_placeholder.encode('utf-8'))
             if not args.check:
                 open_browser(args.browser)
                 app.run(debug=args.debug)
@@ -114,8 +114,9 @@ def diff():
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
+                invalid_notebooks_str = [str(nb) for nb in invalid_notebooks]
                 print('There was a problem parsing the following notebook '
-                      + 'files:\n' + '\n'.join(invalid_notebooks))
+                      + 'files:\n' + '\n'.join(invalid_notebooks_str))
 
             if (len(modified_notebooks) == len(invalid_notebooks)):
                 print("There are no valid notebooks to diff.")
@@ -202,8 +203,9 @@ def merge():
                     invalid_notebooks.append(filename)
 
             if (len(invalid_notebooks) > 0):
+                invalid_notebooks_str = [str(nb) for nb in invalid_notebooks]
                 print('There was a problem parsing the following notebook '
-                      + 'files:\n' + '\n'.join(invalid_notebooks))
+                      + 'files:\n' + '\n'.join(invalid_notebooks_str))
 
             if (len(unmerged_notebooks) == len(invalid_notebooks)):
                 print("There are no valid notebooks to merge.")
@@ -244,17 +246,17 @@ def merge():
             filename = args.notebook[3]   # filename for saving
 
         try:
-            nb_local = parser.parse(open(args.notebook[0]))
+            nb_local = parser.parse(open(args.notebook[0], 'rb'))
         except NotJSONError:
             invalid_notebooks.append(args.notebook[0])
 
         try:
-            nb_base = parser.parse(open(args.notebook[1]))
+            nb_base = parser.parse(open(args.notebook[1], 'rb'))
         except NotJSONError:
             invalid_notebooks.append(args.notebook[1])
 
         try:
-            nb_remote = parser.parse(open(args.notebook[2]))
+            nb_remote = parser.parse(open(args.notebook[2], 'rb'))
         except NotJSONError:
             invalid_notebooks.append(args.notebook[2])
 
