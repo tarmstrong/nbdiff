@@ -52,8 +52,6 @@ class DiffCommand(BaseCommand):
                 db_session.commit()
             except OperationalError:
                 db_session.rollback()
-                print """The database is not initialized.
-                    Please restart server with argument init_db"""
                 errMsg = """There was an error with the database. <br/>
                    Please contact administrator to resolve this issue."""
                 return render_template('Error.html', err=errMsg)
