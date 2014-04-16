@@ -29,7 +29,10 @@ baz.ipynb
     def popen(*args, **kwargs):
         return stub(stdout=stub(read=lambda: ""))
 
-    g.open = lambda fname: stub(read=lambda: "")
+    def fake_open(*args):
+        return stub(read=lambda: "")
+
+    g.open = fake_open
     g.subprocess = stub(
         check_output=check_output_stub,
         PIPE='foo',

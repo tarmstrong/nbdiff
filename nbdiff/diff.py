@@ -203,7 +203,7 @@ def process_col(k, col, colNum):
 
 def check_match(point, k):
     result = []
-    k_keys = [ki for ki in k] # FIXME
+    k_keys = [ki for ki in k]
     max_k = max(k_keys)
     new_max_k = max_k + 1
     k_range = k_keys + [new_max_k]
