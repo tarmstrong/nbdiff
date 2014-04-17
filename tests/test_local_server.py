@@ -11,7 +11,7 @@ def test_home():
 
 def test_notebookjson():
     client = app.test_client()
-    app.add_notebook({'metadata': {}}, 'foo.ipynb')
+    app.add_notebook({'metadata': {}}, b'foo.ipynb')
     result = client.get('/notebooks/test_notebook0')
     assert result.status_code == 200
 

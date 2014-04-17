@@ -5,7 +5,11 @@ from ...merge import notebook_merge
 from nbdiff.server.database.nbdiffModel import nbdiffModel
 from werkzeug.exceptions import BadRequestKeyError
 from sqlalchemy.exc import OperationalError
-import urllib2
+try:
+    import urllib2
+    urllib = urllib2
+except ImportError:
+    import urllib
 import json
 import bitarray
 import IPython.nbformat.current as nbformat
@@ -30,7 +34,7 @@ class MergeURLCommand(BaseCommand):
             return render_template('Error.html', err=errMsg)
 
         try:
-            localFile = urllib2.urlopen(localURL)
+            localFile = urllib.urlopen(localURL)
             if int(localFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The Local notebook
                     exceeds 20MB. Only notebooks below
@@ -41,7 +45,7 @@ class MergeURLCommand(BaseCommand):
                 given URL.<br/>"""
 
         try:
-            baseFile = urllib2.urlopen(baseURL)
+            baseFile = urllib.urlopen(baseURL)
             if int(baseFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The Base notebook
                     exceeds 20MB. Only notebooks below
@@ -52,7 +56,7 @@ class MergeURLCommand(BaseCommand):
                 URL.<br/>"""
 
         try:
-            remoteFile = urllib2.urlopen(remoteURL)
+            remoteFile = urllib.urlopen(remoteURL)
             if int(remoteFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The Remote notebook
                     exceeds 20MB. Only notebooks below
