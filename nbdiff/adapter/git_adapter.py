@@ -25,11 +25,11 @@ class GitAdapter(VcsAdapter):
         nb_diff = []
         for item in fnames:
             head_version_show = subprocess.Popen(
-                ['git', 'show', 'HEAD:' + item],
+                ['git', 'show', 'HEAD:' + item.decode('utf-8')],
                 stdout=subprocess.PIPE
             )
 
-            current_local_notebook = open(item)
+            current_local_notebook = open(item, 'rb')
             committed_notebook = head_version_show.stdout
 
             nb_diff.append((current_local_notebook, committed_notebook, item))
@@ -49,7 +49,7 @@ class GitAdapter(VcsAdapter):
 
         hash_list = []
 
-        for index in xrange(0, len(output_array), 3):
+        for index in range(0, len(output_array), 3):
             local_hash = output_array[index + 1][1]
             base_hash = output_array[index][1]
             remote_hash = output_array[index + 2][1]

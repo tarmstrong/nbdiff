@@ -12,6 +12,9 @@ class BooleanPlus(object):
         self.truth = truthfulness
         self.modified = mod
 
+    def __bool__(self):
+        return self.__nonzero__()
+
     def __nonzero__(self):
         '''
         for evaluating as a boolean

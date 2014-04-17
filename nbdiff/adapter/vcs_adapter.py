@@ -11,7 +11,7 @@ class VcsAdapter(object):
     def filter_modified_notebooks(self, file_hooks):
         modified_notebooks = []
         for item in file_hooks:
-            if re.search('.ipynb$', item[2]):
+            if re.search(b'.ipynb$', item[2]):
                 modified_notebooks.append(item)
 
         return modified_notebooks
@@ -22,7 +22,7 @@ class VcsAdapter(object):
     def filter_unmerged_notebooks(self, file_hooks):
         unmerged_notebooks = []
         for item in file_hooks:
-            if re.search('.ipynb$', item[3]):
+            if re.search(b'.ipynb$', item[3]):
                 unmerged_notebooks.append(item)
 
         return unmerged_notebooks

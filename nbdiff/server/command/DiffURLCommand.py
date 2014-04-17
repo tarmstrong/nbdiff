@@ -5,7 +5,11 @@ from ...notebook_diff import notebook_diff
 from nbdiff.server.database.nbdiffModel import nbdiffModel
 from werkzeug.exceptions import BadRequestKeyError
 from sqlalchemy.exc import OperationalError
-import urllib2
+try:
+    import urllib2
+    urllib = urllib2
+except ImportError:
+    import urllib
 import json
 import bitarray
 import IPython.nbformat.current as nbformat
@@ -28,7 +32,7 @@ class DiffURLCommand(BaseCommand):
             return render_template('Error.html', err=errMsg)
 
         try:
-            beforeFile = urllib2.urlopen(beforeURL)
+            beforeFile = urllib.urlopen(beforeURL)
             if int(beforeFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The Before notebook exceeds 20MB.
                     Only notebooks below 20MB are accepted.<br/>"""
@@ -37,7 +41,7 @@ class DiffURLCommand(BaseCommand):
                 notebook file from the given URL.<br/>"""
 
         try:
-            afterFile = urllib2.urlopen(afterURL)
+            afterFile = urllib.urlopen(afterURL)
             if int(afterFile.info()['Content-Length']) > max_size:
                 errMsg = errMsg + """The After notebook exceeds 20MB.
                     Only notebooks below 20MB are accepted.<br/>"""
@@ -76,8 +80,6 @@ class DiffURLCommand(BaseCommand):
                 db_session.commit()
             except OperationalError:
                 db_session.rollback()
-                print """The database is not initialized.
-                    Please restart server with argument init_db."""
                 errMsg = """There was an error with the database. <br/>
                    Please contact administrator to resolve this issue."""
                 return render_template('Error.html', err=errMsg)
