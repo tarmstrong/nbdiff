@@ -7,6 +7,18 @@ from .vcs_adapter import VcsAdapter
 
 class GitAdapter(VcsAdapter):
 
+    def __init__(self):
+        is_git_repo = False
+
+        try:
+            is_git_repo = subprocess.check_output(
+                "git rev-parse --is-inside-work-tree".split()) == "true\n"
+        except subprocess.CalledProcessError:
+            sys.exit(-1)
+
+        if not is_git_repo:
+            sys.exit(-1)
+
     def get_modified_notebooks(self):
         # get modified file names
         modified = subprocess.check_output("git ls-files --modified".split())
@@ -37,8 +49,6 @@ class GitAdapter(VcsAdapter):
         return super(GitAdapter, self).filter_modified_notebooks(nb_diff)
 
     def get_unmerged_notebooks(self):
-        # TODO error handling.
-
         output = subprocess.check_output("git ls-files --unmerged".split())
         output_array = [line.split() for line in output.splitlines()]
 
