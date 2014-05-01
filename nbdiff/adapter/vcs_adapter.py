@@ -29,3 +29,11 @@ class VcsAdapter(object):
 
     def stage_file(self, file, contents=None):
         raise NotImplementedError("Subclass must implement abstract method")
+
+
+class NoVCSError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
