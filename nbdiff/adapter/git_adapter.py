@@ -2,6 +2,7 @@ __author__ = 'root'
 
 import sys
 import subprocess
+import os
 from .vcs_adapter import VcsAdapter
 from .vcs_adapter import NoVCSError
 
@@ -50,7 +51,7 @@ class GitAdapter(VcsAdapter):
                 stdout=subprocess.PIPE
             )
 
-            absolute_file_path = git_root_path + "/" + name
+            absolute_file_path = os.path.join(git_root_path, name)
 
             current_local_notebook = open(absolute_file_path)
             committed_notebook = head_version_show.stdout
@@ -99,7 +100,7 @@ class GitAdapter(VcsAdapter):
                 stdout=subprocess.PIPE
             )
             #file_name = hash[3]
-            absolute_file_path = git_root_path + "/" + hash[3]
+            absolute_file_path = os.path.join(git_root_path, hash[3])
             file_hooks.append((local.stdout, base.stdout,
                               remote.stdout, absolute_file_path))
 
