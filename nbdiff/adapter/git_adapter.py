@@ -81,6 +81,10 @@ class GitAdapter(VcsAdapter):
 
         file_hooks = []
 
+        git_root_path = subprocess.check_output(
+            "git rev-parse --show-toplevel".split()
+        ).splitlines()[0]
+
         for hash in hash_list:
             local = subprocess.Popen(
                 ['git', 'show', hash[0]],
@@ -94,9 +98,10 @@ class GitAdapter(VcsAdapter):
                 ['git', 'show', hash[2]],
                 stdout=subprocess.PIPE
             )
-            file_name = hash[3]
+            #file_name = hash[3]
+            absolute_file_path = git_root_path + "/" + hash[3]
             file_hooks.append((local.stdout, base.stdout,
-                              remote.stdout, file_name))
+                              remote.stdout, absolute_file_path))
 
         return super(GitAdapter, self).filter_unmerged_notebooks(file_hooks)
 
