@@ -27,6 +27,9 @@ class GitAdapter(VcsAdapter):
             "git ls-files --modified --full-name".split()
         )
         fnames = modified.splitlines()
+        
+        if not fnames:
+            return []
 
         # get unmerged file info
         unmerged = subprocess.check_output(
@@ -99,7 +102,7 @@ class GitAdapter(VcsAdapter):
                 ['git', 'show', hash[2]],
                 stdout=subprocess.PIPE
             )
-            #file_name = hash[3]
+            # file_name = hash[3]
             absolute_file_path = os.path.join(git_root_path, hash[3])
             file_hooks.append((local.stdout, base.stdout,
                               remote.stdout, absolute_file_path))

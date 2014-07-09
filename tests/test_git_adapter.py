@@ -3,7 +3,7 @@ from pretend import stub
 
 
 def test_get_modified_notebooks_empty():
-    g.subprocess = stub(check_output=lambda cmd: '')
+    g.subprocess = stub(check_output=lambda cmd: 'true\n' if '--is-inside-work-tree' in cmd else '')
     adapter = g.GitAdapter()
     result = adapter.get_modified_notebooks()
     assert result == []
@@ -25,6 +25,8 @@ baz.ipynb
                 '100755\thash\t{i}\tfoo.ipynb\n'
                 for i in [1, 2, 3]
             ])
+        elif '--is-inside-work-tree' in cmd:
+            return 'true\n'
 
     def popen(*args, **kwargs):
         return stub(stdout=stub(read=lambda: ""))
@@ -41,7 +43,7 @@ baz.ipynb
 
 
 def test_get_unmerged_notebooks_empty():
-    g.subprocess = stub(check_output=lambda cmd: '')
+    g.subprocess = stub(check_output=lambda cmd: 'true\n' if '--is-inside-work-tree' in cmd else '')
     adapter = g.GitAdapter()
     result = adapter.get_unmerged_notebooks()
     assert result == []
@@ -65,6 +67,8 @@ def test_get_unmerged_notebooks():
                 for i in [1, 2, 3]
             ])
             return f1 + f2 + f3
+        elif '--is-inside-work-tree' in cmd:
+            return 'true\n'
 
     def popen(*args, **kwargs):
         return stub(stdout=stub(read=lambda: ""))
