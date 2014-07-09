@@ -1,13 +1,49 @@
 from . import diff
+from . import comparable
 from .notebook_diff import (
     diff_result_to_cell,
-    cells_diff,
 )
+import IPython.nbformat.current as nbformat
 import itertools as it
 import copy
 
 
-def notebook_merge(local, base, remote):
+def merge(local, base, remote, check_modified=False):
+    """Generate unmerged series of changes (including conflicts).
+
+    By diffing the two diffs, we find *changes* that are
+    on the local branch, the remote branch, or both.
+    We arbitrarily choose the "local" branch to be the "before"
+    and the "remote" branch to be the "after" in the diff algorithm.
+
+    Therefore:
+    If a change is "deleted", that means that it occurs only on
+    the local branch. If a change is "added" that means it occurs only on
+    the remote branch. If a change is "unchanged", that means it occurs
+    in both branches. Either the same addition or same deletion occurred in
+    both branches, or the cell was not changed in either branch.
+
+    Parameters
+    ----------
+    local : list
+        A sequence representing the items on the local branch.
+    base : dict
+        A sequence representing the items on the base branch
+    remote : dict
+        A sequence representing the items on the remote branch.
+
+    Returns
+    -------
+    result : A diff result comparing the changes on the local and remote
+             branches.
+    """
+    base_local = diff.diff(base, local, check_modified=check_modified)
+    base_remote = diff.diff(base, remote, check_modified=check_modified)
+    merge = diff.diff(base_local, base_remote)
+    return merge
+
+
+def notebook_merge(local, base, remote, check_modified=False):
     """Unify three notebooks into a single notebook with merge metadata.
 
     The result of this function is a valid notebook that can be loaded
@@ -27,11 +63,11 @@ def notebook_merge(local, base, remote):
     -------
     nb : A valid notebook containing merge metadata.
     """
-    local_cells = local['worksheets'][0]['cells']
-    base_cells = base['worksheets'][0]['cells']
-    remote_cells = remote['worksheets'][0]['cells']
-    local_diff = cells_diff(base_cells, local_cells)
-    remote_diff = cells_diff(base_cells, remote_cells)
+
+    local_cells = get_cells(local)
+    base_cells = get_cells(base)
+    remote_cells = get_cells(remote)
+
     rows = []
     current_row = []
     empty_cell = lambda: {
@@ -43,17 +79,7 @@ def notebook_merge(local, base, remote):
         'metadata': {'state': 'empty'}
     }
 
-    # By diffing the two diffs, we find *changes* that are
-    # on the local branch, the remote branch, or both.
-    # We arbitrarily choose the "local" branch to be the "before"
-    # and the "remote" branch to be the "after" in the diff algorithm.
-    # Therefore:
-    # If a change is "deleted", that means that it occurs only on
-    # the local branch. If a change is "added" that means it occurs only on
-    # the remote branch. If a change is "unchanged", that means it occurs
-    # in both branches. Either the same addition or same deletion occurred in
-    # both branches, or the cell was not changed in either branch.
-    diff_of_diffs = diff.diff(local_diff, remote_diff)
+    diff_of_diffs = merge(local_cells, base_cells, remote_cells)
 
     # For each item in the higher-order diff, create a "row" that
     # corresponds to a row in the NBDiff interface. A row contains:
@@ -138,8 +164,28 @@ def notebook_merge(local, base, remote):
 
     # Chain all rows together; create a flat array from the nested array.
     # Use the base notebook's notebook-level metadata (title, version, etc.)
-    base['worksheets'][0]['cells'] = list(it.chain.from_iterable(rows))
 
-    base['metadata']['nbdiff-type'] = 'merge'
+    result_notebook = local
+    if len(result_notebook['worksheets']) == 0:
+        result_notebook['worksheets'] = [nbformat.new_worksheet()]
 
-    return base
+    new_cell_array = list(it.chain.from_iterable(rows))
+    result_notebook['worksheets'][0]['cells'] = new_cell_array
+
+    result_notebook['metadata']['nbdiff-type'] = 'merge'
+
+    return result_notebook
+
+
+def get_cells(notebook, check_modified=False):
+    try:
+        cells = [
+            comparable.CellComparator(cell, check_modified=check_modified)
+            for cell in
+            notebook['worksheets'][0]['cells']
+        ]
+    except IndexError:
+        cells = []
+    except KeyError:
+        cells = []
+    return cells

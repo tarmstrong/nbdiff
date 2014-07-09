@@ -22,5 +22,7 @@
 
   button#nbdiff-shutdown {
     display: none;
+	position: absolute;
+	right: 10px;
   }
 

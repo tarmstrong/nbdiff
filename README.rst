@@ -12,17 +12,15 @@ NBDiff
         :target: https://crate.io/packages/nbdiff?version=latest
 
 
-**Warning: Under heavy development.**
-
 A tool for diffing and merging IPython Notebook files.
 
-This project is currently under heavy development by a team of
-university students. See
+This project was built by a team of
+university students from Concordia University. See
 `AUTHORS <https://github.com/tarmstrong/nbdiff/blob/master/AUTHORS.rst>`__
 for more information.
 
 * Free software: MIT license
-* Documentation: http://nbdiff.rtfd.org.
+* Website: http://nbdiff.org.
 
 Installation
 ------------
@@ -125,6 +123,13 @@ Developing
 Run the Python tests
 ~~~~~~~~~~~~~~~~~~~~
 
+To get all of the dependencies necessary to test nbdiff, run:
+
+::
+
+    $ pip install -r requirements-dev.txt
+
+
 To run the python tests, run the following command:
 
 ::
@@ -137,6 +142,15 @@ against PEP-8, use ``flake8`` like so:
 ::
 
     $ flake8 tests nbdiff
+
+
+To check Python test coverage, install ``coverage`` and run the tests with the ``--with-coverage`` option.
+
+::
+
+    $ pip install coverage
+    $ python setup.py nosetests --with-coverage
+
 
 Run the JavaScript tests
 ~~~~~~~~~~~~~~~~~~~~~~~~

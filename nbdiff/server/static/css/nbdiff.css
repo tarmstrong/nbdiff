@@ -4,21 +4,27 @@
 	#first-bar {
 	  float:left;
 	  max-width:50%;
-	  overflow-x: hidden;
+	  overflow-x: hidden;  
+	  border-color: #708090;
+      border-style: solid;
+	  border-width: 4px;
 	}
 
 	#second-bar {
 	  float:right;
 	  max-width:50%;
 	  overflow-x: hidden;
+	  border-color: #708090;
+      border-style: solid;
+      border-width: 4px;
 	}
 
 	pre.deleted {
-	  background-color: #FFCC66;
+	  background-color: #E9967A;
 	}
 
 	.changed {
-	  background-color: #FFCC66;
+	  background-color: #E9967A;
 	}
 
 	div.cell.deleted {
@@ -27,12 +33,12 @@
 
 	.added-ul {
 	  text-decoration: none;
-	  border-bottom: 4px solid green;
+	  border-bottom: 4px solid #90EE90;
 	}
 
 	.deleted-ul {
 	  text-decoration: none;
-	  border-bottom: 4px solid red;
+	  border-bottom: 4px solid #E9967A;
 	}
 
 	.delete-text {
@@ -40,7 +46,7 @@
 	}
 
 	.add-text {
-	  background-color: #ADFF2F;
+	  background-color: #90EE90;
 	}
 
   /*
@@ -50,21 +56,19 @@
   */
 
 	.added-cell {
-	  background-color: #ADFF2F;
+	  background-color: #90EE90;
 	  border: 3px solid #006400;
 	}
 
     .added-word {
-      background-color: #ADFF2F;
+      background-color: #90EE90;
     }
 
     .deleted-word {
       background-color: #E9967A;
     }
 
-    .diffed-header{
-    text-align: center;
-    }
+    
 	.bottom-spacer {
 	  height: 100px;
 	  margin: 100px;
@@ -115,21 +119,23 @@
 
 	.row-cell-diff-left {
 	  float: left;
-	  width: 47%;
+	  width: 48.55%;
 	  overflow-x: hidden;
+	  border: 1px solid #D3D3D3;
 	}
 
 	.row-cell-diff-middle {
 	  padding-top: 10px;
 	  overflow-x: hidden;
-	  width: 6%;
+	  width: 3%;
 	  text-align: center;
 	}
 
 	.row-cell-diff-right {
 	  float:right;
 	  overflow-x: hidden;
-	  width: 47%;
+	  width: 46.55%;
+	  border: 1px solid #D3D3D3;
 	}
 
 	.diff-spacer {
@@ -181,11 +187,25 @@
     display: none;
   }
 
+  /* Header diff stuff */
+
+	.header-row-cell-diff-right {
+	  float:right;
+	  overflow-x: hidden;
+	  width: 47%;
+	}
+
+	.header-row-cell-diff-left {
+	  float: left;
+	  width: 47%;
+	  overflow-x: hidden;
+	}
+
 
   /* Line diff stuff */
 
   .line-diff {
-      border: 1px solid black;
+      border: 1px solid #778899;
       min-width: 100%;
       margin: 0 auto;
       overflow-x: hidden;
@@ -209,12 +229,16 @@
   }
 
   .line-diff-left-filled {
-      background-color: rgb(250, 200, 200);
+      background-color: #E9967A;
   }
   .line-diff-right-filled {
-      background-color: rgb(200, 250, 200);
+      background-color: #90EE90;
   }
 
   .line-diff-unchanged {
       background-color: rgb(245, 245, 245);
+  }
+
+  #nbdiff-filename {
+      font-family: monospace;
   }

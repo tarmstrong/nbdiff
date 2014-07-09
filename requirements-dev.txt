@@ -1,0 +1,7 @@
+flask
+jinja2
+ipython
+python-Levenshtein
+sqlalchemy
+bitarray
+pretend
