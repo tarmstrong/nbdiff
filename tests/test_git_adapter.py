@@ -27,6 +27,8 @@ baz.ipynb
             ])
         elif '--is-inside-work-tree' in cmd:
             return 'true\n'
+        elif '--show-toplevel' in cmd:
+            return '/home/user/Documents'
 
     def popen(*args, **kwargs):
         return stub(stdout=stub(read=lambda: ""))
@@ -69,6 +71,8 @@ def test_get_unmerged_notebooks():
             return f1 + f2 + f3
         elif '--is-inside-work-tree' in cmd:
             return 'true\n'
+        elif '--show-toplevel' in cmd:
+            return '/home/user/Documents'
 
     def popen(*args, **kwargs):
         return stub(stdout=stub(read=lambda: ""))
@@ -81,5 +85,5 @@ def test_get_unmerged_notebooks():
     )
     result = adapter.get_unmerged_notebooks()
     assert len(result) == 2
-    assert result[0][3] == 'foo.ipynb'
-    assert result[1][3] == 'bar.ipynb'
+    assert result[0][3] == '/home/user/Documents/foo.ipynb'
+    assert result[1][3] == '/home/user/Documents/bar.ipynb'
