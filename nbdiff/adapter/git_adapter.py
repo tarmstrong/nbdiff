@@ -2,18 +2,39 @@ __author__ = 'root'
 
 import sys
 import subprocess
+import os
 from .vcs_adapter import VcsAdapter
+from .vcs_adapter import NoVCSError
 
 
 class GitAdapter(VcsAdapter):
 
+    def __init__(self):
+        is_git_repo = False
+
+        try:
+            is_git_repo = subprocess.check_output(
+                "git rev-parse --is-inside-work-tree".split()) == "true\n"
+        except subprocess.CalledProcessError:
+            raise NoVCSError("Git repository not found.")
+
+        if not is_git_repo:
+            raise NoVCSError("Git repository not found.")
+
     def get_modified_notebooks(self):
         # get modified file names
-        modified = subprocess.check_output("git ls-files --modified".split())
+        modified = subprocess.check_output(
+            "git ls-files --modified --full-name".split()
+        )
         fnames = modified.splitlines()
 
+        if not fnames:
+            return []
+
         # get unmerged file info
-        unmerged = subprocess.check_output("git ls-files --unmerged".split())
+        unmerged = subprocess.check_output(
+            "git ls-files --unmerged --full-name".split()
+        )
         unmerged_array = [line.split() for line in unmerged.splitlines()]
 
         # get unmerged file names
@@ -22,25 +43,34 @@ class GitAdapter(VcsAdapter):
         # ignore unmerged files, get unique names
         fnames = list(set(fnames) - set(unmerged_array_names))
 
+        git_root_path = subprocess.check_output(
+            "git rev-parse --show-toplevel".split()
+        ).splitlines()[0]
+
         nb_diff = []
-        for item in fnames:
+        for name in fnames:
             head_version_show = subprocess.Popen(
-                ['git', 'show', 'HEAD:' + item],
+                ['git', 'show', 'HEAD:' + name],
                 stdout=subprocess.PIPE
             )
 
-            current_local_notebook = open(item)
+            absolute_file_path = os.path.join(git_root_path, name)
+
+            current_local_notebook = open(absolute_file_path)
             committed_notebook = head_version_show.stdout
 
-            nb_diff.append((current_local_notebook, committed_notebook, item))
+            nb_diff.append((current_local_notebook, committed_notebook, name))
 
         return super(GitAdapter, self).filter_modified_notebooks(nb_diff)
 
     def get_unmerged_notebooks(self):
-        # TODO error handling.
-
-        output = subprocess.check_output("git ls-files --unmerged".split())
+        output = subprocess.check_output(
+            "git ls-files --unmerged --full-name".split()
+        )
         output_array = [line.split() for line in output.splitlines()]
+
+        if not output_array:
+            return []
 
         if len(output_array) % 3 != 0:  # TODO should be something else
             sys.stderr.write(
@@ -58,6 +88,10 @@ class GitAdapter(VcsAdapter):
 
         file_hooks = []
 
+        git_root_path = subprocess.check_output(
+            "git rev-parse --show-toplevel".split()
+        ).splitlines()[0]
+
         for hash in hash_list:
             local = subprocess.Popen(
                 ['git', 'show', hash[0]],
@@ -71,9 +105,10 @@ class GitAdapter(VcsAdapter):
                 ['git', 'show', hash[2]],
                 stdout=subprocess.PIPE
             )
-            file_name = hash[3]
+            # file_name = hash[3]
+            absolute_file_path = os.path.join(git_root_path, hash[3])
             file_hooks.append((local.stdout, base.stdout,
-                              remote.stdout, file_name))
+                              remote.stdout, absolute_file_path))
 
         return super(GitAdapter, self).filter_unmerged_notebooks(file_hooks)
 

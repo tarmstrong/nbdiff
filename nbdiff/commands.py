@@ -8,6 +8,7 @@ from .notebook_parser import NotebookParser
 import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
+from .adapter.vcs_adapter import NoVCSError
 from .server.local_server import app
 import threading
 import webbrowser
@@ -94,7 +95,10 @@ def diff():
 
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
-        git = GitAdapter()
+        try:
+            git = GitAdapter()
+        except NoVCSError:
+            sys.exit(-1)
 
         modified_notebooks = git.get_modified_notebooks()
 
@@ -180,7 +184,11 @@ def merge():
 
     # only 'nbmerge' - no files specified with command
     if length == 0:
-        git = GitAdapter()
+        try:
+            git = GitAdapter()
+        except NoVCSError:
+            sys.exit(-1)
+
         unmerged_notebooks = git.get_unmerged_notebooks()
 
         if not len(unmerged_notebooks) == 0:

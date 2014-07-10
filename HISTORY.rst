@@ -14,3 +14,8 @@ History
 ++++++++++++++++++
 
 * IPython 2.0.0 support
+
+1.0.4 (2014-10-07)
+++++++++++++++++++
+
+* Fixed several bugs
