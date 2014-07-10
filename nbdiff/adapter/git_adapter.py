@@ -27,7 +27,7 @@ class GitAdapter(VcsAdapter):
             "git ls-files --modified --full-name".split()
         )
         fnames = modified.splitlines()
-        
+
         if not fnames:
             return []
 
@@ -68,7 +68,7 @@ class GitAdapter(VcsAdapter):
             "git ls-files --unmerged --full-name".split()
         )
         output_array = [line.split() for line in output.splitlines()]
-        
+
         if not output_array:
             return []
 

@@ -3,7 +3,9 @@ from pretend import stub
 
 
 def test_get_modified_notebooks_empty():
-    g.subprocess = stub(check_output=lambda cmd: 'true\n' if '--is-inside-work-tree' in cmd else '')
+    g.subprocess = stub(check_output=lambda cmd: 'true\n'
+                        if '--is-inside-work-tree' in cmd
+                        else '')
     adapter = g.GitAdapter()
     result = adapter.get_modified_notebooks()
     assert result == []
@@ -45,7 +47,9 @@ baz.ipynb
 
 
 def test_get_unmerged_notebooks_empty():
-    g.subprocess = stub(check_output=lambda cmd: 'true\n' if '--is-inside-work-tree' in cmd else '')
+    g.subprocess = stub(check_output=lambda cmd: 'true\n'
+                        if '--is-inside-work-tree' in cmd
+                        else '')
     adapter = g.GitAdapter()
     result = adapter.get_unmerged_notebooks()
     assert result == []
