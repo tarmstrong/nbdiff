@@ -3,7 +3,6 @@ Entry points for the nbdiff package.
 '''
 from __future__ import print_function
 import argparse
-import StringIO
 from .merge import notebook_merge
 from .notebook_parser import NotebookParser
 import sys
