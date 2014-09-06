@@ -2,6 +2,8 @@ flask
 jinja2
 ipython
 python-Levenshtein
+python-hglib
 sqlalchemy
 bitarray
 pretend
+
