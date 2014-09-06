@@ -8,8 +8,8 @@ from .vcs_adapter import VcsAdapter
 from .vcs_adapter import NoVCSError
 
 # A deliberate copy of GitAdapter's error message:
-ERROR_MSG = \
-  "fatal: Not a hg  repository (or any of the parent directories): .hg"
+ERROR_MSG = ("fatal: Not a hg  repository"
+             "(or any of the parent directories): .hg")
 
 
 class HgAdapter(VcsAdapter):
