@@ -8,8 +8,7 @@ from .vcs_adapter import VcsAdapter
 from .vcs_adapter import NoVCSError
 
 # A deliberate copy of GitAdapter's error message:
-ERROR_MSG = ("fatal: Not a hg  repository"
-             "(or any of the parent directories): .hg")
+ERR_MSG = "fatal: Not a hg  repository (or any of the parent directories): .hg"
 
 
 class HgAdapter(VcsAdapter):
@@ -23,7 +22,7 @@ class HgAdapter(VcsAdapter):
             #  Maybe we should not assume that every Exception
             # is thrown because a hg repo can't be found.
             # TODO: check if this assumption is correct
-            raise NoVCSError(ERROR_MSG)
+            raise NoVCSError(ERR_MSG)
 
     def get_modified_notebooks(self):
         # initialize the mercurial client:
