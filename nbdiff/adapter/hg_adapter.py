@@ -11,27 +11,79 @@ from .vcs_adapter import NoVCSError
 ERR_MSG = "fatal: Not a hg  repository (or any of the parent directories): .hg"
 
 
+##############################################################
+# Funcions to search the filesystem for a hg repository
+# the search is from the current directory to the root.
+##############################################################
+# TODO: is this portable?
+def isroot(path):
+    return os.path.normpath(path) == os.path.abspath(os.sep)
+
+
+def isempty(path):
+    return os.path.normpath(path) == ''
+
+
+def walkback(path, from_parent=False):
+    # Handle redundant patterns and separators like '/home/user/..'
+    normpath = os.path.normpath(path)
+
+    if os.path.isdir(path):
+        if from_parent:
+            directory = os.path.dirname(normpath)
+        else:
+            directory = normpath
+    else:
+        directory = os.path.dirname(normpath)
+    #  Loop until either:
+    #   1) we have reached the root of the filesystem
+    #      (the end of an absolute path)
+    #   2) we have reached an empty path
+    #      (the end of a relative path)
+    #
+    #  The empty path or the path to the root are still yielded,
+    # (only once, since we interrupt the loop)
+    while True:
+        yield directory
+        if isroot(directory) or isempty(directory):
+            #   Now that we have already yielded the
+            # path to the root or the empty path, we
+            # terminate the loop.
+            #   This is done to make sure these paths
+            # are yielded only once, instead of entering
+            # an infinite cycle.
+            return
+        directory = os.path.dirname(directory)
+
+
+# Walks "back" into the root of the filesystem
+# to try to find a hg repository
+def get_hlib_client_and_path(directory):
+    for dirpath in walkback(directory):
+        try:
+            return hglib.open(dirpath), dirpath
+        except Exception:
+            pass
+    raise NoVCSError(ERR_MSG)
+
+
 class HgAdapter(VcsAdapter):
 
     def __init__(self):
-
-        try:
-            hglib.open(os.getcwd())
-        except Exception:
-            #  This is probably bad practice
-            #  Maybe we should not assume that every Exception
-            # is thrown because a hg repo can't be found.
-            # TODO: check if this assumption is correct
-            raise NoVCSError(ERR_MSG)
+        get_hlib_client_and_path(os.getcwd())
 
     def get_modified_notebooks(self):
         # initialize the mercurial client:
-        client = hglib.open(os.getcwd())
+        client, repopath = get_hlib_client_and_path(os.getcwd())
+        # Gather unmerged files:
+        unmerged = [path for (status, path) in client.resolve(listfiles=True)
+                         if status == 'U']
         nb_diff = []
-        for st, path in client.status(all=True):
+        for status, path in client.status(all=True):
             # if the file has been modified since last commit:
-            if st == 'M':
-                abspath = os.path.abspath(path)  # is this needed?
+            if status == 'M' and path not in unmerged:
+                # returned by client.status is relative to the repo location
+                abspath = os.path.join(repopath, path)
                 current_local_notebook = open(abspath)
                 #  Unlike 'git ls-files', client.cat returns the file contents
                 # as a plain string. To mantain compatibility with GitAdapter,
