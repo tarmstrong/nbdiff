@@ -96,10 +96,3 @@ class HgAdapter(VcsAdapter):
                                 committed_notebook,
                                 path))
 
-        return super(HgAdapter, self).filter_modified_notebooks(nb_diff)
-
-    def get_unmerged_notebooks(self):
-        pass
-
-    def stage_file(self, file, contents=None):
-        pass
