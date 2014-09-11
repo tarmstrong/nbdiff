@@ -77,7 +77,7 @@ class HgAdapter(VcsAdapter):
         client, repopath = get_hlib_client_and_path(os.getcwd())
         # Gather unmerged files:
         unmerged = [path for (status, path) in client.resolve(listfiles=True)
-                         if status == 'U']
+                    if status == 'U']
         nb_diff = []
         for status, path in client.status(all=True):
             # if the file has been modified since last commit:
@@ -96,3 +96,10 @@ class HgAdapter(VcsAdapter):
                                 committed_notebook,
                                 path))
 
+        return super(HgAdapter, self).filter_modified_notebooks(nb_diff)
+
+    def get_unmerged_notebooks(self):
+        pass
+
+    def stage_file(self, file, contents=None):
+        pass
