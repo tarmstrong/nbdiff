@@ -97,7 +97,7 @@ def diff():
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
         #  Try hg and git in this order.
-        # T he order is important because when GitAdapter fails, it sends an
+        # The order is important because when GitAdapter fails, it sends an
         # annoying message to stdout, which is impossible to suppress.
         #  We don't want to see this message when we have a Hg repository.
 
