@@ -11,70 +11,23 @@ from .vcs_adapter import NoVCSError
 ERR_MSG = "fatal: Not a hg  repository (or any of the parent directories): .hg"
 
 
-##############################################################
-# Funcions to search the filesystem for a hg repository
-# the search is from the current directory to the root.
-##############################################################
-# TODO: is this portable?
-def isroot(path):
-    return os.path.normpath(path) == os.path.abspath(os.sep)
-
-
-def isempty(path):
-    return os.path.normpath(path) == ''
-
-
-def walkback(path, from_parent=False):
-    # Handle redundant patterns and separators like '/home/user/..'
-    normpath = os.path.normpath(path)
-
-    if os.path.isdir(path):
-        if from_parent:
-            directory = os.path.dirname(normpath)
-        else:
-            directory = normpath
-    else:
-        directory = os.path.dirname(normpath)
-    #  Loop until either:
-    #   1) we have reached the root of the filesystem
-    #      (the end of an absolute path)
-    #   2) we have reached an empty path
-    #      (the end of a relative path)
-    #
-    #  The empty path or the path to the root are still yielded,
-    # (only once, since we interrupt the loop)
-    while True:
-        yield directory
-        if isroot(directory) or isempty(directory):
-            #   Now that we have already yielded the
-            # path to the root or the empty path, we
-            # terminate the loop.
-            #   This is done to make sure these paths
-            # are yielded only once, instead of entering
-            # an infinite cycle.
-            return
-        directory = os.path.dirname(directory)
-
-
-# Walks "back" into the root of the filesystem
-# to try to find a hg repository
-def get_hlib_client_and_path(directory):
-    for dirpath in walkback(directory):
-        try:
-            return hglib.open(dirpath), dirpath
-        except Exception:
-            pass
-    raise NoVCSError(ERR_MSG)
+def get_hlib_client_and_path():
+    try:
+        client = hglib.open()
+        repopath = client.root()
+        return client, repopath
+    except Exception:
+        raise NoVCSError(ERR_MSG)
 
 
 class HgAdapter(VcsAdapter):
 
     def __init__(self):
-        get_hlib_client_and_path(os.getcwd())
+        get_hlib_client_and_path()
 
     def get_modified_notebooks(self):
         # initialize the mercurial client:
-        client, repopath = get_hlib_client_and_path(os.getcwd())
+        client, repopath = get_hlib_client_and_path()
         # Gather unmerged files:
         unmerged = [path for (status, path) in client.resolve(listfiles=True)
                     if status == 'U']
