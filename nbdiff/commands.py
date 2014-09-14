@@ -8,6 +8,7 @@ from .notebook_parser import NotebookParser
 import sys
 from .notebook_diff import notebook_diff
 from .adapter.git_adapter import GitAdapter
+from .adapter.hg_adapter import HgAdapter
 from .adapter.vcs_adapter import NoVCSError
 from .server.local_server import app
 import threading
@@ -95,12 +96,28 @@ def diff():
 
     elif not (args.before or args.after):
         # No arguments have been given. Ask version control instead
-        try:
-            git = GitAdapter()
-        except NoVCSError:
-            sys.exit(-1)
+        #  Try hg and git in this order.
+        # The order is important because when GitAdapter fails, it sends an
+        # annoying message to stdout, which is impossible to suppress.
+        #  We don't want to see this message when we have a Hg repository.
 
-        modified_notebooks = git.get_modified_notebooks()
+        # Hg:
+        try:
+            vcs = HgAdapter()
+        except NoVCSError as hg_err:
+            # Git:
+            #  use a nested try block to make sure the GitAdapter
+            # is only created if the HgAdapter has failed.
+            try:
+                vcs = GitAdapter()
+            except NoVCSError:
+                #  Now we're sure we are not inside a supported repo.
+                #  The GitAdapter error message has already been printed
+                # and we print the HgAdapter error message
+                print(hg_err.value)
+                sys.exit(-1)
+
+        modified_notebooks = vcs.get_modified_notebooks()
 
         if not len(modified_notebooks) == 0:
             invalid_notebooks = []

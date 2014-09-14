@@ -2,3 +2,4 @@ flask
 jinja2
 ipython
 python-Levenshtein
+python-hglib

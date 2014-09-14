@@ -52,6 +52,7 @@ setup(
         'jinja2',
         'ipython',
         'python-Levenshtein',
+	'python-hglib',
     ],
     license="MIT",
     zip_safe=False,
