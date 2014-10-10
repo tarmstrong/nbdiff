@@ -3,7 +3,9 @@ __author__ = 'root'
 import hglib
 import os
 import StringIO
+import json
 
+from ..notebook_parser import NotebookParser
 from .vcs_adapter import VcsAdapter
 from .vcs_adapter import NoVCSError
 
@@ -52,7 +54,40 @@ class HgAdapter(VcsAdapter):
         return super(HgAdapter, self).filter_modified_notebooks(nb_diff)
 
     def get_unmerged_notebooks(self):
-        pass
+        client, repopath = get_hlib_client_and_path()
+        # Gather unmerged files:
+        unmerged = [path for (status, path) in client.resolve(listfiles=True)
+                    if status == 'U']
+
+        nb_diff = []
+
+        local_remote_hash = client.identify(id=True).split('+')
+        local_hash = local_remote_hash[0]
+        remote_hash = local_remote_hash[1]
+        base_hash = client.log("ancestor('"+local_hash+"', '"+remote_hash+"')")[0][1]
+
+        parser = NotebookParser()
+        for status, path in client.status(all=True):
+            if path in unmerged:
+                abspath = os.path.join(repopath, path)
+                name = os.path.basename(abspath)
+                current_local_notebook = StringIO.StringIO(client.cat(name,rev=local_hash))
+                #print(current_local_notebook.read())
+                #  Unlike 'git ls-files', client.cat returns the file contents
+                # as a plain string. To mantain compatibility with GitAdapter,
+                # we have to supply the string as a file-like stream.
+                #  A StringIO object behaves as a file handle and can be used
+                # for this purpose.
+                committed_notebook = StringIO.StringIO(client.cat([abspath]))
+
+                base = StringIO.StringIO(client.cat(name,rev=base_hash))
+
+                nb_diff.append((current_local_notebook,
+                                base,
+                                committed_notebook,
+                                path))
+        return nb_diff
+        
 
     def stage_file(self, file, contents=None):
         pass

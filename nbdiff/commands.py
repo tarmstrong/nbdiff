@@ -202,11 +202,21 @@ def merge():
     # only 'nbmerge' - no files specified with command
     if length == 0:
         try:
-            git = GitAdapter()
-        except NoVCSError:
-            sys.exit(-1)
+            vcs = HgAdapter()
+        except NoVCSError as hg_err:
+            # Git:
+            #  use a nested try block to make sure the GitAdapter
+            # is only created if the HgAdapter has failed.
+            try:
+                vcs = GitAdapter()
+            except NoVCSError:
+                #  Now we're sure we are not inside a supported repo.
+                #  The GitAdapter error message has already been printed
+                # and we print the HgAdapter error message
+                print(hg_err.value)
+                sys.exit(-1)
 
-        unmerged_notebooks = git.get_unmerged_notebooks()
+        unmerged_notebooks = vcs.get_unmerged_notebooks()
 
         if not len(unmerged_notebooks) == 0:
             invalid_notebooks = []
