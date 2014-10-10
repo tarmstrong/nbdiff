@@ -3,7 +3,6 @@ __author__ = 'root'
 import hglib
 import os
 import StringIO
-import json
 
 from ..notebook_parser import NotebookParser
 from .vcs_adapter import VcsAdapter
@@ -87,7 +86,6 @@ class HgAdapter(VcsAdapter):
                                 committed_notebook,
                                 path))
         return nb_diff
-        
 
     def stage_file(self, file, contents=None):
         pass
