@@ -70,22 +70,16 @@ class HgAdapter(VcsAdapter):
             if path in unmerged:
                 abspath = os.path.join(repopath, path)
                 name = os.path.basename(abspath)
-                current_local_notebook = StringIO.StringIO(client.cat(name,rev=local_hash))
-                #print(current_local_notebook.read())
-                #  Unlike 'git ls-files', client.cat returns the file contents
-                # as a plain string. To mantain compatibility with GitAdapter,
-                # we have to supply the string as a file-like stream.
-                #  A StringIO object behaves as a file handle and can be used
-                # for this purpose.
-                committed_notebook = StringIO.StringIO(client.cat([abspath]))
 
-                base = StringIO.StringIO(client.cat(name,rev=base_hash))
+                current_local_notebook = StringIO.StringIO(client.cat([name],rev=local_hash))
+                committed_notebook = StringIO.StringIO(client.cat([name],rev=remote_hash))
 
+                base = StringIO.StringIO(client.cat([name],rev=base_hash))
                 nb_diff.append((current_local_notebook,
                                 base,
                                 committed_notebook,
-                                path))
-        return nb_diff
+                                abspath))
+        return super(HgAdapter, self).filter_unmerged_notebooks(nb_diff)
 
     def stage_file(self, file, contents=None):
         pass
