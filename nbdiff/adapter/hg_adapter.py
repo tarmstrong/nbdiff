@@ -4,7 +4,6 @@ import hglib
 import os
 import StringIO
 
-from ..notebook_parser import NotebookParser
 from .vcs_adapter import VcsAdapter
 from .vcs_adapter import NoVCSError
 
@@ -63,21 +62,25 @@ class HgAdapter(VcsAdapter):
         local_remote_hash = client.identify(id=True).split('+')
         local_hash = local_remote_hash[0]
         remote_hash = local_remote_hash[1]
-        base_hash = client.log("ancestor('"+local_hash+"', '"+remote_hash+"')")[0][1]
+        base_hash = client.log("ancestor('" + local_hash +
+                               "', '" + remote_hash + "')")[0][1]
 
-        parser = NotebookParser()
         for status, path in client.status(all=True):
             if path in unmerged:
                 abspath = os.path.join(repopath, path)
                 name = os.path.basename(abspath)
 
-                current_local_notebook = StringIO.StringIO(client.cat([name],rev=local_hash))
-                committed_notebook = StringIO.StringIO(client.cat([name],rev=remote_hash))
+                local_nb_str = client.cat([name], rev=local_hash)
+                remote_nb_str = client.cat([name], rev=remote_hash)
+                base_nb_str = client.cat([name], rev=base_hash)
 
-                base = StringIO.StringIO(client.cat([name],rev=base_hash))
-                nb_diff.append((current_local_notebook,
+                local_notebook = StringIO.StringIO(local_nb_str)
+                remote_notebook = StringIO.StringIO(remote_nb_str)
+                base = StringIO.StringIO(base_nb_str)
+
+                nb_diff.append((local_notebook,
                                 base,
-                                committed_notebook,
+                                remote_notebook,
                                 abspath))
         return super(HgAdapter, self).filter_unmerged_notebooks(nb_diff)
 
