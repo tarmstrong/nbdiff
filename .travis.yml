@@ -26,6 +26,8 @@ script:
   - python setup.py install
   - git config --global user.name Enbee Diff
   - git config --global user.email example@example.com
+  - echo '[ui]' >> ~/.hgrc
+  - echo 'username = Enbee Diff' >> ~/.hgrc
   - make test-diff
   - make test-merge
   - make test-specs
