@@ -56,6 +56,8 @@ class HgAdapter(VcsAdapter):
         # Gather unmerged files:
         unmerged = [path for (status, path) in client.resolve(listfiles=True)
                     if status == 'U']
+        if not unmerged:
+            return []
 
         nb_diff = []
 
