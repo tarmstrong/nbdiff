@@ -22,12 +22,12 @@ install:
 
 # command to run tests, e.g. python setup.py test
 script:
+  - echo '[ui]' >> ~/.hgrc
+  - echo 'username = Enbee Diff' >> ~/.hgrc
   - python setup.py nosetests --with-coverage
   - python setup.py install
   - git config --global user.name Enbee Diff
   - git config --global user.email example@example.com
-  - echo '[ui]' >> ~/.hgrc
-  - echo 'username = Enbee Diff' >> ~/.hgrc
   - make test-diff
   - make test-merge
   - make test-specs
