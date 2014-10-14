@@ -22,8 +22,6 @@ install:
 
 # command to run tests, e.g. python setup.py test
 script:
-  - echo '[ui]' >> ~/.hgrc
-  - echo 'username = Enbee Diff' >> ~/.hgrc
   - python setup.py nosetests --with-coverage
   - python setup.py install
   - git config --global user.name Enbee Diff
