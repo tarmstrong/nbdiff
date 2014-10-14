@@ -18,6 +18,7 @@ install:
   - pip install python-coveralls --use-mirrors
   - pip install nose-cov --use-mirrors
   - pip install pretend --use-mirrors
+  - pip install testfixtures --use-mirrors
 
 # command to run tests, e.g. python setup.py test
 script:
