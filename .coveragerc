@@ -1,13 +1,19 @@
 [run]
+debug =
+    dataio
 omit =
     test*
     *virtualenv*
     *IPython*
     *site-packages*
+    *dist-packages*
     *xml*
     *json*
     *sqlite3*
     *shlex*
+    *jinja2*
+    *python2.7*
+    *output*
 include =
     *nbdiff*
     *test*
@@ -21,3 +27,5 @@ exclude_lines =
     def __repr__
     raise NotImplementedError
     if __name__ == .__main__.:
+    
+ignore_errors = True
