@@ -3,27 +3,27 @@ import os
 import unittest
 
 from nbdiff.adapter.hg_adapter import HgAdapter
-from testfixtures import tempdir, compare
+from testfixtures import tempdir
+
 
 class TestSequenceFunctions(unittest.TestCase):
+
     def setUp(self):
         self.original_path = os.getcwd()
-        
+
     def tearDown(self):
         os.chdir(self.original_path)
-    
+
     @tempdir()
     def test_get_modified_notebooks_empty(self, d):
         os.chdir(os.path.join(d.path))
         hglib.init()
         adapter = HgAdapter()
         result = adapter.get_modified_notebooks()
-        self.assertTrue(result == []) 
-    
-    
+        self.assertTrue(result == [])
+
     @tempdir()
     def test_get_modified_notebooks(self, d):
-        original_path = os.getcwd()
         os.chdir(d.path)
         client = hglib.init()
         client.open()
@@ -38,19 +38,18 @@ class TestSequenceFunctions(unittest.TestCase):
         file.close()
         self.assertEqual(d.read('first/second/1.ipynb'), 'modified')
         os.chdir(os.path.join(d.path, 'first'))
-    
+
         adapter = HgAdapter()
         result = adapter.get_modified_notebooks()
         self.assertTrue(len(result) == 1)
         self.assertEqual(result[0][0].read(), 'modified')
         self.assertEqual(result[0][1].read(), 'initial')
         self.assertEqual(result[0][2], 'first/second/1.ipynb')
-    
-    
+
     @tempdir()
     def test_get_unmerged_notebooks_empty(self, d):
         os.chdir(os.path.join(d.path))
         hglib.init()
         adapter = HgAdapter()
         result = adapter.get_unmerged_notebooks()
-        self.assertTrue(result == []) 
+        self.assertTrue(result == [])
