@@ -7,4 +7,3 @@ sqlalchemy
 bitarray
 pretend
 testfixtures
-unittest

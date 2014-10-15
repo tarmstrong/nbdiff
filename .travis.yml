@@ -19,7 +19,6 @@ install:
   - pip install nose-cov --use-mirrors
   - pip install pretend --use-mirrors
   - pip install testfixtures --use-mirrors
-  - pip install unittest --use-mirrors
 
 # command to run tests, e.g. python setup.py test
 script:
