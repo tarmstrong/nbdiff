@@ -52,7 +52,39 @@ class HgAdapter(VcsAdapter):
         return super(HgAdapter, self).filter_modified_notebooks(nb_diff)
 
     def get_unmerged_notebooks(self):
-        pass
+        client, repopath = get_hlib_client_and_path()
+        # Gather unmerged files:
+        unmerged = [path for (status, path) in client.resolve(listfiles=True)
+                    if status == 'U']
+        if not unmerged:
+            return []
+
+        nb_diff = []
+
+        local_remote_hash = client.identify(id=True).split('+')
+        local_hash = local_remote_hash[0]
+        remote_hash = local_remote_hash[1]
+        base_hash = client.log("ancestor('" + local_hash +
+                               "', '" + remote_hash + "')")[0][1]
+
+        for status, path in client.status(all=True):
+            if path in unmerged:
+                abspath = os.path.join(repopath, path)
+                name = os.path.basename(abspath)
+
+                local_nb_str = client.cat([name], rev=local_hash)
+                remote_nb_str = client.cat([name], rev=remote_hash)
+                base_nb_str = client.cat([name], rev=base_hash)
+
+                local_notebook = StringIO.StringIO(local_nb_str)
+                remote_notebook = StringIO.StringIO(remote_nb_str)
+                base = StringIO.StringIO(base_nb_str)
+
+                nb_diff.append((local_notebook,
+                                base,
+                                remote_notebook,
+                                abspath))
+        return super(HgAdapter, self).filter_unmerged_notebooks(nb_diff)
 
     def stage_file(self, file, contents=None):
         pass

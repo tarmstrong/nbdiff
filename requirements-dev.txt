@@ -6,4 +6,4 @@ python-hglib
 sqlalchemy
 bitarray
 pretend
-
+testfixtures
