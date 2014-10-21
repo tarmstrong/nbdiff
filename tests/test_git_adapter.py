@@ -1,6 +1,5 @@
 from nbdiff.adapter import git_adapter as g
 from pretend import stub
-from genericpath import exists
 
 
 def test_get_modified_notebooks_empty():
@@ -10,6 +9,7 @@ def test_get_modified_notebooks_empty():
     adapter = g.GitAdapter()
     result = adapter.get_modified_notebooks()
     assert result == []
+
 
 def test_get_modified_notebooks_deleted():
     adapter = g.GitAdapter()
@@ -45,6 +45,7 @@ baz.ipynb
     result = adapter.get_modified_notebooks()
     assert result[0][2] == 'bar.ipynb'
     assert len(result) == 1
+
 
 def test_get_modified_notebooks():
     adapter = g.GitAdapter()

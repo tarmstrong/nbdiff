@@ -60,7 +60,9 @@ class GitAdapter(VcsAdapter):
                 current_local_notebook = open(absolute_file_path)
                 committed_notebook = head_version_show.stdout
 
-                nb_diff.append((current_local_notebook, committed_notebook, name))
+                nb_diff.append((current_local_notebook,
+                                committed_notebook,
+                                name))
 
         return super(GitAdapter, self).filter_modified_notebooks(nb_diff)
 

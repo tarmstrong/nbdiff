@@ -39,13 +39,14 @@ class HgAdapter(VcsAdapter):
                 abspath = os.path.join(repopath, path)
                 if os.path.exists(abspath):
                     current_local_notebook = open(abspath)
-                    #  Unlike 'git ls-files', client.cat returns the file contents
-                    # as a plain string. To mantain compatibility with GitAdapter,
-                    # we have to supply the string as a file-like stream.
-                    #  A StringIO object behaves as a file handle and can be used
-                    # for this purpose.
-                    committed_notebook = StringIO.StringIO(client.cat([abspath]))
-    
+                    #  Unlike 'git ls-files', client.cat returns the file
+                    # contents as a plain string. To mantain compatibility
+                    # with GitAdapter, we have to supply the string as a
+                    # file-like stream. A StringIO object behaves as a file
+                    # handle and can be used for this purpose.
+                    notebook = client.cat([abspath])
+                    committed_notebook = StringIO.StringIO(notebook)
+
                     nb_diff.append((current_local_notebook,
                                     committed_notebook,
                                     path))
