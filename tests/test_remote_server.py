@@ -123,7 +123,7 @@ class ComparisonCommandTest(unittest.TestCase):
         filename = obj.id
         response = ccmd.ComparisonCommand().process(None, filename, session)
         assert response == "nbdiff.html"
-        response = app.get("/Comparision/"+str(filename))
+        response = app.get("/Comparison/" + str(filename))
         assert response.status == "200 OK"
 
 
