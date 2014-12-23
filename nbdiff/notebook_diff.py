@@ -50,6 +50,11 @@ def diff_modified_items(cellslist):
                     cellslist[i]['originalvalue'].data["source"].split(),
                     cellslist[i]['modifiedvalue'].data["source"].split(),
                 )
+            elif cellslist[i]['originalvalue'].data['cell_type'] == 'markdown':
+                result[i] = diff(
+                    cellslist[i]['originalvalue'].data["source"].splitlines(),
+                    cellslist[i]['modifiedvalue'].data["source"].splitlines(),
+                )
             else:
                 result[i] = diff(
                     cellslist[i]['originalvalue'].data["input"].splitlines(),

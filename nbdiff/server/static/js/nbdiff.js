@@ -294,6 +294,8 @@ Diff.prototype = {
             if (nbcell.state() === 'modified') {
                 if (nbcell.type() === 'heading') { 
                     rows.push(new HeaderDiff(nbcell));
+                } else if (nbcell.type() === 'markdown') {
+                    rows.push(new LineDiff(self._nb, nbcell));
                 } else if (nbcell.type() === 'code') {
                     rows.push(new LineDiff(self._nb, nbcell));
                 }
