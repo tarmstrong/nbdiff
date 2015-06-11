@@ -11,11 +11,12 @@ NBDiff
 .. image:: https://pypip.in/d/nbdiff/badge.png
         :target: https://crate.io/packages/nbdiff?version=latest
 
+**Note: nbdiff only supports IPython 2.x at the moment.**
 
 A tool for diffing and merging IPython Notebook files.
 
 This project was built by a team of
-university students from Concordia University. See
+university students from Concordia University in 2013--2014. See
 `AUTHORS <https://github.com/tarmstrong/nbdiff/blob/master/AUTHORS.rst>`__
 for more information.
 
