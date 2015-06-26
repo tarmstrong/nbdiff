@@ -104,7 +104,7 @@ class CellComparator():
                 else:
                     return False
         elif self.istextcell(cell1):
-            return cell1["source"] == cell2["source"]
+            return self.compare_text_cells(cell1, cell2)
         else:
             return self.compare_cells(cell1, cell2)
 
@@ -137,6 +137,26 @@ class CellComparator():
         input1 = u"".join(cell1['input'])
         input2 = u"".join(cell2['input'])
         similarity_percent = Levenshtein.ratio(input1, input2)
+        if similarity_percent >= 0.65:
+            return BooleanPlus(True, True)
+        return BooleanPlus(False, False)
+
+    def compare_text_cells(self, cell1, cell2):
+        '''
+        return true if exactly equal or if equal but modified,
+        otherwise return false
+        return type: BooleanPlus
+        '''
+        eqsource = (cell1["source"] == cell2["source"])
+
+        if eqsource:
+            return BooleanPlus(True, False)
+        elif not self.check_modified:
+            return BooleanPlus(False, False)
+
+        source1 = u"".join(cell1['source'])
+        source2 = u"".join(cell2['source'])
+        similarity_percent = Levenshtein.ratio(source1, source2)
         if similarity_percent >= 0.65:
             return BooleanPlus(True, True)
         return BooleanPlus(False, False)
