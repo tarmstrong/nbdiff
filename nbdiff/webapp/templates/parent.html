@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../static/css/parent.css"> 
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"> 
+    <script type="text/javascript" src="/static/libraries/jquery-1.10.2.js"> </script>
+    <script type="text/javascript" src="/static/libraries/bootstrap.min.js"> </script>
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="header">
+        <nav class="navbar navbar-default" role="navigation">
+            <ul class="nav navbar-nav">
+                <li><img alt="NBDiff" src="../static/image/logo.png"/></li>
+                <li><a href="/upload">Compare iPython Notebook</a></li>
+                <li><a href="/about-us">About Us</a></li>
+                <li><a href="/contact-us">Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+    <br/>
+    <div class="container">{% block content %}{% endblock %}</div>
+    <div class="footer">
+        <p>Service is available under the MIT License. <br/>
+           This project is currently under heavy development by a team of university students. See <a href="/contact-us">Contact Us</a> for more information.<br/>
+           Documentation: <a href="http://nbdiff.rtfd.org">http://nbdiff.rtfd.org</a> <br/>
+        </p>
+    </div>
+  </body>
+</html>
