@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diff Tool</title>
+    <style type="text/css">
+    	pre {
+		white-space: pre-wrap; /* css-3 */
+		white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+		white-space: -pre-wrap; /* Opera 4-6 */
+		white-space: -o-pre-wrap; /* Opera 7 */
+		word-wrap: break-word; /* Internet Explorer 5.5+ */
+		width:1000px;
+		background-color: #E8E8E8;
+		}
+		.textDiv {
+			overflow-y:scroll;
+			overflow-x:scroll;
+			resize:both;
+			width:400px;
+			
+		}
+	</style>
+  <script src="diff.js"></script>
+  <script>
+window.onload = function () {
+  //event listeners
+  document.getElementById('file1').addEventListener('change',
+      handleFileSelect, false);
+  document.getElementById('file2').addEventListener('change',
+      handleFileSelect, false);
+  document.getElementById('generateDiff').onclick = generateDiff;
+};
+  </script>
+  </head>
+  <body>
+	<table width="100%" >
+		<tr>
+			<td width="33%">
+				<input type="file" id="file1" name="file1"/>
+			</td>
+			<td width="33%">
+				<input type="button" id="generateDiff" value="Generate Diff File" name="generateDiff"/>
+			</td>
+			<td width="33%">
+				<input type="file" id="file2" name="file2"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>Left Side Content:</p>
+				<br/>
+				<div class="textDiv">
+					<pre id="file1Content"/>
+				</div>
+			</td>
+			<td>
+				<p>Results:</p>
+				<br/>
+				<div class="textDiv">
+					<pre id="result"/>
+				</div>
+			</td>
+			<td>
+				<p>Right Side Content:</p>
+				<br/>
+				<div class="textDiv">
+					<pre id="file2Content"/>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript" src="diff.js"></script>
+  </body>
+</html>
